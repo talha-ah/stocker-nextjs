@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@utility/*": ["./utility/*"],
+      "@elements/*": ["./elements/*"],
+      "@contexts/*": ["./contexts/*"],
+      "@components/*": ["./components/*"]
+    }
+  },
+  "include": ["./**/*"],
+  "exclude": ["node_modules", ".next", "out"]
+}
