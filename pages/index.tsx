@@ -2,6 +2,7 @@ import Head from "next/head"
 import Link from "next/link"
 import type { NextPage } from "next"
 
+import Card from "@elements/Card"
 import { Link as ALink } from "@elements/Button"
 import { Container, Main, HeaderText, BoldText } from "@elements/Common"
 
@@ -22,6 +23,8 @@ const Home: NextPage = () => {
         <Link href="/login" passHref>
           <ALink>Login &rarr;</ALink>
         </Link>
+
+        <Card />
       </Main>
     </Container>
   )
