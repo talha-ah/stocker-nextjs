@@ -2,9 +2,8 @@ import Head from "next/head"
 import Link from "next/link"
 import type { NextPage } from "next"
 
-import Card from "@elements/Card"
-import { Link as ALink } from "@elements/Button"
-import { Container, Main, HeaderText, BoldText } from "@elements/Common"
+import { Link as ALink } from "@components/Button"
+import { Container, Main, HeaderText } from "@components/Common"
 
 const Home: NextPage = () => {
   return (
@@ -16,15 +15,11 @@ const Home: NextPage = () => {
       </Head>
 
       <Main width="100%">
-        <HeaderText>
-          <BoldText>Stock Management System</BoldText>
-        </HeaderText>
+        <HeaderText>Stock Management System</HeaderText>
 
         <Link href="/login" passHref>
           <ALink>Login &rarr;</ALink>
         </Link>
-
-        <Card />
       </Main>
     </Container>
   )

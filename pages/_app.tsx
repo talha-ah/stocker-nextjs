@@ -4,8 +4,8 @@ import "semantic-ui-css/semantic.min.css"
 import type { AppProps } from "next/app"
 import { createGlobalStyle, ThemeProvider } from "styled-components"
 
-import theme from "@utility/theme"
-import { AuthProvider } from "@contexts/auth"
+import { colors } from "@utils/theme"
+import { AuthProvider } from "../store"
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -14,6 +14,10 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 `
+
+const theme = {
+  colors,
+}
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

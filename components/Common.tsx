@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-import { device } from "@utility/constants"
+import { device } from "@utils/constants"
 
 type WidthType = {
   width?: string
@@ -71,6 +71,17 @@ export const JustifyBetweenRow = styled(FlexRow)`
   justify-content: space-between;
 `
 
+export const Box = styled.div`
+  overflow: hidden;
+  margin: 20px auto;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: 2px solid rgb(4, 6, 8);
+  background: rgb(255, 255, 255);
+  transition: transform 0.2s ease 0s;
+  box-shadow: rgb(210 239 253) 8px 8px;
+`
+
 export const Code = styled.code`
   background: #fafafa;
   border-radius: 5px;
@@ -82,8 +93,17 @@ export const Code = styled.code`
 
 export const Text = styled.span`
   line-height: 1.5;
+  font-weight: 800;
   font-size: 1.5rem;
   text-align: center;
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  transition: all 0.3s ease 0s;
+  transition: all 0.3s ease 0s;
+  background-color: transparent;
+  font-family: SF Pro Display, -apple-system, acumin-pro, BlinkMacSystemFont,
+    Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
+    Segoe UI Emoji, Segoe UI Symbol;
 `
 
 export const MuteText = styled.span`
@@ -98,26 +118,49 @@ export const SuccessText = styled.span`
   color: ${({ theme }) => theme.colors.success};
 `
 
-export const BoldText = styled.span`
-  font-weight: bold;
+export const LightText = styled.span`
+  font-size: 12px;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 10px;
+  margin-bottom: 1em;
+  color: rgb(153, 153, 153);
+  transition: all 0.3s ease 0s;
+  font-family: SF Pro Display, -apple-system, acumin-pro, BlinkMacSystemFont,
+    Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
+    Segoe UI Emoji, Segoe UI Symbol;
 `
 
-export const HeaderText = styled.h1<WidthType>`
-  margin: 0;
-  font-size: 4rem;
-  line-height: 1.15;
-  text-align: center;
-  margin: 15px 0 !important;
-  width: ${({ width }) => width || "100%"};
+export const BoldText = styled.h5`
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 800;
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  transition: all 0.3s ease 0s;
+  transition: all 0.3s ease 0s;
+  background-color: transparent;
+  font-family: SF Pro Display, -apple-system, acumin-pro, BlinkMacSystemFont,
+    Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
+    Segoe UI Emoji, Segoe UI Symbol;
+`
 
-  @media (${device.tablet}) {
-    & {
-      width: 100%;
-    }
-  }
+export const HeaderText = styled.h5`
+  font-size: 4rem;
+  font-weight: 800;
+  margin: 20px auto;
+  line-height: 1.15;
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  transition: all 0.3s ease 0s;
+  transition: all 0.3s ease 0s;
+  background-color: transparent;
+  font-family: SF Pro Display, -apple-system, acumin-pro, BlinkMacSystemFont,
+    Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
+    Segoe UI Emoji, Segoe UI Symbol;
 
   & a {
-    color: #0070f3;
+    color: rgb(0, 0, 0);
     text-decoration: none;
   }
   & a:hover,

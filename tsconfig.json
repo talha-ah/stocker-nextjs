@@ -15,14 +15,15 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "baseUrl": ".",
     "paths": {
+      "@utils/*": ["./utils/*"],
+      "@store/*": ["./store/*"],
+      "@pages/*": ["./pages/*"],
       "@hooks/*": ["./hooks/*"],
+      "@public/*": ["./public/*"],
       "@styles/*": ["./styles/*"],
-      "@utility/*": ["./utility/*"],
-      "@elements/*": ["./elements/*"],
-      "@contexts/*": ["./contexts/*"],
       "@components/*": ["./components/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
   "exclude": ["node_modules", ".next", "out"]
 }

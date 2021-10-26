@@ -5,7 +5,7 @@ import {
 } from "semantic-ui-react"
 import styled from "styled-components"
 
-import { device } from "@utility/constants"
+import { device } from "@utils/constants"
 
 type WidthType = {
   width?: string

@@ -1,5 +1,5 @@
 const host = "http://localhost:5000"
-const base = host + "/api/v1/"
+const base = host + "/api/v1"
 
 export const endpoints = {
   login: base + "/auth/login",
