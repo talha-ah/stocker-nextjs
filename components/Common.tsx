@@ -33,6 +33,7 @@ export const Main = styled.main<MainType>`
   align-items: center;
   justify-content: center;
   width: ${({ width }) => width || "100%"};
+  background-color: #f5f5f5;
   flex-direction: ${({ flexDirection }) => flexDirection || "column"};
 `
 

@@ -1,9 +1,39 @@
 import Head from "next/head"
 import Link from "next/link"
+import Image from "next/image"
 import type { NextPage } from "next"
 
-import { Link as ALink } from "@components/Button"
-import { Container, Main, HeaderText } from "@components/Common"
+import styled from "styled-components"
+
+import { Container, Main } from "@components/Common"
+import { Button, GhostButton } from "@components/Buttons"
+import { Heading, SemiSmall } from "@components/Texts"
+
+const Content = styled.div`
+  width: 100%;
+  display: flex;
+  max-width: 550px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: ${({ theme }) => theme.gaps.bold};
+`
+
+const ContentItem = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`
+
+const ContentActions = styled.div`
+  width: 100%;
+  display: flex;
+  max-width: 220px;
+  align-items: center;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.gaps.extraLight};
+`
 
 const Home: NextPage = () => {
   return (
@@ -15,11 +45,28 @@ const Home: NextPage = () => {
       </Head>
 
       <Main width="100%">
-        <HeaderText>Stock Management System</HeaderText>
-
-        <Link href="/login" passHref>
-          <ALink>Login &rarr;</ALink>
-        </Link>
+        <Content>
+          <ContentItem>
+            <Image
+              width={200}
+              height={200}
+              src="/images/people.png"
+              alt="Picture of the author"
+            />
+          </ContentItem>
+          <ContentItem>
+            <Heading>Welcome to Stocker! We’re glad you’re here.</Heading>
+            <SemiSmall>
+              Stocker is your tool to create and manage your stocks.
+            </SemiSmall>
+          </ContentItem>
+          <ContentActions>
+            <Link href="/login" passHref>
+              <Button fluid>Sign In</Button>
+            </Link>
+            <GhostButton fluid>Create new account</GhostButton>
+          </ContentActions>
+        </Content>
       </Main>
     </Container>
   )

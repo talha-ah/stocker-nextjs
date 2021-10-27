@@ -2,7 +2,7 @@ import Head from "next/head"
 import Link from "next/link"
 import type { NextPage } from "next"
 
-import { Button, Anchor } from "@components/Button"
+import { Button, Anchor } from "@components/Buttons"
 import { Form, InputField } from "@components/FormField"
 import { Main, BoldText, Container, DangerText } from "@components/Common"
 
