@@ -3,8 +3,9 @@ import Link from "next/link"
 import type { NextPage } from "next"
 
 import { Button, Anchor } from "@components/Buttons"
+import { Main, Container } from "@components/Common"
+import { BigText, DangerText } from "@components/Texts"
 import { Form, InputField } from "@components/FormField"
-import { Main, BoldText, Container, DangerText } from "@components/Common"
 
 import { useLogin } from "@hooks/auth"
 
@@ -27,7 +28,7 @@ const Login: NextPage = () => {
       </Head>
 
       <Main width="100%">
-        <BoldText>Login</BoldText>
+        <BigText>Stock Management System</BigText>
 
         <Form onSubmit={onSubmit} width="600px">
           <InputField

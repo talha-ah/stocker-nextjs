@@ -8,6 +8,7 @@ export const BigText = styled.h1`
   font-weight: 500;
   line-height: 140%;
   text-align: center;
+  margin-bottom: 48px;
   text-decoration: none;
   color: ${colors.black};
   transition: all 0.3s ease 0s;
@@ -128,4 +129,8 @@ export const Link = styled.a`
     color: ${colors.primary};
     text-decoration: underline;
   }
+`
+
+export const DangerText = styled(Small)`
+  color: ${({ theme }) => theme.colors.error};
 `
