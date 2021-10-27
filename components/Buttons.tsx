@@ -65,12 +65,15 @@ export const GhostButton = styled(SButton)`
     Segoe UI Emoji, Segoe UI Symbol;
 `
 
-export const Anchor = styled.a`
+export const Anchor = styled.button`
   margin: 0;
+  top: 20px;
+  left: 20px;
   cursor: pointer;
   font-size: 18px;
   line-height: 1.2;
   font-weight: bold;
+  position: absolute;
   padding: 10px 20px;
   border-radius: 5px;
   color: rgb(0, 0, 0);

@@ -6,8 +6,8 @@ import type { NextPage } from "next"
 import styled from "styled-components"
 
 import { Container, Main } from "@components/Common"
-import { Button, GhostButton } from "@components/Buttons"
 import { Heading, SemiSmall } from "@components/Texts"
+import { Button, GhostButton } from "@components/Buttons"
 
 const Content = styled.div`
   width: 100%;
@@ -32,7 +32,7 @@ const ContentActions = styled.div`
   max-width: 220px;
   align-items: center;
   flex-direction: column;
-  gap: ${({ theme }) => theme.gaps.extraLight};
+  gap: ${({ theme }) => theme.gaps.light};
 `
 
 const Home: NextPage = () => {
@@ -64,7 +64,9 @@ const Home: NextPage = () => {
             <Link href="/login" passHref>
               <Button fluid>Sign In</Button>
             </Link>
-            <GhostButton fluid>Create new account</GhostButton>
+            <Link href="/register" passHref>
+              <GhostButton fluid>Create new account</GhostButton>
+            </Link>
           </ContentActions>
         </Content>
       </Main>

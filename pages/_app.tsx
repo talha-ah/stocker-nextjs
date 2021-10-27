@@ -4,7 +4,15 @@ import "semantic-ui-css/semantic.min.css"
 import type { AppProps } from "next/app"
 import { createGlobalStyle, ThemeProvider } from "styled-components"
 
+import { colors, gaps, borders } from "@utils/theme"
+
 import { AuthProvider } from "../store"
+
+const theme = {
+  gaps,
+  colors,
+  borders,
+}
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -12,43 +20,35 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
   }
+  label {
+    margin: 0;
+    width: 100%;
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: auto;
+    text-decoration: none;
+    transition: all 0.3s ease 0s;
+    color: ${theme.colors.placeholder};
+    margin-bottom: ${theme.gaps.extraLight};
+    font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
+      Segoe UI Emoji, Segoe UI Symbol;
+  }
+  input {
+    border: 0 !important;
+    outline: 0 !important;
+    width: 100% !important;
+    transition: all 0.3s ease 0s;
+    border-bottom: ${theme.borders.input} !important;
+    background-color: ${theme.colors.white} !important;
+    font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
+      Segoe UI Emoji, Segoe UI Symbol;
+
+    :focus {
+      border-bottom: ${theme.borders.inputActive} !important;
+    }
+  }
 `
-
-const theme = {
-  colors: {
-    primary: "#585a96",
-    // accent: "#D400FF",
-    black: "#000000",
-    white: "#ffffff",
-    error: "#c4314b",
-    warning: "#a16114",
-    success: "#237b4b",
-    divider: "#dbdbdb",
-    label: "#686868",
-    border: "#c7c7c7",
-    disabled: "#c7c7c7",
-
-    lightBg: "#f5f5f5",
-    lightText: "#252525",
-    lightSecondary: "#5c5b5b",
-    lightPlaceholder: "#686868",
-    darkBg: "#1f1f1f",
-    darkText: "#d6d6d6",
-    darkSecondary: "#292929",
-    darkPlaceholder: "#adadad",
-  },
-  borders: {
-    radius: 4,
-    light: "2px solid #c7c7c7",
-  },
-  gaps: {
-    extraLight: "8px",
-    light: "16px",
-    default: "24px",
-    bold: "32px",
-    extraBold: "64px",
-  },
-}
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

@@ -8,14 +8,33 @@ export const colors = {
   success: "#237b4b",
   divider: "#dbdbdb",
   label: "#686868",
+  border: "#c7c7c7",
   disabled: "#c7c7c7",
 
-  lightBg: "#f5f5f5",
-  lightText: "#252525",
-  lightSecondary: "#5c5b5b",
-  lightPlaceholder: "#686868",
+  // Light
+  bg: "#f5f5f5",
+  text: "#252525",
+  secondary: "#5c5b5b",
+  placeholder: "#686868",
+
   darkBg: "#1f1f1f",
   darkText: "#d6d6d6",
   darkSecondary: "#292929",
   darkPlaceholder: "#adadad",
+}
+
+export const borders = {
+  radius: 4,
+  input: `2px solid ${colors.white}`,
+  light: `2px solid ${colors.border}`,
+  inputActive: `2px solid ${colors.primary}`,
+}
+
+export const gaps = {
+  extraLight: "4px",
+  light: "8px",
+  semiLight: "16px",
+  default: "24px",
+  bold: "32px",
+  extraBold: "64px",
 }

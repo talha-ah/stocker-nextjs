@@ -35,3 +35,33 @@ export const useLogin = () => {
 
   return { data, doLogin, loading, error }
 }
+
+export const useRegister = () => {
+  const [data, setData] = useState(null)
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
+
+  const { state, dispatch } = useAuth()
+
+  const doRegister = async ({ email, password }) => {
+    try {
+      setLoading(true)
+      const user = await api({
+        method: "POST",
+        uri: endpoints.register,
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      })
+
+      setData(user)
+    } catch (error) {
+      setError(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return { data, doRegister, loading, error }
+}
