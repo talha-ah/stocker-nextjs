@@ -1,6 +1,6 @@
 import DateUtility from "./date"
 
-const api = ({ method = "GET", uri, body, headers, token }) =>
+export const api = ({ method = "GET", uri, body, headers, token }) =>
   new Promise(async (resolve, reject) => {
     try {
       var myHeaders = new Headers()
@@ -27,5 +27,3 @@ const api = ({ method = "GET", uri, body, headers, token }) =>
       }
     }
   })
-
-export default api

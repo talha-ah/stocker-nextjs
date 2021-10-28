@@ -33,7 +33,7 @@ export const Heading = styled.p`
   line-height: auto;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme }) => theme.colors.black};
+  color: ${({ theme }) => theme.colors.white};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `

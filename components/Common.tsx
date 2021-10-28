@@ -2,10 +2,6 @@ import styled from "styled-components"
 
 import { device } from "@utils/constants"
 
-type WidthType = {
-  width?: string
-}
-
 type MainType = {
   width?: string
   flexDirection?: string

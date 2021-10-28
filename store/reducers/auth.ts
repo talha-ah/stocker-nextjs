@@ -1,6 +1,11 @@
 import { createContext, useContext } from "react"
 
 import * as Actions from "../actions"
+import {
+  itemKey,
+  setBrowserItem,
+  removeBrowserItem,
+} from "@utils/browser-utility"
 
 export interface AuthStateI {
   user: any
@@ -27,7 +32,7 @@ export const AuthReducer = (state: AuthStateI, action: AuthActionI) => {
   switch (action.type) {
     case Actions.SET_AUTH:
       if (state.auth) {
-        localStorage.removeItem("stock-management-system")
+        removeBrowserItem()
         return {
           ...state,
           user: "",
@@ -35,18 +40,13 @@ export const AuthReducer = (state: AuthStateI, action: AuthActionI) => {
           auth: false,
         }
       } else {
-        // localStorage.setItem("stock-management-system", action.payload.token)
+        const { token, user } = action.payload
+        setBrowserItem(itemKey, token)
         return {
           ...state,
           auth: true,
-          user: {
-            _id: "Tladlf234kladfklTlkadlfk",
-            firstName: "Test",
-            lastName: "User",
-            email: "test@email.com",
-            username: "testuser",
-          },
-          // token: action.payload.token,
+          user: user,
+          token: token,
         }
       }
     case Actions.SET_USER:

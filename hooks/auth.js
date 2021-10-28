@@ -1,21 +1,22 @@
 import { useState } from "react"
+import { useRouter } from "next/router"
 
-import api from "@utils/api"
+import { api } from "@utils/api"
 import { endpoints } from "@utils/constants"
+import { getBrowserItem } from "@utils/browser-utility"
 
 import { useAuth, Actions } from "../store"
 
 export const useLogin = () => {
-  const [data, setData] = useState(null)
+  const { dispatch } = useAuth()
+
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
-
-  const { state, dispatch } = useAuth()
 
   const doLogin = async ({ email, password }) => {
     try {
       setLoading(true)
-      const user = await api({
+      const response = await api({
         method: "POST",
         uri: endpoints.login,
         body: JSON.stringify({
@@ -24,8 +25,11 @@ export const useLogin = () => {
         }),
       })
 
-      setData(user)
-      dispatch({ type: Actions.SET_AUTH })
+      dispatch({
+        type: Actions.SET_AUTH,
+        payload: { user: response.user, token: response.token },
+      })
+      setLoading(false)
     } catch (error) {
       setError(error.message)
     } finally {
@@ -33,20 +37,18 @@ export const useLogin = () => {
     }
   }
 
-  return { data, doLogin, loading, error }
+  return { doLogin, loading, error }
 }
 
 export const useRegister = () => {
-  const [data, setData] = useState(null)
+  const router = useRouter()
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
-
-  const { state, dispatch } = useAuth()
 
   const doRegister = async ({ email, password }) => {
     try {
       setLoading(true)
-      const user = await api({
+      await api({
         method: "POST",
         uri: endpoints.register,
         body: JSON.stringify({
@@ -55,7 +57,8 @@ export const useRegister = () => {
         }),
       })
 
-      setData(user)
+      setLoading(false)
+      router.replace("/")
     } catch (error) {
       setError(error.message)
     } finally {
@@ -63,5 +66,43 @@ export const useRegister = () => {
     }
   }
 
-  return { data, doRegister, loading, error }
+  return { doRegister, loading, error }
+}
+
+export const useLoadUser = () => {
+  const router = useRouter()
+  const { dispatch } = useAuth()
+
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  const loadUser = async () => {
+    try {
+      const token = getBrowserItem()
+
+      if (!token) {
+        setLoading(false)
+        return
+      }
+
+      const data = await api({
+        uri: Constants.PROFILE,
+        token: token,
+      })
+
+      dispatch({
+        type: actionTypes.SET_AUTH,
+        payload: { token: token, user: data.user },
+      })
+
+      setLoading(false)
+      router.push("/app")
+    } catch (error) {
+      setError(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return { loadUser, loading, error }
 }

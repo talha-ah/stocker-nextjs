@@ -2,7 +2,6 @@ import Head from "next/head"
 import Link from "next/link"
 import Image from "next/image"
 import type { NextPage } from "next"
-
 import styled from "styled-components"
 
 import { Container, Main } from "@components/Common"
@@ -35,12 +34,16 @@ const ContentActions = styled.div`
   gap: ${({ theme }) => theme.gaps.light};
 `
 
+const BlackHeading = styled(Heading)`
+  color: ${({ theme }) => theme.colors.black};
+`
+
 const Home: NextPage = () => {
   return (
     <Container>
       <Head>
-        <title>Stock Management System</title>
-        <meta name="description" content="stock management" />
+        <title>Stocker</title>
+        <meta name="description" content="stocker" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -55,7 +58,9 @@ const Home: NextPage = () => {
             />
           </ContentItem>
           <ContentItem>
-            <Heading>Welcome to Stocker! We’re glad you’re here.</Heading>
+            <BlackHeading>
+              Welcome to Stocker! We’re glad you’re here.
+            </BlackHeading>
             <SemiSmall>
               Stocker is your tool to create and manage your stocks.
             </SemiSmall>

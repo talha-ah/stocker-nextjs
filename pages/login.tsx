@@ -1,15 +1,14 @@
 import Head from "next/head"
 import Link from "next/link"
 import type { NextPage } from "next"
+import styled from "styled-components"
 import { useRouter } from "next/router"
 
+import { useLogin } from "@hooks/auth"
 import { Main, Container } from "@components/Common"
 import { Form, InputField } from "@components/Inputs"
 import { Button, GhostButton, Anchor } from "@components/Buttons"
 import { DangerText, BigHeading, Small } from "@components/Texts"
-
-import { useLogin } from "@hooks/auth"
-import styled from "styled-components"
 
 const FormWrapper = styled.div`
   width: 100%;
@@ -36,7 +35,7 @@ const Actions = styled.div`
 const Login: NextPage = () => {
   const router = useRouter()
 
-  const { data, doLogin, loading, error } = useLogin()
+  const { doLogin, loading, error } = useLogin()
 
   const onSubmit = async (e: any) => {
     e.preventDefault()
@@ -48,8 +47,8 @@ const Login: NextPage = () => {
   return (
     <Container>
       <Head>
-        <title>Login - Stock Management</title>
-        <meta name="description" content="stock management" />
+        <title>Login - Stocker</title>
+        <meta name="description" content="stocker" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

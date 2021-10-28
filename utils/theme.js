@@ -24,8 +24,12 @@ export const colors = {
 }
 
 export const borders = {
-  radius: 4,
-  input: `2px solid ${colors.white}`,
+  radius: {
+    light: "2px",
+    default: "4px",
+    bold: "6px",
+  },
+  input: `2px solid transparent`,
   light: `2px solid ${colors.border}`,
   inputActive: `2px solid ${colors.primary}`,
 }

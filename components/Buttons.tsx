@@ -12,7 +12,7 @@ export const Button = styled(SButton)`
   transition: all 0.3s ease 0s;
   color: ${({ theme }) => theme.colors.white} !important;
   background: ${({ theme }) => theme.colors.primary} !important;
-  border-radius: ${({ theme }) => theme.borders.radius} !important;
+  border-radius: ${({ theme }) => theme.borders.radius.default} !important;
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -28,7 +28,7 @@ export const NeutralButton = styled(SButton)`
   transition: all 0.3s ease 0s;
   color: ${({ theme }) => theme.colors.primary} !important;
   background: ${({ theme }) => theme.colors.white} !important;
-  border-radius: ${({ theme }) => theme.borders.radius} !important;
+  border-radius: ${({ theme }) => theme.borders.radius.default} !important;
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -43,7 +43,7 @@ export const BorderedButton = styled(SButton)`
   background: none !important;
   transition: all 0.3s ease 0s;
   color: ${({ theme }) => theme.colors.primary} !important;
-  border-radius: ${({ theme }) => theme.borders.radius} !important;
+  border-radius: ${({ theme }) => theme.borders.radius.default} !important;
   border: ${({ theme }) => theme.borders.light} !important;
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
@@ -60,7 +60,7 @@ export const GhostButton = styled(SButton)`
   background: none !important;
   transition: all 0.3s ease 0s;
   color: ${({ theme }) => theme.colors.primary} !important;
-  border-radius: ${({ theme }) => theme.borders.radius} !important;
+  border-radius: ${({ theme }) => theme.borders.radius.default} !important;
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
