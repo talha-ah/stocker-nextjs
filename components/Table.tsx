@@ -3,6 +3,8 @@ import styled from "styled-components"
 
 import { generateId } from "@utils/common"
 import { Heading } from "@components/Texts"
+import { IconButton } from "@components/Buttons"
+import { SearchIconInput } from "@components/SearchInput"
 
 const HeaderContainer = styled.div`
   width: 100%;
@@ -25,41 +27,28 @@ const StyledImage = styled(Image)`
   color: red !important;
 `
 
-const ButtonIcon = styled.button`
-  border: 0 !important;
-  padding: 0 !important;
-  background-color: transparent !important;
-`
-
-export const Header = () => {
+export const Header = (props: any) => {
   return (
     <HeaderContainer>
       <Heading>Categories</Heading>
       <Icons>
-        <ButtonIcon>
-          <StyledImage
-            src="/icons/Search.svg"
-            alt="search-icon"
-            width={24}
-            height={24}
-          />
-        </ButtonIcon>
-        <ButtonIcon>
+        <SearchIconInput />
+        <IconButton onClick={props.add}>
           <StyledImage
             src="/icons/Plus.svg"
             alt="search-icon"
             width={24}
             height={24}
           />
-        </ButtonIcon>
-        <ButtonIcon>
+        </IconButton>
+        <IconButton>
           <StyledImage
             src="/icons/Settings.svg"
             alt="search-icon"
             width={24}
             height={24}
           />
-        </ButtonIcon>
+        </IconButton>
       </Icons>
     </HeaderContainer>
   )

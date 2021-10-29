@@ -5,10 +5,10 @@ import styled from "styled-components"
 import { useRouter } from "next/router"
 
 import { useLogin } from "@hooks/auth"
+import { Form, Input } from "@components/Inputs"
 import { Main, Container } from "@components/Common"
-import { Form, InputField } from "@components/Inputs"
+import { BigHeading, Small } from "@components/Texts"
 import { Button, GhostButton, Anchor } from "@components/Buttons"
-import { DangerText, BigHeading, Small } from "@components/Texts"
 
 const FormWrapper = styled.div`
   width: 100%;
@@ -60,39 +60,41 @@ const Login: NextPage = () => {
             <Small>Kindly register to continue</Small>
           </Texts>
           <Form onSubmit={onSubmit}>
-            <InputField
+            <Input
               required
+              error={error}
               name="name"
               type="text"
               label="Name"
               placeholder="name"
             />
 
-            <InputField
+            <Input
               required
+              error={error}
               name="email"
               type="email"
               label="Email Address"
               placeholder="name@domain.com"
             />
 
-            <InputField
+            <Input
               required
+              error={error}
               name="password"
               type="password"
               label="Password"
               placeholder="*********"
             />
 
-            <InputField
+            <Input
               required
               name="secret"
+              error={error}
               type="password"
               label="Secret"
               placeholder="XXXX XXXX XXXX"
             />
-
-            {error && <DangerText>{error}</DangerText>}
 
             <Actions>
               <Button fluid type="submit" loading={loading}>

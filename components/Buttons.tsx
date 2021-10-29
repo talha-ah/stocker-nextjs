@@ -1,68 +1,97 @@
-import { Button as SButton } from "semantic-ui-react"
 import styled from "styled-components"
 
-export const Button = styled(SButton)`
+type ButtonType = {
+  fluid?: boolean
+}
+
+export const BaseButton = styled.button<ButtonType>`
+  border: 0;
+  margin: 0;
+  outline: 0;
+  display: block;
+  font-size: 14px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  padding: 6.5px 12px;
+  text-decoration: none;
+  transition: all 0.3s ease 0s;
+  width: ${({ fluid }) => fluid && "100%"};
+  border-radius: ${({ theme }) => theme.borders.radius.default};
+  font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
+    Segoe UI Emoji, Segoe UI Symbol;
+`
+
+export const Button = styled(BaseButton)`
+  color: ${({ theme }) => theme.colors.white};
+  background: ${({ theme }) => theme.colors.primary};
+`
+
+export const NeutralButton = styled(BaseButton)`
   border: 0;
   outline: 0;
   font-size: 14px;
   font-weight: 500;
   padding: 6.5px 12px;
-  margin: 0 !important;
+  margin: 0;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme }) => theme.colors.white} !important;
-  background: ${({ theme }) => theme.colors.primary} !important;
-  border-radius: ${({ theme }) => theme.borders.radius.default} !important;
+  color: ${({ theme }) => theme.colors.primary};
+  background: ${({ theme }) => theme.colors.white};
+  border-radius: ${({ theme }) => theme.borders.radius.default};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
 
-export const NeutralButton = styled(SButton)`
+export const BorderedButton = styled(BaseButton)`
+  outline: 0;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6.5px 12px;
+  margin: 0;
+  text-decoration: none;
+  background: none;
+  transition: all 0.3s ease 0s;
+  color: ${({ theme }) => theme.colors.primary};
+  border-radius: ${({ theme }) => theme.borders.radius.default};
+  border: ${({ theme }) => theme.borders.light};
+  font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
+    Segoe UI Emoji, Segoe UI Symbol;
+`
+
+export const GhostButton = styled(BaseButton)`
   border: 0;
   outline: 0;
   font-size: 14px;
   font-weight: 500;
   padding: 6.5px 12px;
-  margin: 0 !important;
+  margin: 0;
   text-decoration: none;
+  background: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme }) => theme.colors.primary} !important;
-  background: ${({ theme }) => theme.colors.white} !important;
-  border-radius: ${({ theme }) => theme.borders.radius.default} !important;
+  color: ${({ theme }) => theme.colors.primary};
+  border-radius: ${({ theme }) => theme.borders.radius.default};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
 
-export const BorderedButton = styled(SButton)`
-  outline: 0;
-  font-size: 14px;
-  font-weight: 500;
-  padding: 6.5px 12px;
-  margin: 0 !important;
-  text-decoration: none;
-  background: none !important;
-  transition: all 0.3s ease 0s;
-  color: ${({ theme }) => theme.colors.primary} !important;
-  border-radius: ${({ theme }) => theme.borders.radius.default} !important;
-  border: ${({ theme }) => theme.borders.light} !important;
-  font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
-    Segoe UI Emoji, Segoe UI Symbol;
-`
-
-export const GhostButton = styled(SButton)`
+export const IconButton = styled.button`
   border: 0;
+  margin: 0;
   outline: 0;
-  font-size: 14px;
-  font-weight: 500;
-  padding: 6.5px 12px;
-  margin: 0 !important;
+  padding: 0;
+  display: flex;
+  cursor: pointer;
+  background: none;
+  align-items: center;
   text-decoration: none;
-  background: none !important;
+  background-color: none;
+  justify-content: center;
   transition: all 0.3s ease 0s;
-  color: ${({ theme }) => theme.colors.primary} !important;
-  border-radius: ${({ theme }) => theme.borders.radius.default} !important;
-  font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
-    Segoe UI Emoji, Segoe UI Symbol;
+
+  // &:hover {
+  //   transform: translateY(-2px);
+  // }
 `
 
 export const Anchor = styled.button`

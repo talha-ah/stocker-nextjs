@@ -1,18 +1,22 @@
-import { Form as SForm, TextArea as STextArea } from "semantic-ui-react"
 import styled from "styled-components"
 
 import { device } from "@utils/constants"
+import { DangerText } from "@components/Texts"
 
 type WidthType = {
   width?: string
 }
 
-export const Form = styled(SForm)<WidthType>`
+type InputType = {
+  primary?: boolean
+}
+
+export const Form = styled.form<WidthType>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: ${({ theme }) => theme.gaps.semiLight};
   width: ${({ width }) => width || "100%"};
+  gap: ${({ theme }) => theme.gaps.semiLight};
   max-width: ${({ width }) => width || "100%"};
 
   @media (${device.tablet}) {
@@ -23,35 +27,44 @@ export const Form = styled(SForm)<WidthType>`
   }
 `
 
-const Input = styled.div`
+const InputContainer = styled.div`
   width: 100%;
 `
 
-export const InputField = ({
+const StyledInput = styled.input<InputType>`
+  background-color: ${({ primary, theme }) =>
+    primary ? theme.colors.bg : "transparent"} !important;
+`
+
+export const Input = ({
   name,
   label,
   type,
   error,
+  primary,
   required,
   placeholder,
 }: {
   name?: string
-  label?: string
   type?: string
-  error?: string
+  label?: string
   required?: any
+  primary?: boolean
   placeholder?: string
+  error?: string | null
 }) => (
-  <Input>
-    <label htmlFor={name}>{label}</label>
-    <input
+  <InputContainer>
+    {label && <label htmlFor={name}>{label}</label>}
+    <StyledInput
       id={name}
       name={name}
+      primary={primary}
       required={required}
       type={type || "text"}
       placeholder={placeholder}
     />
-  </Input>
+    {error && <DangerText>{error}</DangerText>}
+  </InputContainer>
 )
 
 export const TextArea = ({
@@ -67,13 +80,14 @@ export const TextArea = ({
   required?: any
   placeholder?: string
 }) => (
-  <SForm.Field
-    name={name}
-    error={error}
-    label={label}
-    control={STextArea}
-    autoComplete="none"
-    required={required}
-    placeholder={placeholder || label}
-  />
+  <InputContainer>
+    {label && <label htmlFor={name}>{label}</label>}
+    <textarea
+      id={name}
+      name={name}
+      required={required}
+      placeholder={placeholder}
+    />
+    {error && <DangerText>{error}</DangerText>}
+  </InputContainer>
 )

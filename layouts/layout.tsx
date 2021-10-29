@@ -3,6 +3,7 @@ import styled from "styled-components"
 
 import Menu from "@components/Menu"
 import { Heading } from "@components/Texts"
+import { IconButton } from "@components/Buttons"
 
 const Container = styled.div`
   width: 100%;
@@ -24,7 +25,7 @@ const Header = styled.div`
   background-color: ${({ theme }) => theme.colors.primary};
 `
 
-const Logo = styled.div`
+const Brand = styled.div`
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -74,15 +75,17 @@ export const Layout = ({ children }: { children: any }) => {
   return (
     <Container>
       <Header>
-        <Logo>
-          <Image
-            src="/icons/Burger.svg"
-            alt="burger-icon"
-            width={24}
-            height={24}
-          />
+        <Brand>
+          <IconButton>
+            <Image
+              src="/icons/Burger.svg"
+              alt="burger-icon"
+              width={24}
+              height={24}
+            />
+          </IconButton>
           <WhiteHeading>Stock Management System</WhiteHeading>
-        </Logo>
+        </Brand>
         <Avatar>
           <Image src="/images/avatar.png" alt="avatar" width={25} height={25} />
         </Avatar>

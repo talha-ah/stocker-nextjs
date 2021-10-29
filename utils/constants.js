@@ -4,6 +4,9 @@ const base = host + "/api/v1"
 export const endpoints = {
   login: base + "/auth/login",
   register: base + "/auth/register",
+
+  // Categories
+  categories: base + "/categories",
 }
 
 export const screens = {

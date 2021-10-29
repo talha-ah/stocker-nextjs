@@ -13,16 +13,13 @@ export const useLogin = () => {
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  const doLogin = async ({ email, password }) => {
+  const doLogin = async (body) => {
     try {
       setLoading(true)
       const response = await api({
         method: "POST",
         uri: endpoints.login,
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+        body: JSON.stringify(body),
       })
 
       dispatch({
@@ -45,16 +42,13 @@ export const useRegister = () => {
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  const doRegister = async ({ email, password }) => {
+  const doRegister = async (body) => {
     try {
       setLoading(true)
       await api({
         method: "POST",
         uri: endpoints.register,
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+        body: JSON.stringify(body),
       })
 
       setLoading(false)
