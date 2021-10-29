@@ -64,9 +64,8 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      {console.log(loading, error)}
       <AuthProvider>
-        <Component {...pageProps} />
+        {loading ? "Loading..." : <Component {...pageProps} />}
       </AuthProvider>
     </ThemeProvider>
   )

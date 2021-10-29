@@ -1,9 +1,10 @@
 import Image from "next/image"
 import styled from "styled-components"
 
+import { generateId } from "@utils/common"
 import { Heading } from "@components/Texts"
 
-const Container = styled.div`
+const HeaderContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -32,7 +33,7 @@ const ButtonIcon = styled.button`
 
 export const Header = () => {
   return (
-    <Container>
+    <HeaderContainer>
       <Heading>Categories</Heading>
       <Icons>
         <ButtonIcon>
@@ -60,6 +61,59 @@ export const Header = () => {
           />
         </ButtonIcon>
       </Icons>
-    </Container>
+    </HeaderContainer>
+  )
+}
+
+const TableContainer = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  color: ${({ theme }) => theme.colors.text};
+  font-family: Segoe UI, Arial, Helvetica, sans-serif;
+
+  & tr {
+    border-radius: 60px;
+  }
+
+  & tr:nth-child(even) {
+    background-color: ${({ theme }) => theme.colors.accent};
+  }
+
+  & tr:hover {
+    background-color: ${({ theme }) => theme.colors.white};
+  }
+
+  & th {
+    text-align: left;
+    color: ${({ theme }) => theme.colors.text};
+  }
+
+  & td,
+  & th {
+    padding: ${({ theme }) => theme.gaps.light};
+    border-bottom: ${({ theme }) => theme.borders.tableBorder};
+  }
+`
+
+export const Table = ({ data }: { data: any }) => {
+  return (
+    <TableContainer>
+      <thead>
+        <tr>
+          {data.headers.map((header: any) => (
+            <th key={header.key}>{header.name}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {data.rows.map((row: any) => (
+          <tr key={generateId()}>
+            {data.headers.map((header: any) => (
+              <td key={generateId()}>{row[header.field]}</td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </TableContainer>
   )
 }

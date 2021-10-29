@@ -24,7 +24,7 @@ const Header = styled.div`
   background-color: ${({ theme }) => theme.colors.primary};
 `
 
-const Logo = styled(Heading)`
+const Logo = styled.div`
   display: flex;
   align-items: center;
   flex-direction: row;

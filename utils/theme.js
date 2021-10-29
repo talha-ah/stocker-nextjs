@@ -1,6 +1,6 @@
 export const colors = {
   primary: "#585a96",
-  // accent: "#D400FF",
+  accent: "#f2f2f2",
   black: "#000000",
   white: "#ffffff",
   error: "#c4314b",
@@ -32,6 +32,7 @@ export const borders = {
   input: `2px solid transparent`,
   light: `2px solid ${colors.border}`,
   inputActive: `2px solid ${colors.primary}`,
+  tableBorder: `1px solid ${colors.divider}`,
 }
 
 export const gaps = {

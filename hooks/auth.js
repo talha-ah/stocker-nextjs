@@ -81,22 +81,24 @@ export const useLoadUser = () => {
       const token = getBrowserItem()
 
       if (!token) {
+        setTimeout(() => {
+          setLoading(false)
+          return
+        }, 5000)
+      } else {
+        const data = await api({
+          uri: Constants.PROFILE,
+          token: token,
+        })
+
+        dispatch({
+          type: actionTypes.SET_AUTH,
+          payload: { token: token, user: data.user },
+        })
+
         setLoading(false)
-        return
+        router.push("/app")
       }
-
-      const data = await api({
-        uri: Constants.PROFILE,
-        token: token,
-      })
-
-      dispatch({
-        type: actionTypes.SET_AUTH,
-        payload: { token: token, user: data.user },
-      })
-
-      setLoading(false)
-      router.push("/app")
     } catch (error) {
       setError(error.message)
     } finally {
