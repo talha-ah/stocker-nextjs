@@ -1,18 +1,26 @@
 import Head from "next/head"
 import type { NextPage } from "next"
+import styled from "styled-components"
 
-import { Layout } from "layouts/layout"
+import { Layout } from "@layouts/layout"
+import { Header } from "@components/Table"
+
+const Content = styled.div`
+  width: 100%;
+`
 
 const App: NextPage = () => {
   return (
     <Layout>
       <Head>
-        <title>Home - Stocker</title>
+        <title>Categories - Stocker</title>
         <meta name="description" content="stocker" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h3>Home</h3>
+      <Content>
+        <Header />
+      </Content>
     </Layout>
   )
 }

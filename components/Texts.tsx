@@ -9,7 +9,7 @@ export const BigText = styled.h1`
   margin-bottom: 48px;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.text};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -21,7 +21,7 @@ export const BigHeading = styled.p`
   line-height: auto;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme }) => theme.colors.secondary};
+  color: ${({ theme }) => theme.colors.text};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -33,7 +33,7 @@ export const Heading = styled.p`
   line-height: auto;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.text};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -45,7 +45,7 @@ export const SubHeading = styled.p`
   line-height: auto;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme }) => theme.colors.black};
+  color: ${({ theme }) => theme.colors.text};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -57,7 +57,7 @@ export const Description = styled.p`
   line-height: auto;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme }) => theme.colors.black};
+  color: ${({ theme }) => theme.colors.text};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -69,7 +69,7 @@ export const SemiSmall = styled.p`
   line-height: auto;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme }) => theme.colors.black};
+  color: ${({ theme }) => theme.colors.text};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `

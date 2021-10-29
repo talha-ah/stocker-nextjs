@@ -7,7 +7,7 @@ import { useEffect } from "react"
 import { createGlobalStyle, ThemeProvider } from "styled-components"
 
 import { useLoadUser } from "@hooks/auth"
-import { colors, gaps, borders } from "@utils/theme"
+import { colors, gaps, borders, sidebar } from "@utils/theme"
 
 import { AuthProvider } from "../store"
 
@@ -15,6 +15,7 @@ const theme = {
   gaps,
   colors,
   borders,
+  sidebar,
 }
 
 const GlobalStyle = createGlobalStyle`

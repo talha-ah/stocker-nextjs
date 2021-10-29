@@ -1,12 +1,17 @@
 import React from "react"
 import Link from "next/link"
 import styled from "styled-components"
+import { useRouter } from "next/router"
 
 import { SubHeading } from "./Texts"
 
 type ItemType = {
   active?: boolean
 }
+
+const Div = styled.div`
+  width: ${({ theme }) => theme.sidebar.width};
+`
 
 const Item = styled.div<ItemType>`
   width: 100%;
@@ -36,7 +41,6 @@ const sidebarMenuList = [
     id: 1,
     name: "Home",
     url: "/app",
-    active: true,
   },
   {
     id: 2,
@@ -66,11 +70,17 @@ const sidebarMenuList = [
 ]
 
 export default function Menu() {
-  return sidebarMenuList.map((item) => (
-    <Item key={item.id} active={item.active}>
-      <Link href={item.url} passHref>
-        <SubHeading>{item.name}</SubHeading>
-      </Link>
-    </Item>
-  ))
+  const router = useRouter()
+
+  return (
+    <Div>
+      {sidebarMenuList.map((item) => (
+        <Link key={item.id} href={item.url} passHref>
+          <Item active={router.route === item.url}>
+            <SubHeading>{item.name}</SubHeading>
+          </Item>
+        </Link>
+      ))}
+    </Div>
+  )
 }

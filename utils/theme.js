@@ -42,3 +42,7 @@ export const gaps = {
   bold: "32px",
   extraBold: "64px",
 }
+
+export const sidebar = {
+  width: "180px",
+}

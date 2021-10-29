@@ -21,6 +21,8 @@
       "@hooks/*": ["./hooks/*"],
       "@public/*": ["./public/*"],
       "@styles/*": ["./styles/*"],
+      "@assets/*": ["./assets/*"],
+      "@layouts/*": ["./layouts/*"],
       "@components/*": ["./components/*"]
     }
   },

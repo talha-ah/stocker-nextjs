@@ -1,5 +1,5 @@
-import styled from "styled-components"
 import Image from "next/image"
+import styled from "styled-components"
 
 import Menu from "@components/Menu"
 import { Heading } from "@components/Texts"
@@ -7,21 +7,33 @@ import { Heading } from "@components/Texts"
 const Container = styled.div`
   width: 100%;
   height: 100vh;
-  background-color: ${({ theme }) => theme.colors.bg};
   display: flex;
   flex-direction: column;
+  background-color: ${({ theme }) => theme.colors.bg};
 `
 
 const Header = styled.div`
   width: 100%;
   height: 50px;
   display: flex;
-  padding: 0 24px;
+  padding: 0 ${({ theme }) => theme.gaps.semiLight};
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   gap: ${({ theme }) => theme.gaps.light};
   background-color: ${({ theme }) => theme.colors.primary};
+`
+
+const Logo = styled(Heading)`
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  gap: ${({ theme }) => theme.gaps.semiLight};
+`
+
+const WhiteHeading = styled(Heading)`
+  color: ${({ theme }) => theme.colors.white};
 `
 
 const Avatar = styled.div`
@@ -45,7 +57,6 @@ const Page = styled.div`
 `
 
 const Sidebar = styled.div`
-  width: 200px;
   height: 100%;
   padding: 8px;
   display: flex;
@@ -63,7 +74,15 @@ export const Layout = ({ children }: { children: any }) => {
   return (
     <Container>
       <Header>
-        <Heading>Stock Management System</Heading>
+        <Logo>
+          <Image
+            src="/icons/Burger.svg"
+            alt="burger-icon"
+            width={24}
+            height={24}
+          />
+          <WhiteHeading>Stock Management System</WhiteHeading>
+        </Logo>
         <Avatar>
           <Image src="/images/avatar.png" alt="avatar" width={25} height={25} />
         </Avatar>
