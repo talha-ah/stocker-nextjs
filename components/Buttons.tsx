@@ -2,6 +2,7 @@ import styled from "styled-components"
 
 type ButtonType = {
   fluid?: boolean
+  loading?: boolean
 }
 
 export const BaseButton = styled.button<ButtonType>`
@@ -20,6 +21,10 @@ export const BaseButton = styled.button<ButtonType>`
   border-radius: ${({ theme }) => theme.borders.radius.default};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
+
+  // &:hover {
+  //   transform: translateY(-2px);
+  // }
 `
 
 export const Button = styled(BaseButton)`
@@ -28,51 +33,21 @@ export const Button = styled(BaseButton)`
 `
 
 export const NeutralButton = styled(BaseButton)`
-  border: 0;
-  outline: 0;
-  font-size: 14px;
-  font-weight: 500;
-  padding: 6.5px 12px;
-  margin: 0;
-  text-decoration: none;
-  transition: all 0.3s ease 0s;
   color: ${({ theme }) => theme.colors.primary};
   background: ${({ theme }) => theme.colors.white};
   border-radius: ${({ theme }) => theme.borders.radius.default};
-  font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
-    Segoe UI Emoji, Segoe UI Symbol;
 `
 
 export const BorderedButton = styled(BaseButton)`
-  outline: 0;
-  font-size: 14px;
-  font-weight: 500;
-  padding: 6.5px 12px;
-  margin: 0;
-  text-decoration: none;
-  background: none;
-  transition: all 0.3s ease 0s;
   color: ${({ theme }) => theme.colors.primary};
-  border-radius: ${({ theme }) => theme.borders.radius.default};
   border: ${({ theme }) => theme.borders.light};
-  font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
-    Segoe UI Emoji, Segoe UI Symbol;
+  border-radius: ${({ theme }) => theme.borders.radius.default};
 `
 
 export const GhostButton = styled(BaseButton)`
-  border: 0;
-  outline: 0;
-  font-size: 14px;
-  font-weight: 500;
-  padding: 6.5px 12px;
-  margin: 0;
-  text-decoration: none;
-  background: none;
-  transition: all 0.3s ease 0s;
+  background: transparent;
   color: ${({ theme }) => theme.colors.primary};
   border-radius: ${({ theme }) => theme.borders.radius.default};
-  font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
-    Segoe UI Emoji, Segoe UI Symbol;
 `
 
 export const IconButton = styled.button`
@@ -88,10 +63,6 @@ export const IconButton = styled.button`
   background-color: none;
   justify-content: center;
   transition: all 0.3s ease 0s;
-
-  // &:hover {
-  //   transform: translateY(-2px);
-  // }
 `
 
 export const Anchor = styled.button`

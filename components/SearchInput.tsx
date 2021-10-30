@@ -14,12 +14,12 @@ const SearchBar = styled.div`
 `
 
 const StyledImage = styled(Image)`
-  color: red !important;
+  color: red;
 `
 
 const Input = styled.input`
-  width: 100%;
   height: 100%;
+  width: 100% !important;
   padding: 0 ${({ theme }) => theme.gaps.light};
 `
 

@@ -24,13 +24,13 @@ const Icons = styled.div`
 `
 
 const StyledImage = styled(Image)`
-  color: red !important;
+  color: red;
 `
 
 export const Header = (props: any) => {
   return (
     <HeaderContainer>
-      <Heading>Categories</Heading>
+      <Heading>{props.title}</Heading>
       <Icons>
         <SearchIconInput />
         <IconButton onClick={props.add}>
@@ -56,17 +56,19 @@ export const Header = (props: any) => {
 
 const TableContainer = styled.table`
   width: 100%;
+  font-size: 14px;
+  font-weight: 400;
   border-collapse: collapse;
-  color: ${({ theme }) => theme.colors.text};
+  color: ${({ theme }) => theme.colors.placeholder};
   font-family: Segoe UI, Arial, Helvetica, sans-serif;
 
   & tr {
     border-radius: 60px;
   }
 
-  & tr:nth-child(even) {
-    background-color: ${({ theme }) => theme.colors.accent};
-  }
+  // & tr:nth-child(even) {
+  //   background-color: ${({ theme }) => theme.colors.white};
+  // }
 
   & tr:hover {
     background-color: ${({ theme }) => theme.colors.white};
@@ -75,6 +77,7 @@ const TableContainer = styled.table`
   & th {
     text-align: left;
     color: ${({ theme }) => theme.colors.text};
+    background-color: ${({ theme }) => theme.colors.white};
   }
 
   & td,

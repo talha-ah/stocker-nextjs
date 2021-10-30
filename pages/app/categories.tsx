@@ -19,51 +19,45 @@ const Content = styled.div`
 
 const tableData = {
   headers: [
-    { key: 1, name: "Company", field: "company" },
-    { key: 2, name: "Contact", field: "contact" },
-    { key: 3, name: "Country", field: "country" },
+    { key: 1, name: "Name", field: "name" },
+    { key: 2, name: "Items", field: "items" },
+    { key: 3, name: "Actions", field: "actions" },
   ],
   rows: [
     {
       key: 1,
-      company: "Alfreds Futterkiste",
-      contact: "Maria Anders",
-      country: "Germany",
+      name: "Bulbs",
+      items: 12,
     },
     {
       key: 2,
-      company: "Berglunds snabbköp",
-      contact: "Christina Berglund",
-      country: "Sweden",
-    },
-    {
-      key: 2,
-      company: "Centro comercial Moctezuma",
-      contact: "Francisco Chang",
-      country: "Mexico",
+      name: "Lights",
+      items: 221,
     },
     {
       key: 3,
-      company: "Ernst Handel",
-      contact: "Roland Mendel",
-      country: "Austria",
+      name: "TubeLights",
+      items: 122,
     },
     {
       key: 4,
-      company: "Island Trading",
-      contact: "Helen Bennett",
-      country: "UK",
+      name: "Buttons",
+      items: 33,
     },
     {
-      key: 4,
-      company: "Königlich Essen",
-      contact: "Philip Cramer",
-      country: "Germany",
+      key: 5,
+      name: "Switches",
+      items: 42,
+    },
+    {
+      key: 6,
+      name: "High Light",
+      items: 2,
     },
   ],
 }
 
-const App: NextPage = () => {
+const Categories: NextPage = () => {
   const [show, setShow] = useState(false)
 
   const { addCategory, loading, error } = useAddCategory()
@@ -84,7 +78,7 @@ const App: NextPage = () => {
       </Head>
 
       <Content>
-        <Header add={() => setShow((s) => !s)} />
+        <Header add={() => setShow((s) => !s)} title="Categories" />
         <Table data={tableData} />
         <Drawer
           show={show}
@@ -102,9 +96,7 @@ const App: NextPage = () => {
               label="Category Name"
             />
 
-            <Button type="submit" loading={loading}>
-              Create category
-            </Button>
+            <Button type="submit">Create</Button>
           </Form>
         </Drawer>
       </Content>
@@ -112,4 +104,4 @@ const App: NextPage = () => {
   )
 }
 
-export default App
+export default Categories

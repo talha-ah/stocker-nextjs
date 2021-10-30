@@ -32,7 +32,7 @@ const Item = styled.div<ItemType>`
   }
 
   & a {
-    color: red !important;
+    color: red;
   }
 `
 

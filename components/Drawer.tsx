@@ -1,6 +1,6 @@
 import Image from "next/image"
 import styled from "styled-components"
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 
 import { Heading } from "@components/Texts"
 import { IconButton } from "@components/Buttons"
@@ -31,7 +31,7 @@ const Container = styled.div`
 `
 
 const Body = styled.div`
-  width: 400px;
+  width: 500px;
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.gaps.semiLight};
@@ -55,25 +55,32 @@ const Content = styled.div`
 export const Drawer = (props: any) => {
   const [show, setShow] = useState(false)
 
-  const toggleShow = useCallback(
-    (state: boolean) => {
-      setShow(state)
-      props.setShow(state)
-    },
-    [props]
-  )
+  const toggleShow = (state: boolean) => {
+    setShow(state)
+    props.setShow(state)
+  }
 
   useEffect(() => {
     toggleShow(props.show)
     // eslint-disable-next-line
-  }, [toggleShow, props.show])
+  }, [props.show])
+
+  // Handle outside click
+  const ref = useRef(null)
+  const close = (e: any) => {
+    toggleShow(e && e.target !== ref.current)
+  }
+
+  useEffect(() => {
+    const element = document.getElementById("drawer")
+    element?.addEventListener("click", close)
+    return () => element?.removeEventListener("click", close)
+    // eslint-disable-next-line
+  }, [])
 
   return (
-    <Container
-      onClick={() => toggleShow(false)}
-      className={`${show ? "is-open" : ""}`}
-    >
-      <Body onClick={(event) => event.stopPropagation()}>
+    <Container ref={ref} id="drawer" className={`${show ? "is-open" : ""}`}>
+      <Body>
         <Header>
           <Heading>{props.title}</Heading>
           <IconButton onClick={() => toggleShow(false)}>

@@ -33,7 +33,12 @@ const InputContainer = styled.div`
 
 const StyledInput = styled.input<InputType>`
   background-color: ${({ primary, theme }) =>
-    primary ? theme.colors.bg : "transparent"} !important;
+    primary ? theme.colors.bg : theme.colors.white};
+`
+
+const StyledTextArea = styled.textarea<InputType>`
+  background-color: ${({ primary, theme }) =>
+    primary ? theme.colors.bg : theme.colors.white};
 `
 
 export const Input = ({
@@ -71,20 +76,23 @@ export const TextArea = ({
   name,
   label,
   error,
+  primary,
   required,
   placeholder,
 }: {
   name?: string
   label?: string
-  error?: string
   required?: any
+  primary?: boolean
   placeholder?: string
+  error?: string | null
 }) => (
   <InputContainer>
     {label && <label htmlFor={name}>{label}</label>}
-    <textarea
+    <StyledTextArea
       id={name}
       name={name}
+      primary={primary}
       required={required}
       placeholder={placeholder}
     />

@@ -97,7 +97,7 @@ const Login: NextPage = () => {
             />
 
             <Actions>
-              <Button fluid type="submit" loading={loading}>
+              <Button fluid type="submit">
                 Register
               </Button>
               <Link href="/login" passHref>

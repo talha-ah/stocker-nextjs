@@ -7,6 +7,18 @@ export const endpoints = {
 
   // Categories
   categories: base + "/categories",
+
+  // Stocks
+  stocks: base + "/stocks",
+
+  // Customers
+  customers: base + "/customers",
+
+  // Sale Reports
+  sales: base + "/sales",
+
+  // Orders
+  orders: base + "/orders",
 }
 
 export const screens = {

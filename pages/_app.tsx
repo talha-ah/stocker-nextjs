@@ -1,8 +1,7 @@
 import "@styles/globals.css"
 
-import type { AppProps } from "next/app"
-
 import { useEffect } from "react"
+import type { AppProps } from "next/app"
 import { createGlobalStyle, ThemeProvider } from "styled-components"
 
 import { useLoadUser } from "@hooks/auth"
@@ -38,20 +37,39 @@ const GlobalStyle = createGlobalStyle`
       Segoe UI Emoji, Segoe UI Symbol;
   }
   input {
+    border: 0;
+    outline: 0;
+    width: 100%;
     height: 34px;
-    border: 0 !important;
-    outline: 0 !important;
-    width: 100% !important;
     transition: all 0.3s ease 0s;
-    padding: 0px ${theme.gaps.semiLight} !important;
-    border-bottom: ${theme.borders.input} !important;
-    background-color: ${theme.colors.white} !important;
-    border-radius: ${theme.borders.radius.default} !important;
+    padding: 0px ${theme.gaps.semiLight};
+    border-bottom: ${theme.borders.input};
+    background-color: ${theme.colors.white};
+    border-radius: ${theme.borders.radius.default};
     font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
       Segoe UI Emoji, Segoe UI Symbol;
 
     :focus {
-      border-bottom: ${theme.borders.inputActive} !important;
+      border-bottom: ${theme.borders.inputActive};
+    }
+  }
+  textarea {
+    border: 0;
+    outline: 0;
+    width: 100%;
+    height: 34px;
+    overflow: hidden;
+    resize: vertical;
+    min-height: 80px;
+    border-bottom: ${theme.borders.input};
+    background-color: ${theme.colors.white};
+    border-radius: ${theme.borders.radius.default};
+    padding: ${theme.gaps.light} ${theme.gaps.semiLight};
+    font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
+      Segoe UI Emoji, Segoe UI Symbol;
+
+    :focus {
+      border-bottom: ${theme.borders.inputActive};
     }
   }
 `
