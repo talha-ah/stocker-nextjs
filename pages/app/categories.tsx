@@ -8,7 +8,7 @@ import { Modal } from "@components/Modal"
 import { Button } from "@components/Buttons"
 import { Form, Input } from "@components/Inputs"
 import { Header, Table } from "@components/Table"
-import { useAddCategory } from "@hooks/categories"
+import { useCategories } from "@hooks/categories"
 
 const Content = styled.div`
   width: 100%;
@@ -17,56 +17,15 @@ const Content = styled.div`
   gap: ${({ theme }) => theme.gaps.light};
 `
 
-const tableData = {
-  headers: [
-    { key: 1, name: "Name", field: "name" },
-    { key: 2, name: "Items", field: "items" },
-    { key: 3, name: "Actions", field: "actions" },
-  ],
-  rows: [
-    {
-      key: 1,
-      name: "Bulbs",
-      items: 12,
-    },
-    {
-      key: 2,
-      name: "Lights",
-      items: 221,
-    },
-    {
-      key: 3,
-      name: "TubeLights",
-      items: 122,
-    },
-    {
-      key: 4,
-      name: "Buttons",
-      items: 33,
-    },
-    {
-      key: 5,
-      name: "Switches",
-      items: 42,
-    },
-    {
-      key: 6,
-      name: "High Light",
-      items: 2,
-    },
-  ],
-}
-
 const Categories: NextPage = () => {
   const [show, setShow] = useState(false)
 
-  const { addCategory, loading, error } = useAddCategory()
+  const { data, headers, addData, addLoading, fetchLoading } = useCategories()
 
   const onSubmit = async (e: any) => {
     e.preventDefault()
-    const email = e.target.email.value
-    const password = e.target.password.value
-    addCategory({ email, password })
+    const name = e.target.name.value
+    addData({ name }, () => e.target.reset())
   }
 
   return (
@@ -79,7 +38,7 @@ const Categories: NextPage = () => {
 
       <Content>
         <Header add={() => setShow((s) => !s)} title="Categories" />
-        <Table data={tableData} />
+        <Table rows={data} headers={headers} loading={fetchLoading} />
         <Modal
           show={show}
           title="Add Category"
@@ -90,13 +49,14 @@ const Categories: NextPage = () => {
               primary
               required
               type="text"
-              error={error}
-              name="category_name"
-              placeholder="Category name"
+              name="name"
               label="Category Name"
+              placeholder="Category name"
             />
 
-            <Button type="submit">Create</Button>
+            <Button type="submit">
+              {addLoading ? "Loading..." : "Create"}
+            </Button>
           </Form>
         </Modal>
       </Content>

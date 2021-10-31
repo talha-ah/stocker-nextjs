@@ -6,7 +6,6 @@ import styled from "styled-components"
 import { Layout } from "@layouts/layout"
 import { Modal } from "@components/Modal"
 import { Button } from "@components/Buttons"
-import { useAddCustomer } from "@hooks/customers"
 import { Header, Table } from "@components/Table"
 import { Form, Input, TextArea } from "@components/Inputs"
 
@@ -85,15 +84,6 @@ const tableData = {
 const Customers: NextPage = () => {
   const [show, setShow] = useState(false)
 
-  const { addCustomer, loading, error } = useAddCustomer()
-
-  const onSubmit = async (e: any) => {
-    e.preventDefault()
-    const email = e.target.email.value
-    const password = e.target.password.value
-    addCustomer({ email, password })
-  }
-
   return (
     <Layout>
       <Head>
@@ -104,13 +94,13 @@ const Customers: NextPage = () => {
 
       <Content>
         <Header add={() => setShow((s) => !s)} title="Customers" />
-        <Table data={tableData} />
+        {/* <Table data={tableData} /> */}
         <Modal
           show={show}
           title="Add Customer"
           setShow={(s: boolean) => setShow(s)}
         >
-          <Form onSubmit={onSubmit}>
+          {/* <Form onSubmit={onSubmit}>
             <Input
               primary
               required
@@ -153,10 +143,10 @@ const Customers: NextPage = () => {
               label="Details"
               name="description"
               placeholder="Details"
-            />
+            /> 
 
             <Button type="submit">Create</Button>
-          </Form>
+          </Form>*/}
         </Modal>
       </Content>
     </Layout>

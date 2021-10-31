@@ -82,29 +82,50 @@ const TableContainer = styled.table`
 
   & td,
   & th {
-    padding: ${({ theme }) => theme.gaps.light};
+    padding: ${({ theme }) => theme.gaps.light}
+      ${({ theme }) => theme.gaps.semiLight};
     border-bottom: ${({ theme }) => theme.borders.tableBorder};
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 `
 
-export const Table = ({ data }: { data: any }) => {
+export const Table = ({
+  rows,
+  headers,
+  loading,
+}: {
+  rows: any
+  headers: any
+  loading: boolean
+}) => {
   return (
     <TableContainer>
       <thead>
         <tr>
-          {data.headers.map((header: any) => (
+          {headers?.map((header: any) => (
             <th key={header.key}>{header.name}</th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {data.rows.map((row: any) => (
-          <tr key={generateId()}>
-            {data.headers.map((header: any) => (
-              <td key={generateId()}>{row[header.field]}</td>
-            ))}
+        {loading ? (
+          <tr>
+            <td colSpan={headers?.length} style={{ textAlign: "center" }}>
+              Loading...
+            </td>
           </tr>
-        ))}
+        ) : (
+          rows?.map((row: any) => (
+            <tr key={generateId()}>
+              {headers.map((header: any) => (
+                <td key={generateId()}>{row[header.field]}</td>
+              ))}
+            </tr>
+          ))
+        )}
       </tbody>
     </TableContainer>
   )

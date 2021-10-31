@@ -5,6 +5,9 @@ export const endpoints = {
   login: base + "/auth/login",
   register: base + "/auth/register",
 
+  // Users
+  users: base + "/users",
+
   // Categories
   categories: base + "/categories",
 
@@ -14,11 +17,11 @@ export const endpoints = {
   // Customers
   customers: base + "/customers",
 
-  // Sale Reports
-  sales: base + "/sales",
-
   // Orders
   orders: base + "/orders",
+
+  // Sale Reports
+  sales: base + "/sales",
 }
 
 export const screens = {

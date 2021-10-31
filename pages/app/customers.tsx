@@ -6,7 +6,7 @@ import styled from "styled-components"
 import { Layout } from "@layouts/layout"
 import { Modal } from "@components/Modal"
 import { Button } from "@components/Buttons"
-import { useAddCustomer } from "@hooks/customers"
+import { useCustomers } from "@hooks/customers"
 import { Header, Table } from "@components/Table"
 import { Form, Input, TextArea } from "@components/Inputs"
 
@@ -17,81 +17,17 @@ const Content = styled.div`
   gap: ${({ theme }) => theme.gaps.light};
 `
 
-const tableData = {
-  headers: [
-    { key: 1, name: "Name", field: "name" },
-    { key: 2, name: "Email", field: "email" },
-    { key: 3, name: "Phone", field: "phone" },
-    { key: 4, name: "Address", field: "address" },
-    { key: 5, name: "Details", field: "details" },
-    { key: 6, name: "Sales", field: "sales" },
-    { key: 7, name: "Balance", field: "balance" },
-    { key: 8, name: "Actions", field: "actions" },
-  ],
-  rows: [
-    {
-      key: 1,
-      name: "Talha Ahmad",
-      email: "talha@gmail.com",
-      phone: "03364543004",
-      address: "Harbance pura Lahore",
-      details: "Bulb description",
-      sales: 20,
-      balance: 0,
-    },
-    {
-      key: 2,
-      name: "Talha Ahmad",
-      email: "talha@gmail.com",
-      phone: "03364543004",
-      address: "Harbance pura Lahore",
-      details: "Bulb description",
-      sales: 20,
-      balance: 0,
-    },
-    {
-      key: 3,
-      name: "Talha Ahmad",
-      email: "talha@gmail.com",
-      phone: "03364543004",
-      address: "Harbance pura Lahore",
-      details: "Bulb description",
-      sales: 20,
-      balance: 0,
-    },
-    {
-      key: 4,
-      name: "Talha Ahmad",
-      email: "talha@gmail.com",
-      phone: "03364543004",
-      address: "Harbance pura Lahore",
-      details: "Bulb description",
-      sales: 20,
-      balance: 0,
-    },
-    {
-      key: 5,
-      name: "Talha Ahmad",
-      email: "talha@gmail.com",
-      phone: "03364543004",
-      address: "Harbance pura Lahore",
-      details: "Bulb description",
-      sales: 20,
-      balance: 0,
-    },
-  ],
-}
-
 const Customers: NextPage = () => {
   const [show, setShow] = useState(false)
 
-  const { addCustomer, loading, error } = useAddCustomer()
+  const { data, headers, addData, addError, addLoading, fetchLoading } =
+    useCustomers()
 
   const onSubmit = async (e: any) => {
     e.preventDefault()
     const email = e.target.email.value
     const password = e.target.password.value
-    addCustomer({ email, password })
+    addData({ email, password })
   }
 
   return (
@@ -104,7 +40,7 @@ const Customers: NextPage = () => {
 
       <Content>
         <Header add={() => setShow((s) => !s)} title="Customers" />
-        <Table data={tableData} />
+        <Table rows={data} headers={headers} loading={fetchLoading} />
         <Modal
           show={show}
           title="Add Customer"
@@ -117,7 +53,7 @@ const Customers: NextPage = () => {
               type="text"
               name="name"
               label="Name"
-              error={error}
+              error={addError}
               placeholder="Name"
             />
             <Input
@@ -125,7 +61,7 @@ const Customers: NextPage = () => {
               required
               type="email"
               name="email"
-              error={error}
+              error={addError}
               label="Email"
               placeholder="Email"
             />
@@ -134,7 +70,7 @@ const Customers: NextPage = () => {
               required
               type="text"
               name="phone"
-              error={error}
+              error={addError}
               label="Phone"
               placeholder="Phone"
             />
@@ -142,20 +78,22 @@ const Customers: NextPage = () => {
               primary
               required
               type="text"
-              error={error}
+              error={addError}
               name="address"
               label="Address"
               placeholder="Address"
             />
             <TextArea
               primary
-              error={error}
+              error={addError}
               label="Details"
               name="description"
               placeholder="Details"
             />
 
-            <Button type="submit">Create</Button>
+            <Button type="submit">
+              {addLoading ? "Loading..." : "Create"}
+            </Button>
           </Form>
         </Modal>
       </Content>

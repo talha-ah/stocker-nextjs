@@ -88,7 +88,7 @@ const Orders: NextPage = () => {
 
       <Content>
         <Header add={() => alert("Add Order")} title="Receipts" />
-        <Table data={tableData} />
+        {/* <Table data={tableData} /> */}
       </Content>
     </Layout>
   )
