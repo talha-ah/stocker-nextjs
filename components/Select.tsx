@@ -5,6 +5,19 @@ import { useState, useRef, useEffect } from "react"
 import { generateId } from "@utils/common"
 import { DangerText } from "@components/Texts"
 
+type SelectorType = {
+  primary?: boolean
+}
+
+type OptionType = {
+  active?: boolean
+}
+
+type SelectionType = {
+  value?: string
+  label?: string
+} | null
+
 const Container = styled.div`
   width: 100%;
   display: flex;
@@ -13,42 +26,60 @@ const Container = styled.div`
   transition: all 0.3s ease 0s;
 `
 
-type InputContainerType = {
-  primary?: boolean
-}
-
-const InputContainer = styled.div<InputContainerType>`
+const Selector = styled.div<SelectorType>`
+  border: 0;
+  outline: 0;
   width: 100%;
   height: 34px;
   display: flex;
-  index: 1;
-  position: relative;
-  cursor: pointer;
-  flex-direction: row;
-  align-items: center;
-  transition: all 0.3s ease 0s;
-  justify-content: space-between;
-  padding: 0px ${({ theme }) => theme.gaps.semiLight};
-  background-color: ${({ primary, theme }) =>
-    primary ? theme.colors.bg : theme.colors.white};
-  border-radius: ${({ theme }) => theme.borders.radius.default};
-`
-
-const Input = styled.div`
-  border: 0;
-  outline: 0;
-  index: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
   font-size: 14px;
+  cursor: pointer;
+  overflow: hidden;
   position: relative;
   align-items: center;
   justify-content: flex-start;
   transition: all 0.3s ease 0s;
-  border-bottom: ${({ theme }) => theme.borders.input};
+  padding: 0px ${({ theme }) => theme.gaps.semiLight};
+  border-radius: ${({ theme }) => theme.borders.radius.default};
+  background-color: ${({ primary, theme }) =>
+    primary ? theme.colors.bg : theme.colors.white};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
+`
+
+const SelectorIcon = styled.div`
+  top: 0;
+  height: 100%;
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  right: ${({ theme }) => theme.gaps.semiLight};
+`
+
+const InputContainer = styled.div`
+  width: 100%;
+  padding: 0px ${({ theme }) => theme.gaps.semiLight}
+    ${({ theme }) => theme.gaps.light};
+`
+
+const Input = styled.input`
+  border: 0;
+  outline: 0;
+  width: 100%;
+  height: 34px;
+  font-size: 14px;
+  transition: all 0.3s ease 0s;
+  padding: 0px ${({ theme }) => theme.gaps.semiLight};
+  background-color: ${({ theme }) => theme.colors.bg};
+  border-bottom: ${({ theme }) => theme.borders.input};
+  border-radius: ${({ theme }) => theme.borders.radius.default};
+  font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
+    Segoe UI Emoji, Segoe UI Symbol;
+
+  :focus {
+    border-bottom: ${({ theme }) => theme.borders.inputActive};
+  }
 `
 
 const Options = styled.div`
@@ -66,11 +97,8 @@ const Options = styled.div`
   padding: ${({ theme }) => theme.gaps.light} 0px;
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: ${({ theme }) => theme.borders.radius.default};
+  filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1));
 `
-
-type OptionType = {
-  active?: boolean
-}
 
 const Option = styled.div<OptionType>`
   width: 100%;
@@ -95,25 +123,22 @@ const Dot = styled.div`
   background-color: ${({ theme }) => theme.colors.primary};
 `
 
-type SelectionType = {
-  value?: string
-  label?: string
-} | null
-
 export const Select = (props: any) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [open, setOpen] = useState(false)
   const [selection, setSelection] = useState<SelectionType[]>([])
 
-  const toggling = (e: any) => {
-    e.stopPropagation()
-    setIsOpen(!isOpen)
+  function isItemInSelection(item: any) {
+    return selection.some((current) => current?.value === item.value)
   }
+
+  const toggle = () => setOpen((s) => !s)
 
   const onSelect = (item: any) => () => {
     if (!selection.some((current) => current?.value === item?.value)) {
       if (!props.multi) {
+        setQuery("")
+        setOpen(false)
         setSelection([item])
-        setIsOpen(false)
         props.onChange([item])
       } else if (props.multi) {
         setSelection([...selection, item])
@@ -126,17 +151,27 @@ export const Select = (props: any) => {
       )
       setSelection([...selectionAfterRemoval])
       props.onChange([...selectionAfterRemoval])
+      setQuery("")
+      !props.multi && setOpen(false)
     }
   }
 
-  function isItemInSelection(item: any) {
-    return selection.some((current) => current?.value === item.value)
+  // Filtering
+  const [query, setQuery] = useState("")
+
+  const filter = (options: any) => {
+    return options.filter(
+      (option: any) =>
+        option.value.toLowerCase().indexOf(query.toLowerCase()) > -1
+    )
   }
 
   // Handle outside click
   const ref = useRef(null)
+
   const close = (e: any) => {
-    setIsOpen(() => e && e.target === ref.current)
+    setQuery("")
+    setOpen(() => e && e.target === ref.current)
   }
 
   useEffect(() => {
@@ -145,32 +180,38 @@ export const Select = (props: any) => {
   }, [])
 
   return (
-    <Container>
+    <Container onClick={(e) => e.stopPropagation()}>
       {props.label && <label htmlFor={props.name}>{props.label}</label>}
-      <InputContainer
-        ref={ref}
-        id={props.name}
-        onClick={toggling}
-        primary={props.primary}
-      >
-        <Input>
-          {props.multi
-            ? selection.length !== 0
-              ? `${selection.length} item(s) selected`
-              : props.placeholder
-            : selection[0]?.label || props.placeholder}
-        </Input>
-        <Image
-          src="/icons/ChevronDown.svg"
-          alt="search-icon"
-          width={24}
-          height={24}
-        />
-      </InputContainer>
+
+      <Selector primary={props.primary} ref={ref} onClick={toggle}>
+        {props.multi
+          ? selection.length !== 0
+            ? `${selection.length} item(s) selected`
+            : props.placeholder
+          : selection[0]?.label || props.placeholder}
+
+        <SelectorIcon>
+          <Image
+            src="/icons/ChevronDown.svg"
+            alt="search-icon"
+            width={24}
+            height={24}
+          />
+        </SelectorIcon>
+      </Selector>
       {props.error && <DangerText>{props.error}</DangerText>}
-      {isOpen && (
+      {open && (
         <Options>
-          {props.options.map((option: any) => (
+          <InputContainer>
+            <Input
+              type="text"
+              name="query"
+              autoComplete="off"
+              placeholder="Search"
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </InputContainer>
+          {filter(props.options).map((option: any) => (
             <Option
               key={generateId()}
               onClick={onSelect(option)}

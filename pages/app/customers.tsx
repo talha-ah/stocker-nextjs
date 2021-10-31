@@ -4,7 +4,7 @@ import type { NextPage } from "next"
 import styled from "styled-components"
 
 import { Layout } from "@layouts/layout"
-import { Drawer } from "@components/Drawer"
+import { Modal } from "@components/Modal"
 import { Button } from "@components/Buttons"
 import { useAddCustomer } from "@hooks/customers"
 import { Header, Table } from "@components/Table"
@@ -22,11 +22,11 @@ const tableData = {
     { key: 1, name: "Name", field: "name" },
     { key: 2, name: "Email", field: "email" },
     { key: 3, name: "Phone", field: "phone" },
-    { key: 3, name: "Address", field: "address" },
-    { key: 3, name: "Details", field: "details" },
-    { key: 3, name: "Sales", field: "sales" },
-    { key: 3, name: "Balance", field: "balance" },
-    { key: 3, name: "Actions", field: "actions" },
+    { key: 4, name: "Address", field: "address" },
+    { key: 5, name: "Details", field: "details" },
+    { key: 6, name: "Sales", field: "sales" },
+    { key: 7, name: "Balance", field: "balance" },
+    { key: 8, name: "Actions", field: "actions" },
   ],
   rows: [
     {
@@ -105,7 +105,7 @@ const Customers: NextPage = () => {
       <Content>
         <Header add={() => setShow((s) => !s)} title="Customers" />
         <Table data={tableData} />
-        <Drawer
+        <Modal
           show={show}
           title="Add Customer"
           setShow={(s: boolean) => setShow(s)}
@@ -157,7 +157,7 @@ const Customers: NextPage = () => {
 
             <Button type="submit">Create</Button>
           </Form>
-        </Drawer>
+        </Modal>
       </Content>
     </Layout>
   )

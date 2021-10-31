@@ -4,7 +4,7 @@ import type { NextPage } from "next"
 import styled from "styled-components"
 
 import { Layout } from "@layouts/layout"
-import { Drawer } from "@components/Drawer"
+import { Modal } from "@components/Modal"
 import { Button } from "@components/Buttons"
 import { useAddCustomer } from "@hooks/customers"
 import { Header, Table } from "@components/Table"
@@ -105,7 +105,7 @@ const Customers: NextPage = () => {
       <Content>
         <Header add={() => setShow((s) => !s)} title="Customers" />
         <Table data={tableData} />
-        <Drawer
+        <Modal
           show={show}
           title="Add Customer"
           setShow={(s: boolean) => setShow(s)}
@@ -157,7 +157,7 @@ const Customers: NextPage = () => {
 
             <Button type="submit">Create</Button>
           </Form>
-        </Drawer>
+        </Modal>
       </Content>
     </Layout>
   )

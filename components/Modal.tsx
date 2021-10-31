@@ -52,7 +52,7 @@ const Content = styled.div`
   width: 100%;
 `
 
-export const Drawer = (props: any) => {
+export const Modal = (props: any) => {
   const [show, setShow] = useState(false)
 
   const toggleShow = (state: boolean) => {
@@ -72,14 +72,14 @@ export const Drawer = (props: any) => {
   }
 
   useEffect(() => {
-    const element = document.getElementById("drawer")
+    const element = document.getElementById("modal")
     element?.addEventListener("click", close)
     return () => element?.removeEventListener("click", close)
     // eslint-disable-next-line
   }, [])
 
   return (
-    <Container ref={ref} id="drawer" className={`${show ? "is-open" : ""}`}>
+    <Container ref={ref} id="modal" className={`${show ? "is-open" : ""}`}>
       <Body>
         <Header>
           <Heading>{props.title}</Heading>

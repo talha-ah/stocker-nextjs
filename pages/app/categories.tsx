@@ -4,7 +4,7 @@ import type { NextPage } from "next"
 import styled from "styled-components"
 
 import { Layout } from "@layouts/layout"
-import { Drawer } from "@components/Drawer"
+import { Modal } from "@components/Modal"
 import { Button } from "@components/Buttons"
 import { Form, Input } from "@components/Inputs"
 import { Header, Table } from "@components/Table"
@@ -80,7 +80,7 @@ const Categories: NextPage = () => {
       <Content>
         <Header add={() => setShow((s) => !s)} title="Categories" />
         <Table data={tableData} />
-        <Drawer
+        <Modal
           show={show}
           title="Add Category"
           setShow={(s: boolean) => setShow(s)}
@@ -98,7 +98,7 @@ const Categories: NextPage = () => {
 
             <Button type="submit">Create</Button>
           </Form>
-        </Drawer>
+        </Modal>
       </Content>
     </Layout>
   )

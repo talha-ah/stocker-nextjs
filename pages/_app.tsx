@@ -36,42 +36,6 @@ const GlobalStyle = createGlobalStyle`
     font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
       Segoe UI Emoji, Segoe UI Symbol;
   }
-  input {
-    border: 0;
-    outline: 0;
-    width: 100%;
-    height: 34px;
-    transition: all 0.3s ease 0s;
-    padding: 0px ${theme.gaps.semiLight};
-    border-bottom: ${theme.borders.input};
-    background-color: ${theme.colors.white};
-    border-radius: ${theme.borders.radius.default};
-    font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
-      Segoe UI Emoji, Segoe UI Symbol;
-
-    :focus {
-      border-bottom: ${theme.borders.inputActive};
-    }
-  }
-  textarea {
-    border: 0;
-    outline: 0;
-    width: 100%;
-    height: 34px;
-    overflow: hidden;
-    resize: vertical;
-    min-height: 80px;
-    border-bottom: ${theme.borders.input};
-    background-color: ${theme.colors.white};
-    border-radius: ${theme.borders.radius.default};
-    padding: ${theme.gaps.light} ${theme.gaps.semiLight};
-    font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
-      Segoe UI Emoji, Segoe UI Symbol;
-
-    :focus {
-      border-bottom: ${theme.borders.inputActive};
-    }
-  }
 `
 
 export default function App({ Component, pageProps }: AppProps) {

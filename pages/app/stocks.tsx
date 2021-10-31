@@ -5,7 +5,7 @@ import styled from "styled-components"
 
 import { Layout } from "@layouts/layout"
 import { useAddStock } from "@hooks/stocks"
-import { Drawer } from "@components/Drawer"
+import { Modal } from "@components/Modal"
 import { Select } from "@components/Select"
 import { Button } from "@components/Buttons"
 import { Header, Table } from "@components/Table"
@@ -112,7 +112,7 @@ const Stocks: NextPage = () => {
       <Content>
         <Header add={() => setShow((s) => !s)} title="Stocks" />
         <Table data={tableData} />
-        <Drawer
+        <Modal
           show={show}
           title="Add Stock"
           setShow={(s: boolean) => setShow(s)}
@@ -187,7 +187,7 @@ const Stocks: NextPage = () => {
 
             <Button type="submit">Create</Button>
           </Form>
-        </Drawer>
+        </Modal>
       </Content>
     </Layout>
   )
