@@ -80,7 +80,7 @@ const Login: NextPage = () => {
 
             <Actions>
               <Button fluid type="submit">
-                Login
+                {loading ? "Loading..." : "Login"}
               </Button>
               <Link href="/register" passHref>
                 <GhostButton fluid>Create new account</GhostButton>

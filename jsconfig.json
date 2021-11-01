@@ -3,13 +3,13 @@
     "baseUrl": ".",
     "paths": {
       "@utils/*": ["./utils/*"],
-      "@store/*": ["./store/*"],
       "@pages/*": ["./pages/*"],
       "@hooks/*": ["./hooks/*"],
       "@public/*": ["./public/*"],
       "@styles/*": ["./styles/*"],
       "@assets/*": ["./assets/*"],
       "@layouts/*": ["./layouts/*"],
+      "@contexts/*": ["./contexts/*"],
       "@components/*": ["./components/*"]
     }
   },

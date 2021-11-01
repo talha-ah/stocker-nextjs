@@ -1,13 +1,11 @@
 import "@styles/globals.css"
 
-import { useEffect } from "react"
 import type { AppProps } from "next/app"
 import { createGlobalStyle, ThemeProvider } from "styled-components"
 
-import { useLoadUser } from "@hooks/auth"
 import { colors, gaps, borders, sidebar } from "@utils/theme"
 
-import { AuthProvider } from "../store"
+import { AppProvider } from "../contexts"
 
 const theme = {
   gaps,
@@ -39,18 +37,12 @@ const GlobalStyle = createGlobalStyle`
 `
 
 export default function App({ Component, pageProps }: AppProps) {
-  const { loadUser, loading, error } = useLoadUser()
-
-  useEffect(() => {
-    loadUser()
-  }, [loadUser])
-
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <AuthProvider>
-        {loading ? "Loading..." : <Component {...pageProps} />}
-      </AuthProvider>
+      <AppProvider>
+        <Component {...pageProps} />
+      </AppProvider>
     </ThemeProvider>
   )
 }

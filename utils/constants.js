@@ -5,6 +5,9 @@ export const endpoints = {
   login: base + "/auth/login",
   register: base + "/auth/register",
 
+  // Profile
+  profile: base + "/profile",
+
   // Users
   users: base + "/users",
 

@@ -5,10 +5,11 @@ import { api } from "@utils/api"
 import { endpoints } from "@utils/constants"
 import { getBrowserItem } from "@utils/browser-utility"
 
-import { useAuth, Actions } from "../store"
+import { useAppContext, AuthTypes } from "@contexts/index"
 
 export const useLogin = () => {
-  const { dispatch } = useAuth()
+  const router = useRouter()
+  const { dispatch } = useAppContext()
 
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -23,10 +24,10 @@ export const useLogin = () => {
       })
 
       dispatch({
-        type: Actions.SET_AUTH,
-        payload: { user: response.user, token: response.token },
+        type: AuthTypes.LOGIN,
+        payload: { user: response.user, token: response.data.token },
       })
-      setLoading(false)
+      router.push("/app")
     } catch (error) {
       setError(error.message)
     } finally {
@@ -63,9 +64,9 @@ export const useRegister = () => {
   return { doRegister, loading, error }
 }
 
-export const useLoadUser = () => {
+export const useCheckUser = () => {
   const router = useRouter()
-  const { dispatch } = useAuth()
+  const { dispatch } = useAppContext()
 
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -73,26 +74,18 @@ export const useLoadUser = () => {
   const loadUser = async () => {
     try {
       const token = getBrowserItem()
+      if (!token) return
 
-      if (!token) {
-        setTimeout(() => {
-          setLoading(false)
-          return
-        }, 5000)
-      } else {
-        const data = await api({
-          uri: Constants.PROFILE,
-          token: token,
-        })
+      const response = await api({
+        uri: endpoints.profile,
+      })
 
-        dispatch({
-          type: actionTypes.SET_AUTH,
-          payload: { token: token, user: data.user },
-        })
+      dispatch({
+        type: AuthTypes.LOGIN,
+        payload: { token: token, user: response.data },
+      })
 
-        setLoading(false)
-        router.push("/app")
-      }
+      router.push("/app")
     } catch (error) {
       setError(error.message)
     } finally {
@@ -101,4 +94,16 @@ export const useLoadUser = () => {
   }
 
   return { loadUser, loading, error }
+}
+
+export const useLogout = () => {
+  const router = useRouter()
+  const { dispatch } = useAppContext()
+
+  const doLogout = async () => {
+    dispatch({ type: AuthTypes.LOGOUT })
+    router.push("/")
+  }
+
+  return { doLogout }
 }

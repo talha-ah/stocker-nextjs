@@ -2,6 +2,7 @@ import Image from "next/image"
 import styled from "styled-components"
 
 import Menu from "@components/Menu"
+import { useLogout } from "@hooks/auth"
 import { Heading } from "@components/Texts"
 import { IconButton } from "@components/Buttons"
 
@@ -72,6 +73,8 @@ const Content = styled.div`
 `
 
 export const Layout = ({ children }: { children: any }) => {
+  const { doLogout } = useLogout()
+
   return (
     <Container>
       <Header>
@@ -86,7 +89,7 @@ export const Layout = ({ children }: { children: any }) => {
           </IconButton>
           <WhiteHeading>Stock Management System</WhiteHeading>
         </Brand>
-        <Avatar>
+        <Avatar onClick={() => doLogout()}>
           <Image src="/images/avatar.png" alt="avatar" width={25} height={25} />
         </Avatar>
       </Header>
