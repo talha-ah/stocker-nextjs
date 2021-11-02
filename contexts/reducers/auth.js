@@ -4,11 +4,17 @@ import {
   removeBrowserItem,
 } from "@utils/browser-utility"
 
+export const AuthInitialState = {
+  user: "",
+  token: "",
+  auth: false,
+  darkMode: false,
+}
+
 export const AuthTypes = {
   LOGIN: "LOGIN",
   LOGOUT: "LOGOUT",
   SET_USER: "SET_USER",
-  SET_LOADING: "SET_LOADING",
   SET_DARK_MODE: "SET_DARK_MODE",
 }
 
@@ -44,11 +50,4 @@ export const AuthReducer = (state, action) => {
     default:
       return state
   }
-}
-
-export const AuthInitialState = {
-  user: "",
-  token: "",
-  auth: false,
-  darkMode: false,
 }

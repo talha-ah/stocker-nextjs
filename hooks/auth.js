@@ -30,8 +30,8 @@ export const useLogin = () => {
       router.push("/app")
     } catch (error) {
       setError(error.message)
-    } finally {
       setLoading(false)
+    } finally {
     }
   }
 
