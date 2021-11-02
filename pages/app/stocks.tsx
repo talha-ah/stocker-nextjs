@@ -6,9 +6,10 @@ import styled from "styled-components"
 import { Layout } from "@layouts/layout"
 import { useStocks } from "@hooks/stocks"
 import { Modal } from "@components/Modal"
-import { Select } from "@components/Select"
 import { Button } from "@components/Buttons"
+import { useAppContext } from "@contexts/index"
 import { Header, Table } from "@components/Table"
+import { Select, SelectType } from "@components/Select"
 import { Form, Input, TextArea } from "@components/Inputs"
 
 const Content = styled.div`
@@ -19,16 +20,27 @@ const Content = styled.div`
 `
 
 const Stocks: NextPage = () => {
+  const { state } = useAppContext()
   const [show, setShow] = useState(false)
+  const [category, setCategory] = useState<SelectType[]>([])
 
   const { data, headers, addData, addError, addLoading, fetchLoading } =
     useStocks()
 
   const onSubmit = async (e: any) => {
     e.preventDefault()
-    const email = e.target.email.value
-    const password = e.target.password.value
-    addData({ email, password })
+
+    const body: any = {
+      category: category[0]?.value,
+    }
+    Array.from(e.target).forEach((input: any) => {
+      input.name && (body[input.name] = input.value)
+    })
+
+    addData(body, () => {
+      e.target.reset()
+      setCategory([])
+    })
   }
 
   return (
@@ -54,13 +66,13 @@ const Stocks: NextPage = () => {
               error={addError}
               name="category"
               label="Category"
+              value={category}
               placeholder="Category"
-              onChange={(value: any) => console.log(value)}
-              options={[
-                { label: "Bulbs", value: "bulbs" },
-                { label: "LEDs", value: "leds" },
-                { label: "Pliers", value: "pliers" },
-              ]}
+              onChange={(value: any) => setCategory(value)}
+              options={state.categories.categories.map((category: any) => ({
+                label: category?.name,
+                value: category?._id,
+              }))}
             />
             <Input
               primary

@@ -69,7 +69,7 @@ const sidebarMenuList = [
   },
 ]
 
-export default function Menu() {
+export const Menu = () => {
   const router = useRouter()
 
   return (

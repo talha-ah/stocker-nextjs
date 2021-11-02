@@ -1,11 +1,38 @@
-import { useState } from "react"
 import { useRouter } from "next/router"
+import { useState, useEffect } from "react"
 
 import { api } from "@utils/api"
 import { endpoints } from "@utils/constants"
 import { getBrowserItem } from "@utils/browser-utility"
 
+import { useCategories } from "@hooks/categories"
 import { useAppContext, AuthTypes } from "@contexts/index"
+
+export const useRegister = () => {
+  const router = useRouter()
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
+
+  const doRegister = async (body) => {
+    try {
+      setLoading(true)
+      await api({
+        method: "POST",
+        uri: endpoints.register,
+        body: JSON.stringify(body),
+      })
+
+      setLoading(false)
+      router.replace("/")
+    } catch (error) {
+      setError(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return { doRegister, loading, error }
+}
 
 export const useLogin = () => {
   const router = useRouter()
@@ -38,64 +65,6 @@ export const useLogin = () => {
   return { doLogin, loading, error }
 }
 
-export const useRegister = () => {
-  const router = useRouter()
-  const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(false)
-
-  const doRegister = async (body) => {
-    try {
-      setLoading(true)
-      await api({
-        method: "POST",
-        uri: endpoints.register,
-        body: JSON.stringify(body),
-      })
-
-      setLoading(false)
-      router.replace("/")
-    } catch (error) {
-      setError(error.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return { doRegister, loading, error }
-}
-
-export const useCheckUser = () => {
-  const router = useRouter()
-  const { dispatch } = useAppContext()
-
-  const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(true)
-
-  const loadUser = async () => {
-    try {
-      const token = getBrowserItem()
-      if (!token) return
-
-      const response = await api({
-        uri: endpoints.profile,
-      })
-
-      dispatch({
-        type: AuthTypes.LOGIN,
-        payload: { token: token, user: response.data },
-      })
-
-      router.push("/app")
-    } catch (error) {
-      setError(error.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return { loadUser, loading, error }
-}
-
 export const useLogout = () => {
   const router = useRouter()
   const { dispatch } = useAppContext()
@@ -106,4 +75,57 @@ export const useLogout = () => {
   }
 
   return { doLogout }
+}
+
+export const AuthWrapper = ({ children }) => {
+  const router = useRouter()
+  const { dispatch } = useAppContext()
+  const { fetchData: fetchCategories } = useCategories()
+
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  const checkAuth = async () => {
+    try {
+      const token = getBrowserItem()
+      if (!token) {
+        if (router.asPath.startsWith("/app")) {
+          router.replace("/")
+        } else {
+          router.replace(router.asPath)
+        }
+        return
+      }
+
+      const response = await api({
+        uri: endpoints.profile,
+      })
+      fetchCategories()
+
+      dispatch({
+        type: AuthTypes.LOGIN,
+        payload: { token: token, user: response.data },
+      })
+
+      if (router.asPath.startsWith("/app")) {
+        router.replace(router.asPath)
+      } else {
+        router.replace("/app")
+      }
+    } catch (error) {
+      setError(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    checkAuth()
+    // eslint-disable-next-line
+  }, [])
+
+  if (loading) return <div>Loading...</div>
+  if (error) return <div>Error: {error}</div>
+
+  return children
 }

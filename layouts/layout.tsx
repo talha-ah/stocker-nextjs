@@ -1,9 +1,10 @@
 import Image from "next/image"
 import styled from "styled-components"
 
-import Menu from "@components/Menu"
+import { Menu } from "@components/Menu"
 import { useLogout } from "@hooks/auth"
 import { Heading } from "@components/Texts"
+import { useAppContext } from "@contexts/index"
 import { IconButton } from "@components/Buttons"
 
 const Container = styled.div`
@@ -74,9 +75,11 @@ const Content = styled.div`
 
 export const Layout = ({ children }: { children: any }) => {
   const { doLogout } = useLogout()
+  const { state } = useAppContext()
 
   return (
     <Container>
+      {console.log("State Layout", state)}
       <Header>
         <Brand>
           <IconButton>

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 
 import { api } from "@utils/api"
 import { endpoints } from "@utils/constants"
+import { useAppContext } from "@contexts/index"
 
 const headers = [
   { key: 1, name: "Sr.", field: "sr" },
@@ -16,6 +17,7 @@ const headers = [
 ]
 
 export const useStocks = () => {
+  const { state } = useAppContext()
   const [data, setData] = useState([])
 
   const [addError, setAddError] = useState("")
@@ -36,15 +38,16 @@ export const useStocks = () => {
       })
 
       const result = response.data.map((row, ind) => ({
-        sr: ind + 1,
+        sr: row.sr,
+        _id: row._id,
         key: row._id,
-        description: row.description,
+        code: row.code,
+        location: row.location,
+        inventory: row.inventory,
         cost_price: row.cost_price,
         sale_price: row.sale_price,
-        inventory: row.inventory,
-        location: row.location,
-        code: row.code,
         category: row.category.name,
+        description: row.description,
       }))
 
       setData(result)
@@ -55,16 +58,31 @@ export const useStocks = () => {
     }
   }
 
-  const addData = async (body) => {
+  const addData = async (body, cb) => {
     try {
       setAddLoading(true)
+
       const response = await api({
         method: "POST",
         uri: endpoints.stocks,
         body: JSON.stringify(body),
       })
 
-      setData(response)
+      const category = state.categories.categories.find(
+        (category) => String(category._id) === String(body.category)
+      )
+
+      let result = [
+        ...data,
+        {
+          ...response.data,
+          key: response.data._id,
+          category: category.name,
+        },
+      ]
+
+      setData(result)
+      cb()
     } catch (error) {
       setAddError(error.message)
     } finally {

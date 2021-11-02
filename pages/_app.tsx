@@ -3,6 +3,8 @@ import "@styles/globals.css"
 import type { AppProps } from "next/app"
 import { createGlobalStyle, ThemeProvider } from "styled-components"
 
+import { AuthWrapper } from "@hooks/auth"
+import { AppProvider } from "@contexts/index"
 import { colors, gaps, borders, sidebar } from "@utils/theme"
 
 const theme = {
@@ -38,7 +40,11 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <Component {...pageProps} />
+      <AppProvider>
+        <AuthWrapper>
+          <Component {...pageProps} />
+        </AuthWrapper>
+      </AppProvider>
     </ThemeProvider>
   )
 }

@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
 import { api } from "@utils/api"
 import { endpoints } from "@utils/constants"
+import { useAppContext, CategoriesTypes } from "@contexts/index"
 
 const headers = [
   { key: 1, name: "Name", field: "name" },
@@ -11,6 +12,7 @@ const headers = [
 
 export const useCategories = () => {
   const [data, setData] = useState([])
+  const { state, dispatch } = useAppContext()
 
   const [addError, setAddError] = useState("")
   const [fetchError, setFetchError] = useState("")
@@ -18,22 +20,29 @@ export const useCategories = () => {
   const [addLoading, setAddLoading] = useState(false)
   const [fetchLoading, setFetchLoading] = useState(true)
 
-  useEffect(() => {
-    fetchData()
-  }, [])
-
   const fetchData = async () => {
     try {
+      if (state.categories.categoriesFetched) {
+        setData(state.categories.categories)
+        return
+      }
+
       const response = await api({
         method: "GET",
         uri: endpoints.categories,
       })
 
       const result = response.data.map((row) => ({
+        _id: row._id,
         key: row._id,
         name: row.name,
         items: row.items,
       }))
+
+      dispatch({
+        type: CategoriesTypes.SET_CATEGORIES,
+        payload: { categories: result },
+      })
 
       setData(result)
     } catch (error) {
@@ -53,7 +62,14 @@ export const useCategories = () => {
         body: JSON.stringify(body),
       })
 
-      setData([{ ...response.data, items: 0 }, ...data])
+      const result = { ...response.data, items: 0 }
+
+      dispatch({
+        type: CategoriesTypes.ADD_CATEGORY,
+        payload: { category: result },
+      })
+
+      setData([result, ...data])
       cb()
     } catch (error) {
       setAddError(error.message)

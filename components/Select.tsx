@@ -13,7 +13,7 @@ type OptionType = {
   active?: boolean
 }
 
-type SelectionType = {
+export type SelectType = {
   value?: string
   label?: string
 } | null
@@ -125,31 +125,27 @@ const Dot = styled.div`
 
 export const Select = (props: any) => {
   const [open, setOpen] = useState(false)
-  const [selection, setSelection] = useState<SelectionType[]>([])
 
   function isItemInSelection(item: any) {
-    return selection.some((current) => current?.value === item.value)
+    return props.value.some((current: any) => current?.value === item.value)
   }
 
   const toggle = () => setOpen((s) => !s)
 
   const onSelect = (item: any) => () => {
-    if (!selection.some((current) => current?.value === item?.value)) {
+    if (!props.value.some((current: any) => current?.value === item?.value)) {
       if (!props.multi) {
         setQuery("")
         setOpen(false)
-        setSelection([item])
         props.onChange([item])
       } else if (props.multi) {
-        setSelection([...selection, item])
-        props.onChange([...selection, item])
+        props.onChange([...props.value, item])
       }
     } else {
-      let selectionAfterRemoval = selection
+      let selectionAfterRemoval = props.value
       selectionAfterRemoval = selectionAfterRemoval.filter(
-        (current) => current?.value !== item.value
+        (current: any) => current?.value !== item.value
       )
-      setSelection([...selectionAfterRemoval])
       props.onChange([...selectionAfterRemoval])
       setQuery("")
       !props.multi && setOpen(false)
@@ -185,10 +181,10 @@ export const Select = (props: any) => {
 
       <Selector primary={props.primary} ref={ref} onClick={toggle}>
         {props.multi
-          ? selection.length !== 0
-            ? `${selection.length} item(s) selected`
+          ? props.value.length !== 0
+            ? `${props.value.length} item(s) selected`
             : props.placeholder
-          : selection[0]?.label || props.placeholder}
+          : props.value[0]?.label || props.placeholder}
 
         <SelectorIcon>
           <Image

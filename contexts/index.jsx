@@ -1,6 +1,11 @@
 import { useContext, createContext, useReducer } from "react"
 
 import { AuthInitialState, AuthReducer, AuthTypes } from "./reducers/auth"
+import {
+  CategoriesTypes,
+  CategoriesReducer,
+  CategoriesInitialState,
+} from "./reducers/categories"
 
 // combine reducers ala Redux: each can handle its own slice
 const combineReducers = (slices) => (prevState, action) =>
@@ -15,10 +20,12 @@ const combineReducers = (slices) => (prevState, action) =>
 
 const AppReducer = combineReducers({
   auth: AuthReducer,
+  categories: CategoriesReducer,
 })
 
 const AppInitialState = {
   auth: AuthInitialState,
+  categories: CategoriesInitialState,
 }
 
 export const AppContext = createContext({
@@ -36,6 +43,6 @@ export const AppProvider = ({ children }) => {
   )
 }
 
-export { AuthTypes }
+export { AuthTypes, CategoriesTypes }
 
 export const useAppContext = () => useContext(AppContext)

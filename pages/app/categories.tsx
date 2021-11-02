@@ -1,7 +1,7 @@
 import Head from "next/head"
-import { useState } from "react"
 import type { NextPage } from "next"
 import styled from "styled-components"
+import { useState, useEffect } from "react"
 
 import { Layout } from "@layouts/layout"
 import { Modal } from "@components/Modal"
@@ -20,7 +20,13 @@ const Content = styled.div`
 const Categories: NextPage = () => {
   const [show, setShow] = useState(false)
 
-  const { data, headers, addData, addLoading, fetchLoading } = useCategories()
+  const { fetchData, data, headers, addData, addLoading, fetchLoading } =
+    useCategories()
+
+  useEffect(() => {
+    fetchData()
+    // eslint-disable-next-line
+  }, [])
 
   const onSubmit = async (e: any) => {
     e.preventDefault()

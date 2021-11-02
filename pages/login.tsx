@@ -1,5 +1,6 @@
 import Head from "next/head"
 import Link from "next/link"
+import { useEffect } from "react"
 import type { NextPage } from "next"
 import styled from "styled-components"
 import { useRouter } from "next/router"
@@ -43,6 +44,12 @@ const Login: NextPage = () => {
     const password = e.target.password.value
     doLogin({ email, password })
   }
+
+  useEffect(() => {
+    router.prefetch("/register")
+    router.prefetch("/app")
+    // eslint-disable-next-line
+  }, [])
 
   return (
     <Container>

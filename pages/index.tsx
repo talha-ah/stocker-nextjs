@@ -4,8 +4,8 @@ import Image from "next/image"
 import { useEffect } from "react"
 import type { NextPage } from "next"
 import styled from "styled-components"
+import { useRouter } from "next/router"
 
-import { useCheckUser } from "@hooks/auth"
 import { Container, Main } from "@components/Common"
 import { Heading, SemiSmall } from "@components/Texts"
 import { Button, GhostButton } from "@components/Buttons"
@@ -41,10 +41,10 @@ const BlackHeading = styled(Heading)`
 `
 
 const Home: NextPage = () => {
-  const { loadUser, loading } = useCheckUser()
+  const router = useRouter()
 
   useEffect(() => {
-    loadUser()
+    router.prefetch("/login")
     // eslint-disable-next-line
   }, [])
 
@@ -57,36 +57,32 @@ const Home: NextPage = () => {
       </Head>
 
       <Main width="100%">
-        {loading ? (
-          "Loading..."
-        ) : (
-          <Content>
-            <ContentItem>
-              <Image
-                width={200}
-                height={200}
-                src="/images/people.png"
-                alt="Picture of the author"
-              />
-            </ContentItem>
-            <ContentItem>
-              <BlackHeading>
-                Welcome to Stocker! We’re glad you’re here.
-              </BlackHeading>
-              <SemiSmall>
-                Stocker is your tool to create and manage your stocks.
-              </SemiSmall>
-            </ContentItem>
-            <ContentActions>
-              <Link href="/login" passHref>
-                <Button fluid>Sign In</Button>
-              </Link>
-              <Link href="/register" passHref>
-                <GhostButton fluid>Create new account</GhostButton>
-              </Link>
-            </ContentActions>
-          </Content>
-        )}
+        <Content>
+          <ContentItem>
+            <Image
+              width={200}
+              height={200}
+              src="/images/people.png"
+              alt="Picture of the author"
+            />
+          </ContentItem>
+          <ContentItem>
+            <BlackHeading>
+              Welcome to Stocker! We’re glad you’re here.
+            </BlackHeading>
+            <SemiSmall>
+              Stocker is your tool to create and manage your stocks.
+            </SemiSmall>
+          </ContentItem>
+          <ContentActions>
+            <Link href="/login" passHref>
+              <Button fluid>Sign In</Button>
+            </Link>
+            <Link href="/register" passHref>
+              <GhostButton fluid>Create new account</GhostButton>
+            </Link>
+          </ContentActions>
+        </Content>
       </Main>
     </Container>
   )
