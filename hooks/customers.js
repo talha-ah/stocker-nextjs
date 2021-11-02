@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
 import { api } from "@utils/api"
 import { endpoints } from "@utils/constants"
@@ -23,26 +23,23 @@ export const useCustomers = () => {
   const [addLoading, setAddLoading] = useState(false)
   const [fetchLoading, setFetchLoading] = useState(true)
 
-  useEffect(() => {
-    fetchData()
-  }, [])
-
   const fetchData = async () => {
     try {
       const response = await api({
         method: "GET",
-        uri: `${endpoints.users}?role=customer`,
+        uri: endpoints.customers,
       })
 
       const result = response.data.map((row) => ({
         key: row._id,
+        _id: row._id,
         email: row.email,
         phone: row.phone,
         name: row.first_name,
         address_one: row.address_one,
         description: row.description,
         sales: row.sales,
-        balance: row.balance,
+        balance: row.balance.value,
       }))
 
       setData(result)
@@ -53,16 +50,23 @@ export const useCustomers = () => {
     }
   }
 
-  const addData = async (body) => {
+  const addData = async (body, cb) => {
     try {
       setAddLoading(true)
+
       const response = await api({
         method: "POST",
         uri: endpoints.customers,
         body: JSON.stringify(body),
       })
 
-      setData(response)
+      const result = response.data
+      result.key = result._id
+      result.name = result.first_name
+      result.balance = result.balance.value
+
+      setData([result, ...data])
+      cb()
     } catch (error) {
       setAddError(error.message)
     } finally {

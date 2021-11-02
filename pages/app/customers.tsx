@@ -1,7 +1,7 @@
 import Head from "next/head"
-import { useState } from "react"
 import type { NextPage } from "next"
 import styled from "styled-components"
+import { useState, useEffect } from "react"
 
 import { Layout } from "@layouts/layout"
 import { Modal } from "@components/Modal"
@@ -20,14 +20,32 @@ const Content = styled.div`
 const Customers: NextPage = () => {
   const [show, setShow] = useState(false)
 
-  const { data, headers, addData, addError, addLoading, fetchLoading } =
-    useCustomers()
+  const {
+    data,
+    headers,
+    fetchData,
+    addData,
+    addError,
+    addLoading,
+    fetchLoading,
+  } = useCustomers()
+
+  useEffect(() => {
+    fetchData()
+    // eslint-disable-next-line
+  }, [])
 
   const onSubmit = async (e: any) => {
     e.preventDefault()
-    const email = e.target.email.value
-    const password = e.target.password.value
-    addData({ email, password })
+
+    const body: any = {}
+    Array.from(e.target).forEach((input: any) => {
+      input.name && (body[input.name] = input.value)
+    })
+
+    addData(body, () => {
+      e.target.reset()
+    })
   }
 
   return (
@@ -51,14 +69,13 @@ const Customers: NextPage = () => {
               primary
               required
               type="text"
-              name="name"
+              name="first_name"
               label="Name"
               error={addError}
               placeholder="Name"
             />
             <Input
               primary
-              required
               type="email"
               name="email"
               error={addError}
@@ -67,7 +84,6 @@ const Customers: NextPage = () => {
             />
             <Input
               primary
-              required
               type="text"
               name="phone"
               error={addError}
@@ -76,10 +92,9 @@ const Customers: NextPage = () => {
             />
             <Input
               primary
-              required
               type="text"
               error={addError}
-              name="address"
+              name="address_one"
               label="Address"
               placeholder="Address"
             />
