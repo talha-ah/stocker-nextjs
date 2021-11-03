@@ -2,6 +2,7 @@ import Head from "next/head"
 import { useState } from "react"
 import type { NextPage } from "next"
 import styled from "styled-components"
+import { useRouter } from "next/router"
 
 import { api } from "@utils/api"
 import { Layout } from "@layouts/layout"
@@ -87,6 +88,7 @@ type CustomerType = {
 } | null
 
 const Orders: NextPage = () => {
+  const router = useRouter()
   const [rows, setRows] = useState<RowType[]>([])
 
   const [paymentType, setPaymentType] = useState<SelectType[]>([
@@ -146,39 +148,50 @@ const Orders: NextPage = () => {
   // Add Customer <==================
 
   // ==================> Submit
-  const [orderLoading, setOrderLoading] = useState(false)
+  const [orderLoading, setOrderLoading] = useState<{
+    active: boolean
+    quotation: boolean
+  }>({
+    active: false,
+    quotation: false,
+  })
 
-  const onSubmit = async (status: string) => {
-    setOrderLoading(true)
-    const body = {
-      created_for: customer?.value,
-      display_id: generateId(),
-      stocks: rows.map((row) => ({
-        stock_id: row.value,
-        quantity: row.qty,
-        price: row.sale_price,
-        discount: row.discount,
-        discount_type: "percentage",
-      })),
-      type: paymentType[0]?.value,
-      installments: 1,
-      status: status || "active",
-      address_one: customer?.address_one,
-      address_two: customer?.address_two,
-      postal_code: customer?.postal_code,
-      city: customer?.city,
-      state: customer?.state,
-      country: customer?.country,
+  const onSubmit = async (status: string = "active") => {
+    try {
+      setOrderLoading({ ...orderLoading, [status]: true })
+      const body = {
+        created_for: customer?.value,
+        display_id: generateId(),
+        stocks: rows.map((row) => ({
+          stock_id: row.value,
+          quantity: row.qty,
+          price: row.sale_price,
+          discount: row.discount,
+          discount_type: "percentage",
+        })),
+        type: paymentType[0]?.value,
+        installments: 1,
+        status: status,
+        address_one: customer?.address_one,
+        address_two: customer?.address_two,
+        postal_code: customer?.postal_code,
+        city: customer?.city,
+        state: customer?.state,
+        country: customer?.country,
+      }
+
+      await api({
+        method: "POST",
+        uri: endpoints.orders,
+        body: JSON.stringify(body),
+      })
+      setOrderLoading({ ...orderLoading, [status]: false })
+
+      // Create invoice
+      router.back()
+    } catch (err) {
+      setOrderLoading({ ...orderLoading, [status]: false })
     }
-
-    await api({
-      method: "POST",
-      uri: endpoints.orders,
-      body: JSON.stringify(body),
-    })
-    setOrderLoading(true)
-
-    // Create invoice
   }
   // Submit <==================
 
@@ -192,6 +205,7 @@ const Orders: NextPage = () => {
 
       <Content>
         <Header title="Add Order" actions={false} />
+        {console.log(orderLoading)}
         <Selects>
           <Select
             name="paymentType"
@@ -225,10 +239,10 @@ const Orders: NextPage = () => {
         <Table rows={rows} headers={headers} />
         <Buttons>
           <NeutralButton onClick={() => onSubmit("quotation")}>
-            {orderLoading ? "Loading..." : "Add Quotation"}
+            {orderLoading.active ? "Loading..." : "Add Quotation"}
           </NeutralButton>
           <Button onClick={() => onSubmit("active")}>
-            {orderLoading ? "Loading..." : "Add Order"}
+            {orderLoading.quotation ? "Loading..." : "Add Order"}
           </Button>
         </Buttons>
         <Modal
