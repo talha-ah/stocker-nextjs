@@ -14,8 +14,8 @@ type OptionType = {
 }
 
 export type SelectType = {
-  value?: string
-  label?: string
+  value: string
+  label: string
 } | null
 
 const Container = styled.div`

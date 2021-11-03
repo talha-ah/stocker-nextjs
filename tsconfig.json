@@ -18,6 +18,7 @@
       "@utils/*": ["./utils/*"],
       "@pages/*": ["./pages/*"],
       "@hooks/*": ["./hooks/*"],
+      "@forms/*": ["./forms/*"],
       "@public/*": ["./public/*"],
       "@styles/*": ["./styles/*"],
       "@assets/*": ["./assets/*"],

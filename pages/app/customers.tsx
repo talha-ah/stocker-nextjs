@@ -5,10 +5,9 @@ import { useState, useEffect } from "react"
 
 import { Layout } from "@layouts/layout"
 import { Modal } from "@components/Modal"
-import { Button } from "@components/Buttons"
 import { useCustomers } from "@hooks/customers"
+import { CreateCustomer } from "forms/customers"
 import { Header, Table } from "@components/Table"
-import { Form, Input, TextArea } from "@components/Inputs"
 
 const Content = styled.div`
   width: 100%;
@@ -22,10 +21,10 @@ const Customers: NextPage = () => {
 
   const {
     data,
-    headers,
-    fetchData,
     addData,
+    headers,
     addError,
+    fetchData,
     addLoading,
     fetchLoading,
   } = useCustomers()
@@ -64,52 +63,11 @@ const Customers: NextPage = () => {
           title="Add Customer"
           setShow={(s: boolean) => setShow(s)}
         >
-          <Form onSubmit={onSubmit}>
-            <Input
-              primary
-              required
-              type="text"
-              name="first_name"
-              label="Name"
-              error={addError}
-              placeholder="Name"
-            />
-            <Input
-              primary
-              type="email"
-              name="email"
-              error={addError}
-              label="Email"
-              placeholder="Email"
-            />
-            <Input
-              primary
-              type="text"
-              name="phone"
-              error={addError}
-              label="Phone"
-              placeholder="Phone"
-            />
-            <Input
-              primary
-              type="text"
-              error={addError}
-              name="address_one"
-              label="Address"
-              placeholder="Address"
-            />
-            <TextArea
-              primary
-              error={addError}
-              label="Details"
-              name="description"
-              placeholder="Details"
-            />
-
-            <Button type="submit">
-              {addLoading ? "Loading..." : "Create"}
-            </Button>
-          </Form>
+          <CreateCustomer
+            error={addError}
+            onSubmit={onSubmit}
+            loading={addLoading}
+          />
         </Modal>
       </Content>
     </Layout>

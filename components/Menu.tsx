@@ -39,8 +39,9 @@ const Item = styled.div<ItemType>`
 const sidebarMenuList = [
   {
     id: 1,
-    name: "Home",
+    exact: true,
     url: "/app",
+    name: "Home",
   },
   {
     id: 2,
@@ -59,13 +60,13 @@ const sidebarMenuList = [
   },
   {
     id: 5,
-    name: "Sale Reports",
-    url: "/app/sales",
+    name: "Orders",
+    url: "/app/orders",
   },
   {
     id: 6,
-    name: "Receipts",
-    url: "/app/receipts",
+    name: "Sale Reports",
+    url: "/app/sales",
   },
 ]
 
@@ -76,7 +77,13 @@ export const Menu = () => {
     <Div>
       {sidebarMenuList.map((item) => (
         <Link key={item.id} href={item.url} passHref>
-          <Item active={router.route === item.url}>
+          <Item
+            active={
+              item.exact
+                ? router.asPath === item.url
+                : router.asPath.startsWith(item.url)
+            }
+          >
             <SubHeading>{item.name}</SubHeading>
           </Item>
         </Link>

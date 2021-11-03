@@ -2,13 +2,12 @@ import Head from "next/head"
 import Link from "next/link"
 import type { NextPage } from "next"
 import styled from "styled-components"
-import { useRouter } from "next/router"
 
 import { useLogin } from "@hooks/auth"
 import { Form, Input } from "@components/Inputs"
 import { Main, Container } from "@components/Common"
 import { BigHeading, Small } from "@components/Texts"
-import { Button, GhostButton, Anchor } from "@components/Buttons"
+import { Button, GhostButton } from "@components/Buttons"
 
 const FormWrapper = styled.div`
   width: 100%;
@@ -33,8 +32,6 @@ const Actions = styled.div`
 `
 
 const Login: NextPage = () => {
-  const router = useRouter()
-
   const { doLogin, loading, error } = useLogin()
 
   const onSubmit = async (e: any) => {
@@ -53,7 +50,6 @@ const Login: NextPage = () => {
       </Head>
 
       <Main width="100%">
-        <Anchor onClick={() => router.back()}>&larr; Back</Anchor>
         <FormWrapper>
           <Texts>
             <BigHeading>Welcome</BigHeading>

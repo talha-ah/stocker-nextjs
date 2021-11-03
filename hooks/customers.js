@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 import { api } from "@utils/api"
 import { endpoints } from "@utils/constants"
@@ -84,4 +84,40 @@ export const useCustomers = () => {
     addLoading,
     fetchLoading,
   }
+}
+
+export const useSearchCustomer = (text) => {
+  const [customers, setCustomers] = useState([])
+  const [customersError, setCustomersError] = useState("")
+  const [customersLoading, setCustomersLoading] = useState(false)
+
+  const fetchCustomers = async () => {
+    try {
+      setCustomersLoading(true)
+
+      const response = await api({
+        method: "GET",
+        uri: `${endpoints.customers}?search=${text}`,
+      })
+
+      const result = response.data.map((customer) => ({
+        ...customer,
+        value: customer._id,
+        label: customer.first_name,
+      }))
+
+      setCustomers(result)
+    } catch (error) {
+      setCustomersError(error.message)
+    } finally {
+      setCustomersLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    text ? fetchCustomers() : setCustomers([])
+    // eslint-disable-next-line
+  }, [text])
+
+  return { customers, customersLoading, customersError }
 }

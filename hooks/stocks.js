@@ -101,3 +101,39 @@ export const useStocks = () => {
     fetchLoading,
   }
 }
+
+export const useSearchStock = (text, filterArray) => {
+  const [stocks, setStocks] = useState([])
+  const [stocksError, setStocksError] = useState("")
+  const [stocksLoading, setStocksLoading] = useState(false)
+
+  const fetchStocks = async () => {
+    try {
+      setStocksLoading(true)
+
+      const response = await api({
+        method: "GET",
+        uri: `${endpoints.stocks}?search=${text}`,
+      })
+
+      const result = response.data.map((stock) => ({
+        ...stock,
+        value: stock._id,
+        label: stock.description,
+      }))
+
+      setStocks(result)
+    } catch (error) {
+      setStocksError(error.message)
+    } finally {
+      setStocksLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    text ? fetchStocks() : setStocks([])
+    // eslint-disable-next-line
+  }, [text])
+
+  return { stocks, stocksError, stocksLoading }
+}

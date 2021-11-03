@@ -1,13 +1,9 @@
 import Head from "next/head"
-import { useState } from "react"
 import type { NextPage } from "next"
 import styled from "styled-components"
 
 import { Layout } from "@layouts/layout"
-import { Modal } from "@components/Modal"
-import { Button } from "@components/Buttons"
 import { Header, Table } from "@components/Table"
-import { Form, Input, TextArea } from "@components/Inputs"
 
 const Content = styled.div`
   width: 100%;
@@ -21,11 +17,11 @@ const tableData = {
     { key: 1, name: "Name", field: "name" },
     { key: 2, name: "Email", field: "email" },
     { key: 3, name: "Phone", field: "phone" },
-    { key: 3, name: "Address", field: "address" },
-    { key: 3, name: "Details", field: "details" },
-    { key: 3, name: "Sales", field: "sales" },
-    { key: 3, name: "Balance", field: "balance" },
-    { key: 3, name: "Actions", field: "actions" },
+    { key: 4, name: "Address", field: "address" },
+    { key: 5, name: "Details", field: "details" },
+    { key: 6, name: "Sales", field: "sales" },
+    { key: 7, name: "Balance", field: "balance" },
+    { key: 8, name: "Actions", field: "actions" },
   ],
   rows: [
     {
@@ -82,8 +78,6 @@ const tableData = {
 }
 
 const Customers: NextPage = () => {
-  const [show, setShow] = useState(false)
-
   return (
     <Layout>
       <Head>
@@ -93,61 +87,8 @@ const Customers: NextPage = () => {
       </Head>
 
       <Content>
-        <Header add={() => setShow((s) => !s)} title="Customers" />
-        {/* <Table data={tableData} /> */}
-        <Modal
-          show={show}
-          title="Add Customer"
-          setShow={(s: boolean) => setShow(s)}
-        >
-          {/* <Form onSubmit={onSubmit}>
-            <Input
-              primary
-              required
-              type="text"
-              name="name"
-              label="Name"
-              error={error}
-              placeholder="Name"
-            />
-            <Input
-              primary
-              required
-              type="email"
-              name="email"
-              error={error}
-              label="Email"
-              placeholder="Email"
-            />
-            <Input
-              primary
-              required
-              type="text"
-              name="phone"
-              error={error}
-              label="Phone"
-              placeholder="Phone"
-            />
-            <Input
-              primary
-              required
-              type="text"
-              error={error}
-              name="address"
-              label="Address"
-              placeholder="Address"
-            />
-            <TextArea
-              primary
-              error={error}
-              label="Details"
-              name="description"
-              placeholder="Details"
-            /> 
-
-            <Button type="submit">Create</Button>
-          </Form>*/}
-        </Modal>
+        <Header title="Sales" />
+        <Table rows={tableData.rows} headers={tableData.headers} />
       </Content>
     </Layout>
   )

@@ -1,7 +1,17 @@
 import DateUtility from "./date"
-import { getBrowserItem } from "./browser-utility"
+import { getBrowserItem, removeBrowserItem } from "./browser-utility"
 
-export const api = ({ method = "GET", uri, body, headers }) =>
+export const api = ({
+  method = "GET",
+  uri,
+  body,
+  headers,
+}: {
+  method?: string
+  uri: string
+  body?: any
+  headers?: any
+}) =>
   new Promise(async (resolve, reject) => {
     try {
       const token = getBrowserItem()
@@ -21,8 +31,11 @@ export const api = ({ method = "GET", uri, body, headers }) =>
 
       console.log(`[API Data at ${DateUtility.getLocaleDate()}]:`, data)
       resolve(data)
-    } catch (err) {
+    } catch (err: any) {
       if (err.status) {
+        if (err.status === 403) {
+          removeBrowserItem()
+        }
         const error = await err.json()
         console.log(`[API Error at ${DateUtility.getLocaleDate()}]:`, error)
         reject(error)

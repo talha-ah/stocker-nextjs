@@ -27,29 +27,39 @@ const StyledImage = styled(Image)`
   color: red;
 `
 
-export const Header = (props: any) => {
+export const Header = ({
+  title,
+  actions = true,
+  add = () => null,
+}: {
+  title: string
+  actions?: boolean
+  add?: any
+}) => {
   return (
     <HeaderContainer>
-      <Heading>{props.title}</Heading>
-      <Icons>
-        <SearchIconInput />
-        <IconButton onClick={props.add}>
-          <StyledImage
-            src="/icons/Plus.svg"
-            alt="search-icon"
-            width={24}
-            height={24}
-          />
-        </IconButton>
-        <IconButton>
-          <StyledImage
-            src="/icons/Settings.svg"
-            alt="search-icon"
-            width={24}
-            height={24}
-          />
-        </IconButton>
-      </Icons>
+      <Heading>{title}</Heading>
+      {actions && (
+        <Icons>
+          <SearchIconInput />
+          <IconButton onClick={add}>
+            <StyledImage
+              src="/icons/Plus.svg"
+              alt="search-icon"
+              width={24}
+              height={24}
+            />
+          </IconButton>
+          <IconButton>
+            <StyledImage
+              src="/icons/Settings.svg"
+              alt="search-icon"
+              width={24}
+              height={24}
+            />
+          </IconButton>
+        </Icons>
+      )}
     </HeaderContainer>
   )
 }
@@ -99,7 +109,7 @@ export const Table = ({
 }: {
   rows: any
   headers: any
-  loading: boolean
+  loading?: boolean
 }) => {
   return (
     <TableContainer>
