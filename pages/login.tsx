@@ -1,15 +1,14 @@
 import Head from "next/head"
-import Link from "next/link"
 import { useEffect } from "react"
 import type { NextPage } from "next"
 import styled from "styled-components"
 import { useRouter } from "next/router"
 
+import { DoLogin } from "@forms/auth"
 import { useLogin } from "@hooks/auth"
-import { Form, Input } from "@components/Inputs"
+import { Logo } from "@components/Buttons"
 import { Main, Container } from "@components/Common"
 import { BigHeading, Small } from "@components/Texts"
-import { Button, GhostButton } from "@components/Buttons"
 
 const FormWrapper = styled.div`
   width: 100%;
@@ -25,24 +24,13 @@ const Texts = styled.div`
   width: 100%;
 `
 
-const Actions = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.gaps.light};
-`
-
 const Login: NextPage = () => {
   const router = useRouter()
 
   const { doLogin, loading, error } = useLogin()
 
-  const onSubmit = async (e: any) => {
-    e.preventDefault()
-    const email = e.target.email.value
-    const password = e.target.password.value
-    doLogin({ email, password })
+  const onSubmit = async (body: any) => {
+    doLogin(body)
   }
 
   useEffect(() => {
@@ -60,40 +48,13 @@ const Login: NextPage = () => {
       </Head>
 
       <Main width="100%">
-        {/* <Anchor onClick={() => router.back()}>&larr; Back</Anchor> */}
+        <Logo onClick={() => router.replace("/")}>Stocker</Logo>
         <FormWrapper>
           <Texts>
             <BigHeading>Welcome</BigHeading>
             <Small>Kindly login to continue</Small>
           </Texts>
-          <Form onSubmit={onSubmit}>
-            <Input
-              required
-              name="email"
-              type="email"
-              error={error}
-              label="Email Address"
-              placeholder="name@domain.com"
-            />
-
-            <Input
-              required
-              error={error}
-              name="password"
-              type="password"
-              label="Password"
-              placeholder="*********"
-            />
-
-            <Actions>
-              <Button fluid type="submit">
-                {loading ? "Loading..." : "Login"}
-              </Button>
-              <Link href="/register" passHref>
-                <GhostButton fluid>Create new account</GhostButton>
-              </Link>
-            </Actions>
-          </Form>
+          <DoLogin onSubmit={onSubmit} loading={loading} error={error} />
         </FormWrapper>
       </Main>
     </Container>

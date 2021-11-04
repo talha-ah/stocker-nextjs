@@ -74,18 +74,24 @@ const StyledTextArea = styled.textarea<InputType>`
 
 export const Input = ({
   name,
-  label,
   type,
+  label,
   error,
+  value,
   primary,
   required,
+  onChange,
   placeholder,
+  defaultValue,
 }: {
   name?: string
   type?: string
   label?: string
-  required?: any
+  value?: string
+  onChange?: any
   primary?: boolean
+  required?: boolean
+  defaultValue?: any
   placeholder?: string
   error?: string | null
 }) => (
@@ -94,10 +100,13 @@ export const Input = ({
     <StyledInput
       id={name}
       name={name}
+      value={value}
       primary={primary}
       required={required}
+      onChange={onChange}
       type={type || "text"}
       placeholder={placeholder}
+      defaultValue={defaultValue}
     />
     {error && <DangerText>{error}</DangerText>}
   </InputContainer>
@@ -107,15 +116,21 @@ export const TextArea = ({
   name,
   label,
   error,
+  value,
   primary,
   required,
+  onChange,
   placeholder,
+  defaultValue,
 }: {
   name?: string
   label?: string
-  required?: any
+  value?: string
+  onChange?: any
   primary?: boolean
+  required?: boolean
   placeholder?: string
+  defaultValue?: string
   error?: string | null
 }) => (
   <InputContainer>
@@ -123,9 +138,12 @@ export const TextArea = ({
     <StyledTextArea
       id={name}
       name={name}
+      value={value}
       primary={primary}
       required={required}
+      onChange={onChange}
       placeholder={placeholder}
+      defaultValue={defaultValue}
     />
     {error && <DangerText>{error}</DangerText>}
   </InputContainer>

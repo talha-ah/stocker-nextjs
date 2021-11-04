@@ -7,11 +7,24 @@ export const CreateCustomer = ({
   onSubmit,
 }: {
   onSubmit: any
-  error: any
-  loading: boolean
+  loading?: boolean
+  error?: string | null
 }) => {
+  const submitHandler = async (e: any) => {
+    e.preventDefault()
+
+    const body: any = {}
+    Array.from(e.target).forEach((input: any) => {
+      input.name && (body[input.name] = input.value)
+    })
+
+    onSubmit(body, () => {
+      e.target.reset()
+    })
+  }
+
   return (
-    <Form onSubmit={onSubmit}>
+    <Form onSubmit={submitHandler}>
       <Input
         primary
         required

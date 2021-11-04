@@ -1,13 +1,13 @@
 import Head from "next/head"
-import Link from "next/link"
 import type { NextPage } from "next"
 import styled from "styled-components"
+import { useRouter } from "next/router"
 
-import { useLogin } from "@hooks/auth"
-import { Form, Input } from "@components/Inputs"
+import { DoRegister } from "@forms/auth"
+import { useRegister } from "@hooks/auth"
+import { Logo } from "@components/Buttons"
 import { Main, Container } from "@components/Common"
 import { BigHeading, Small } from "@components/Texts"
-import { Button, GhostButton } from "@components/Buttons"
 
 const FormWrapper = styled.div`
   width: 100%;
@@ -23,22 +23,12 @@ const Texts = styled.div`
   width: 100%;
 `
 
-const Actions = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.gaps.light};
-`
+const Register: NextPage = () => {
+  const router = useRouter()
+  const { doRegister, loading, error } = useRegister()
 
-const Login: NextPage = () => {
-  const { doLogin, loading, error } = useLogin()
-
-  const onSubmit = async (e: any) => {
-    e.preventDefault()
-    const email = e.target.email.value
-    const password = e.target.password.value
-    doLogin({ email, password })
+  const onSubmit = async (body: any) => {
+    doRegister(body)
   }
 
   return (
@@ -50,61 +40,17 @@ const Login: NextPage = () => {
       </Head>
 
       <Main width="100%">
+        <Logo onClick={() => router.replace("/")}>Stocker</Logo>
         <FormWrapper>
           <Texts>
             <BigHeading>Welcome</BigHeading>
             <Small>Kindly register to continue</Small>
           </Texts>
-          <Form onSubmit={onSubmit}>
-            <Input
-              required
-              error={error}
-              name="name"
-              type="text"
-              label="Name"
-              placeholder="name"
-            />
-
-            <Input
-              required
-              error={error}
-              name="email"
-              type="email"
-              label="Email Address"
-              placeholder="name@domain.com"
-            />
-
-            <Input
-              required
-              error={error}
-              name="password"
-              type="password"
-              label="Password"
-              placeholder="*********"
-            />
-
-            <Input
-              required
-              name="secret"
-              error={error}
-              type="password"
-              label="Secret"
-              placeholder="XXXX XXXX XXXX"
-            />
-
-            <Actions>
-              <Button fluid type="submit">
-                {loading ? "Loading..." : "Register"}
-              </Button>
-              <Link href="/login" passHref>
-                <GhostButton fluid>Login</GhostButton>
-              </Link>
-            </Actions>
-          </Form>
+          <DoRegister onSubmit={onSubmit} loading={loading} error={error} />
         </FormWrapper>
       </Main>
     </Container>
   )
 }
 
-export default Login
+export default Register

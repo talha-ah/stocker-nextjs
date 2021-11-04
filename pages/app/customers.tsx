@@ -34,17 +34,8 @@ const Customers: NextPage = () => {
     // eslint-disable-next-line
   }, [])
 
-  const onSubmit = async (e: any) => {
-    e.preventDefault()
-
-    const body: any = {}
-    Array.from(e.target).forEach((input: any) => {
-      input.name && (body[input.name] = input.value)
-    })
-
-    addData(body, () => {
-      e.target.reset()
-    })
+  const onSubmit = async (body: any, cb: any) => {
+    addData(body, cb)
   }
 
   return (

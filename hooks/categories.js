@@ -2,6 +2,7 @@ import { useState } from "react"
 
 import { api } from "@utils/api"
 import { endpoints } from "@utils/constants"
+
 import { useAppContext, CategoriesTypes } from "@contexts/index"
 
 const headers = [
@@ -14,11 +15,17 @@ export const useCategories = () => {
   const [data, setData] = useState([])
   const { state, dispatch } = useAppContext()
 
-  const [addError, setAddError] = useState("")
   const [fetchError, setFetchError] = useState("")
-
-  const [addLoading, setAddLoading] = useState(false)
   const [fetchLoading, setFetchLoading] = useState(true)
+
+  const [addError, setAddError] = useState("")
+  const [addLoading, setAddLoading] = useState(false)
+
+  const [editError, setEditError] = useState(null)
+  const [editLoading, setEditLoading] = useState(false)
+
+  const [deleteError, setDeleteError] = useState(null)
+  const [deleteLoading, setDeleteLoading] = useState(false)
 
   const fetchData = async () => {
     try {
@@ -78,14 +85,78 @@ export const useCategories = () => {
     }
   }
 
+  const editData = async (body, id, cb) => {
+    try {
+      setEditLoading(true)
+
+      const response = await api({
+        method: "PUT",
+        uri: `${endpoints.categories}/${id}`,
+        body: JSON.stringify(body),
+      })
+
+      dispatch({
+        type: CategoriesTypes.EDIT_CATEGORY,
+        payload: { category: response.data },
+      })
+
+      const categories = [...data]
+      const categoryIndex = categories.findIndex(
+        (category) => String(category._id) === String(response.data._id)
+      )
+      categories[categoryIndex] = response.data
+
+      console.log("updated categories", categories)
+
+      setData(categories)
+      cb()
+    } catch (error) {
+      setEditError(error.message)
+    } finally {
+      setEditLoading(false)
+    }
+  }
+
+  const deleteData = async (id) => {
+    try {
+      setDeleteLoading(true)
+
+      await api({
+        method: "DELETE",
+        uri: `${endpoints.categories}/${id}`,
+      })
+
+      dispatch({
+        type: CategoriesTypes.DELETE_CATEGORY,
+        payload: { _id: id },
+      })
+
+      const result = data.filter(
+        (category) => String(category._id) !== String(id)
+      )
+
+      setData(result)
+    } catch (error) {
+      setDeleteError(error.message)
+    } finally {
+      setDeleteLoading(false)
+    }
+  }
+
   return {
     data,
     addData,
     headers,
+    editData,
     addError,
+    editError,
     fetchData,
     fetchError,
+    deleteData,
     addLoading,
+    editLoading,
+    deleteError,
     fetchLoading,
+    deleteLoading,
   }
 }

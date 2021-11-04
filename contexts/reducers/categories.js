@@ -5,8 +5,8 @@ export const CategoriesInitialState = {
 
 export const CategoriesTypes = {
   ADD_CATEGORY: "ADD_CATEGORY",
+  EDIT_CATEGORY: "EDIT_CATEGORY",
   SET_CATEGORIES: "SET_CATEGORIES",
-  UPDATE_CATEGORY: "UPDATE_CATEGORY",
   DELETE_CATEGORY: "DELETE_CATEGORY",
 }
 
@@ -23,10 +23,11 @@ export const CategoriesReducer = (state, action) => {
         ...state,
         categories: [action.payload.category, ...state.categories],
       }
-    case CategoriesTypes.UPDATE_CATEGORY:
+    case CategoriesTypes.EDIT_CATEGORY:
       const categories = [...state.categories]
       const categoryIndex = categories.findIndex(
-        (category) => String(category._id) === String(action.payload._id)
+        (category) =>
+          String(category._id) === String(action.payload.category._id)
       )
       categories[categoryIndex] = action.payload.category
       return {
