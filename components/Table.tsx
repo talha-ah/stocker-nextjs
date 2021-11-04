@@ -68,6 +68,7 @@ const TableContainer = styled.table`
   width: 100%;
   font-size: 14px;
   font-weight: 400;
+  table-layout: fixed;
   border-collapse: collapse;
   color: ${({ theme }) => theme.colors.placeholder};
   font-family: Segoe UI, Arial, Helvetica, sans-serif;
@@ -96,6 +97,7 @@ const TableContainer = styled.table`
       ${({ theme }) => theme.gaps.semiLight};
     border-bottom: ${({ theme }) => theme.borders.tableBorder};
 
+    max-width: 100px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -116,7 +118,12 @@ export const Table = ({
       <thead>
         <tr>
           {headers?.map((header: any) => (
-            <th key={header.key}>{header.name}</th>
+            <th
+              key={header.key}
+              style={{ textAlign: header.align || "center" }}
+            >
+              {header.name}
+            </th>
           ))}
         </tr>
       </thead>
@@ -131,7 +138,12 @@ export const Table = ({
           rows?.map((row: any) => (
             <tr key={generateId()}>
               {headers.map((header: any) => (
-                <td key={generateId()}>{row[header.field]}</td>
+                <td
+                  key={generateId()}
+                  style={{ textAlign: header.align || "center" }}
+                >
+                  {row[header.field]}
+                </td>
               ))}
             </tr>
           ))

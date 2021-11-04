@@ -4,13 +4,12 @@ import type { NextPage } from "next"
 import styled from "styled-components"
 import { useRouter } from "next/router"
 
-import { api } from "@utils/api"
 import { Layout } from "@layouts/layout"
 import { Modal } from "@components/Modal"
+import { useOrders } from "@hooks/orders"
 import { generateId } from "@utils/common"
-import { endpoints } from "@utils/constants"
-import { useSearchStock } from "@hooks/stocks"
 import { CreateCustomer } from "forms/customers"
+import { useSearchStock } from "@hooks/stocks"
 import { Header, Table } from "@components/Table"
 import { Select, SelectType } from "@components/Select"
 import { SearchSelect } from "@components/SearchSelect"
@@ -95,8 +94,9 @@ const Orders: NextPage = () => {
     paymentTypes[0],
   ])
 
+  const { addData, loading, error } = useOrders()
   const [stockSearch, setstockSearch] = useState("")
-  const { stocks, stocksLoading } = useSearchStock(stockSearch, rows)
+  const { stocks, stocksLoading } = useSearchStock(stockSearch)
 
   const [customer, setCustomer] = useState<CustomerType>(null)
   const [customerSearch, setCustomerSearch] = useState("")
@@ -128,72 +128,47 @@ const Orders: NextPage = () => {
     setstockSearch("")
   }
 
+  const onSubmit = async (status: string = "active") => {
+    const body = {
+      created_for: customer?.value,
+      display_id: generateId(),
+      stocks: rows.map((row) => ({
+        stock_id: row.value,
+        quantity: row.qty,
+        price: row.sale_price,
+        discount: row.discount,
+        discount_type: "percentage",
+      })),
+      type: paymentType[0]?.value,
+      installments: 1,
+      status: status,
+      address_one: customer?.address_one,
+      address_two: customer?.address_two,
+      postal_code: customer?.postal_code,
+      city: customer?.city,
+      state: customer?.state,
+      country: customer?.country,
+    }
+
+    addData(body, () => {
+      // Create invoice
+      router.back()
+    })
+  }
+
   // ==================> Add Customer
   const [show, setShow] = useState(false)
 
-  const { addData, addError, addLoading } = useCustomers()
+  const {
+    addData: addCustomer,
+    error: addCustomerError,
+    loading: addCustomerLoading,
+  } = useCustomers()
 
-  const onAddCustomer = async (e: any) => {
-    e.preventDefault()
-
-    const body: any = {}
-    Array.from(e.target).forEach((input: any) => {
-      input.name && (body[input.name] = input.value)
-    })
-
-    addData(body, () => {
-      e.target.reset()
-    })
+  const onAddCustomer = async (body: any, cb: any) => {
+    addCustomer(body, cb)
   }
   // Add Customer <==================
-
-  // ==================> Submit
-  const [orderLoading, setOrderLoading] = useState<{
-    active: boolean
-    quotation: boolean
-  }>({
-    active: false,
-    quotation: false,
-  })
-
-  const onSubmit = async (status: string = "active") => {
-    try {
-      setOrderLoading({ ...orderLoading, [status]: true })
-      const body = {
-        created_for: customer?.value,
-        display_id: generateId(),
-        stocks: rows.map((row) => ({
-          stock_id: row.value,
-          quantity: row.qty,
-          price: row.sale_price,
-          discount: row.discount,
-          discount_type: "percentage",
-        })),
-        type: paymentType[0]?.value,
-        installments: 1,
-        status: status,
-        address_one: customer?.address_one,
-        address_two: customer?.address_two,
-        postal_code: customer?.postal_code,
-        city: customer?.city,
-        state: customer?.state,
-        country: customer?.country,
-      }
-
-      await api({
-        method: "POST",
-        uri: endpoints.orders,
-        body: JSON.stringify(body),
-      })
-      setOrderLoading({ ...orderLoading, [status]: false })
-
-      // Create invoice
-      router.back()
-    } catch (err) {
-      setOrderLoading({ ...orderLoading, [status]: false })
-    }
-  }
-  // Submit <==================
 
   return (
     <Layout>
@@ -205,7 +180,6 @@ const Orders: NextPage = () => {
 
       <Content>
         <Header title="Add Order" actions={false} />
-        {console.log(orderLoading)}
         <Selects>
           <Select
             name="paymentType"
@@ -239,10 +213,10 @@ const Orders: NextPage = () => {
         <Table rows={rows} headers={headers} />
         <Buttons>
           <NeutralButton onClick={() => onSubmit("quotation")}>
-            {orderLoading.active ? "Loading..." : "Add Quotation"}
+            {loading.add.active ? "Loading..." : "Add Quotation"}
           </NeutralButton>
           <Button onClick={() => onSubmit("active")}>
-            {orderLoading.quotation ? "Loading..." : "Add Order"}
+            {loading.add.quotation ? "Loading..." : "Add Order"}
           </Button>
         </Buttons>
         <Modal
@@ -251,9 +225,9 @@ const Orders: NextPage = () => {
           setShow={(s: boolean) => setShow(s)}
         >
           <CreateCustomer
-            error={addError}
             onSubmit={onAddCustomer}
-            loading={addLoading}
+            error={addCustomerError.add}
+            loading={addCustomerLoading.add}
           />
         </Modal>
       </Content>

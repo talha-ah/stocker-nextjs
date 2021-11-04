@@ -17,12 +17,16 @@ const Content = styled.div`
 const Orders: NextPage = () => {
   const router = useRouter()
 
-  const { data, headers, fetchData, fetchLoading } = useOrders()
+  const { data, headers, fetchData, loading } = useOrders()
 
   useEffect(() => {
     fetchData()
     // eslint-disable-next-line
   }, [])
+
+  const renderData = (rows: any) => {
+    return rows
+  }
 
   return (
     <Layout>
@@ -34,7 +38,11 @@ const Orders: NextPage = () => {
 
       <Content>
         <Header add={() => router.push("/app/orders/add")} title="Orders" />
-        <Table rows={data} headers={headers} loading={fetchLoading} />
+        <Table
+          headers={headers}
+          rows={renderData(data)}
+          loading={loading.fetch}
+        />
       </Content>
     </Layout>
   )

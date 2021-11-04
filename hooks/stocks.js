@@ -5,26 +5,34 @@ import { endpoints } from "@utils/constants"
 import { useAppContext } from "@contexts/index"
 
 const headers = [
-  { key: 1, name: "Sr.", field: "sr" },
-  { key: 2, name: "Description", field: "description" },
-  { key: 3, name: "Cost Price", field: "cost_price" },
-  { key: 4, name: "Sale Price", field: "sale_price" },
-  { key: 5, name: "Inventory", field: "inventory" },
-  { key: 6, name: "Location", field: "location" },
-  { key: 7, name: "Code", field: "code" },
-  { key: 8, name: "Category", field: "category" },
-  { key: 9, name: "Actions", field: "actions" },
+  { key: 1, name: "Sr.", field: "sr", align: "left" },
+  { key: 2, name: "Description", field: "description", align: "left" },
+  { key: 3, name: "Cost Price", field: "cost_price", align: "left" },
+  { key: 4, name: "Sale Price", field: "sale_price", align: "left" },
+  { key: 5, name: "Inventory", field: "inventory", align: "left" },
+  { key: 6, name: "Location", field: "location", align: "left" },
+  { key: 7, name: "Code", field: "code", align: "left" },
+  { key: 8, name: "Category", field: "category", align: "left" },
+  { key: 9, name: "Actions", field: "actions", align: "right" },
 ]
 
 export const useStocks = () => {
   const { state } = useAppContext()
   const [data, setData] = useState([])
 
-  const [addError, setAddError] = useState("")
-  const [fetchError, setFetchError] = useState("")
+  const [loading, setLoading] = useState({
+    fetch: true,
+    add: false,
+    edit: false,
+    delete: false,
+  })
 
-  const [addLoading, setAddLoading] = useState(false)
-  const [fetchLoading, setFetchLoading] = useState(true)
+  const [error, setError] = useState({
+    fetch: null,
+    add: null,
+    edit: null,
+    delete: null,
+  })
 
   useEffect(() => {
     fetchData()
@@ -48,19 +56,20 @@ export const useStocks = () => {
         sale_price: row.sale_price,
         category: row.category.name,
         description: row.description,
+        category_id: row.category._id,
       }))
 
       setData(result)
     } catch (error) {
-      setFetchError(error.message)
+      setError({ fetch: error.message })
     } finally {
-      setFetchLoading(false)
+      setLoading({ fetch: false })
     }
   }
 
   const addData = async (body, cb) => {
     try {
-      setAddLoading(true)
+      setLoading({ add: true })
 
       const response = await api({
         method: "POST",
@@ -72,37 +81,86 @@ export const useStocks = () => {
         (category) => String(category._id) === String(body.category)
       )
 
-      let result = [
-        ...data,
-        {
-          ...response.data,
-          key: response.data._id,
-          category: category.name,
-        },
-      ]
+      response.data.key = response.data._id
+      response.data.category = category.name
+      response.data.category_id = category._id
+
+      let result = [response.data, ...data]
 
       setData(result)
       cb()
     } catch (error) {
-      setAddError(error.message)
+      setError({ add: error.message })
     } finally {
-      setAddLoading(false)
+      setLoading({ add: false })
+    }
+  }
+
+  const editData = async (body, id, cb) => {
+    try {
+      setLoading({ edit: true })
+
+      const response = await api({
+        method: "PUT",
+        uri: `${endpoints.stocks}/${id}`,
+        body: JSON.stringify(body),
+      })
+
+      const category = state.categories.categories.find(
+        (category) => String(category._id) === String(body.category)
+      )
+
+      response.data.key = response.data._id
+      response.data.category = category.name
+      response.data.category_id = category._id
+
+      const result = [...data]
+      const dIndex = result.findIndex(
+        (d) => String(d._id) === String(response.data._id)
+      )
+      result[dIndex] = response.data
+
+      setData(result)
+      cb()
+    } catch (error) {
+      setError({ edit: error.message })
+    } finally {
+      setLoading({ edit: false })
+    }
+  }
+
+  const deleteData = async (id) => {
+    try {
+      setLoading({ delete: true })
+
+      await api({
+        method: "DELETE",
+        uri: `${endpoints.stocks}/${id}`,
+      })
+
+      const result = data.filter((d) => String(d._id) !== String(id))
+
+      setData(result)
+    } catch (error) {
+      setError({ delete: error.message })
+    } finally {
+      setLoading({ delete: false })
     }
   }
 
   return {
     data,
-    addData,
+    error,
     headers,
-    addError,
+    loading,
+    addData,
+    editData,
     fetchData,
-    fetchError,
-    addLoading,
-    fetchLoading,
+    deleteData,
   }
 }
 
-export const useSearchStock = (text, filterArray) => {
+export const useSearchStock = (text) => {
   const [stocks, setStocks] = useState([])
   const [stocksError, setStocksError] = useState("")
   const [stocksLoading, setStocksLoading] = useState(false)

@@ -3,7 +3,8 @@ import Link from "next/link"
 import styled from "styled-components"
 import { useRouter } from "next/router"
 
-import { SubHeading } from "./Texts"
+import { generateId } from "@utils/common"
+import { SubHeading } from "@components/Texts"
 
 type ItemType = {
   active?: boolean
@@ -38,33 +39,27 @@ const Item = styled.div<ItemType>`
 
 const sidebarMenuList = [
   {
-    id: 1,
     exact: true,
     url: "/app",
     name: "Home",
   },
   {
-    id: 2,
-    name: "Categories",
-    url: "/app/categories",
-  },
-  {
-    id: 3,
-    name: "Stocks",
-    url: "/app/stocks",
-  },
-  {
-    id: 4,
     name: "Customers",
     url: "/app/customers",
   },
   {
-    id: 5,
+    name: "Categories",
+    url: "/app/categories",
+  },
+  {
+    name: "Stocks",
+    url: "/app/stocks",
+  },
+  {
     name: "Orders",
     url: "/app/orders",
   },
   {
-    id: 6,
     name: "Sale Reports",
     url: "/app/sales",
   },
@@ -76,7 +71,7 @@ export const Menu = () => {
   return (
     <Div>
       {sidebarMenuList.map((item) => (
-        <Link key={item.id} href={item.url} passHref>
+        <Link key={generateId()} href={item.url} passHref>
           <Item
             active={
               item.exact

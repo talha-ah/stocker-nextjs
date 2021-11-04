@@ -39,7 +39,7 @@ export const EditCategory = ({
   loading,
   onSubmit,
 }: {
-  value: string
+  value?: any
   onSubmit: any
   loading?: boolean
   error?: string | null
@@ -58,8 +58,8 @@ export const EditCategory = ({
         type="text"
         name="name"
         error={error}
-        defaultValue={value}
         label="Category Name"
+        defaultValue={value.name}
         placeholder="Category name"
       />
 

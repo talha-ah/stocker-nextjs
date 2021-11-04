@@ -4,23 +4,30 @@ import { api } from "@utils/api"
 import { endpoints } from "@utils/constants"
 
 const headers = [
-  { key: 1, name: "Customer", field: "customer" },
-  { key: 2, name: "Display ID", field: "display_id" },
-  { key: 3, name: "type", field: "type" },
-  { key: 4, name: "Price", field: "total_price" },
-  { key: 5, name: "Stocks", field: "stocks_length" },
-  { key: 6, name: "Installments", field: "installments" },
-  { key: 8, name: "Actions", field: "actions" },
+  { key: 1, name: "Customer", field: "customer", align: "left" },
+  { key: 2, name: "Display ID", field: "display_id", align: "left" },
+  { key: 3, name: "type", field: "type", align: "left" },
+  { key: 4, name: "Price", field: "total_price", align: "left" },
+  { key: 5, name: "Stocks", field: "stocks_length", align: "left" },
+  { key: 6, name: "Installments", field: "installments", align: "left" },
+  { key: 8, name: "Actions", field: "actions", align: "right" },
 ]
 
 export const useOrders = () => {
   const [data, setData] = useState([])
 
-  const [addError, setAddError] = useState("")
-  const [fetchError, setFetchError] = useState("")
+  const [loading, setLoading] = useState({
+    fetch: true,
+    add: {
+      active: false,
+      quotation: false,
+    },
+  })
 
-  const [addLoading, setAddLoading] = useState(false)
-  const [fetchLoading, setFetchLoading] = useState(true)
+  const [error, setError] = useState({
+    fetch: null,
+    add: null,
+  })
 
   const fetchData = async () => {
     try {
@@ -30,56 +37,51 @@ export const useOrders = () => {
       })
 
       const result = response.data.map((row) => ({
+        ...row,
         key: row._id,
-        _id: row._id,
         customer: row.created_for.first_name,
-        display_id: row.display_id,
-        type: row.type,
-        total_price: row.total_price,
         stocks_length: row.stocks.length,
-        installments: row.installments,
       }))
 
       setData(result)
     } catch (error) {
-      setFetchError(error.message)
+      setError({ fetch: error.message })
     } finally {
-      setFetchLoading(false)
+      setLoading({ fetch: false })
     }
   }
 
   const addData = async (body, cb) => {
     try {
-      setAddLoading(true)
+      setLoading({ add: { [body.status]: true } })
 
       const response = await api({
         method: "POST",
-        uri: endpoints.customers,
+        uri: endpoints.orders,
         body: JSON.stringify(body),
       })
 
-      const result = response.data
-      // result.key = result._id
-      // result.name = result.first_name
-      // result.balance = result.balance.value
+      response.data.key = response.data._id
+      response.data.customer = response.data.created_for.first_name
+      response.data.stocks_length = response.data.stocks.length
 
-      // setData([result, ...data])
+      const result = response.data
+
+      setData([result, ...data])
       cb()
     } catch (error) {
-      setAddError(error.message)
+      setError({ add: error.message })
     } finally {
-      setAddLoading(false)
+      setLoading({ add: { [body.status]: false } })
     }
   }
 
   return {
     data,
-    addData,
+    error,
     headers,
-    addError,
+    loading,
+    addData,
     fetchData,
-    fetchError,
-    addLoading,
-    fetchLoading,
   }
 }

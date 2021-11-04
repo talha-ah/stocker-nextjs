@@ -6,26 +6,28 @@ import { endpoints } from "@utils/constants"
 import { useAppContext, CategoriesTypes } from "@contexts/index"
 
 const headers = [
-  { key: 1, name: "Name", field: "name" },
-  { key: 2, name: "Items", field: "items" },
-  { key: 3, name: "Actions", field: "actions" },
+  { key: 1, name: "Name", field: "name", align: "left" },
+  { key: 2, name: "Items", field: "items", align: "left" },
+  { key: 3, name: "Actions", field: "actions", align: "right" },
 ]
 
 export const useCategories = () => {
   const [data, setData] = useState([])
   const { state, dispatch } = useAppContext()
 
-  const [fetchError, setFetchError] = useState("")
-  const [fetchLoading, setFetchLoading] = useState(true)
+  const [loading, setLoading] = useState({
+    fetch: true,
+    add: false,
+    edit: false,
+    delete: false,
+  })
 
-  const [addError, setAddError] = useState("")
-  const [addLoading, setAddLoading] = useState(false)
-
-  const [editError, setEditError] = useState(null)
-  const [editLoading, setEditLoading] = useState(false)
-
-  const [deleteError, setDeleteError] = useState(null)
-  const [deleteLoading, setDeleteLoading] = useState(false)
+  const [error, setError] = useState({
+    fetch: null,
+    add: null,
+    edit: null,
+    delete: null,
+  })
 
   const fetchData = async () => {
     try {
@@ -53,15 +55,15 @@ export const useCategories = () => {
 
       setData(result)
     } catch (error) {
-      setFetchError(error.message)
+      setError({ fetch: error.message })
     } finally {
-      setFetchLoading(false)
+      setLoading({ fetch: false })
     }
   }
 
   const addData = async (body, cb) => {
     try {
-      setAddLoading(true)
+      setLoading({ add: true })
 
       const response = await api({
         method: "POST",
@@ -69,7 +71,7 @@ export const useCategories = () => {
         body: JSON.stringify(body),
       })
 
-      const result = { ...response.data, items: 0 }
+      const result = response.data
 
       dispatch({
         type: CategoriesTypes.ADD_CATEGORY,
@@ -79,15 +81,15 @@ export const useCategories = () => {
       setData([result, ...data])
       cb()
     } catch (error) {
-      setAddError(error.message)
+      setError({ add: error.message })
     } finally {
-      setAddLoading(false)
+      setLoading({ add: false })
     }
   }
 
   const editData = async (body, id, cb) => {
     try {
-      setEditLoading(true)
+      setLoading({ edit: true })
 
       const response = await api({
         method: "PUT",
@@ -100,26 +102,24 @@ export const useCategories = () => {
         payload: { category: response.data },
       })
 
-      const categories = [...data]
-      const categoryIndex = categories.findIndex(
-        (category) => String(category._id) === String(response.data._id)
+      const result = [...data]
+      const dIndex = result.findIndex(
+        (d) => String(d._id) === String(response.data._id)
       )
-      categories[categoryIndex] = response.data
+      result[dIndex] = response.data
 
-      console.log("updated categories", categories)
-
-      setData(categories)
+      setData(result)
       cb()
     } catch (error) {
-      setEditError(error.message)
+      setError({ edit: error.message })
     } finally {
-      setEditLoading(false)
+      setLoading({ edit: false })
     }
   }
 
   const deleteData = async (id) => {
     try {
-      setDeleteLoading(true)
+      setLoading({ delete: true })
 
       await api({
         method: "DELETE",
@@ -131,32 +131,24 @@ export const useCategories = () => {
         payload: { _id: id },
       })
 
-      const result = data.filter(
-        (category) => String(category._id) !== String(id)
-      )
+      const result = data.filter((d) => String(d._id) !== String(id))
 
       setData(result)
     } catch (error) {
-      setDeleteError(error.message)
+      setError({ delete: error.message })
     } finally {
-      setDeleteLoading(false)
+      setLoading({ delete: false })
     }
   }
 
   return {
     data,
-    addData,
+    error,
     headers,
+    loading,
+    addData,
     editData,
-    addError,
-    editError,
     fetchData,
-    fetchError,
     deleteData,
-    addLoading,
-    editLoading,
-    deleteError,
-    fetchLoading,
-    deleteLoading,
   }
 }

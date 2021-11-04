@@ -22,6 +22,7 @@ const Actions = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: flex-end;
   gap: ${({ theme }) => theme.gaps.light};
 `
 
@@ -41,15 +42,13 @@ const Categories: NextPage = () => {
 
   const {
     data,
+    error,
+    loading,
     headers,
     addData,
     editData,
     fetchData,
     deleteData,
-    addLoading,
-    editLoading,
-    fetchLoading,
-    deleteLoading,
   } = useCategories()
 
   useEffect(() => {
@@ -69,6 +68,40 @@ const Categories: NextPage = () => {
     })
   }
 
+  const renderData = (rows: any) => {
+    return rows.map((row: any) => ({
+      ...row,
+      actions: (
+        <Actions>
+          <IconButton
+            onClick={() => {
+              setCategory(row)
+              setShow((s) => !s)
+            }}
+          >
+            <Image
+              src="/icons/Edit.svg"
+              alt="search-icon"
+              height={16}
+              width={16}
+            />
+          </IconButton>
+          <IconButton
+            onClick={() => deleteData(row._id)}
+            disabled={row.items > 0 || loading.delete}
+          >
+            <Image
+              src="/icons/Delete.svg"
+              alt="search-icon"
+              height={16}
+              width={16}
+            />
+          </IconButton>
+        </Actions>
+      ),
+    }))
+  }
+
   return (
     <Layout>
       <Head>
@@ -80,61 +113,33 @@ const Categories: NextPage = () => {
       <Content>
         <Header add={() => setShow((s) => !s)} title="Categories" />
         <Table
-          rows={data.map((row: any) => ({
-            ...row,
-            actions: (
-              <Actions>
-                <IconButton
-                  onClick={() => {
-                    setCategory(row)
-                    setShow((s) => !s)
-                  }}
-                >
-                  <Image
-                    src="/icons/Edit.svg"
-                    alt="search-icon"
-                    height={16}
-                    width={16}
-                  />
-                </IconButton>
-                <IconButton
-                  onClick={() => deleteData(row._id)}
-                  disabled={row.items > 0 || deleteLoading}
-                >
-                  <Image
-                    src="/icons/Delete.svg"
-                    alt="search-icon"
-                    height={16}
-                    width={16}
-                  />
-                </IconButton>
-              </Actions>
-            ),
-          }))}
           headers={headers}
-          loading={fetchLoading}
+          rows={renderData(data)}
+          loading={loading.fetch}
         />
-        {category ? (
-          <Modal
-            show={show}
-            title="Edit Category"
-            setShow={(s: boolean) => setShow(s)}
-          >
+        <Modal
+          show={show}
+          title={category ? "Edit Category" : "Add Category"}
+          setShow={(s: boolean) => {
+            setShow(s)
+            if (!s) setCategory(null)
+          }}
+        >
+          {category ? (
             <EditCategory
+              value={category}
               onSubmit={onEdit}
-              loading={editLoading}
-              value={category?.name}
+              error={error.edit}
+              loading={loading.edit}
             />
-          </Modal>
-        ) : (
-          <Modal
-            show={show}
-            title="Add Category"
-            setShow={(s: boolean) => setShow(s)}
-          >
-            <CreateCategory onSubmit={onSubmit} loading={addLoading} />
-          </Modal>
-        )}
+          ) : (
+            <CreateCategory
+              error={error.add}
+              onSubmit={onSubmit}
+              loading={loading.add}
+            />
+          )}
+        </Modal>
       </Content>
     </Layout>
   )
