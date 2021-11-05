@@ -1,5 +1,6 @@
 import Head from "next/head"
 import { useState } from "react"
+import Image from "next/image"
 import type { NextPage } from "next"
 import styled from "styled-components"
 import { useRouter } from "next/router"
@@ -7,14 +8,15 @@ import { useRouter } from "next/router"
 import { Layout } from "@layouts/layout"
 import { Modal } from "@components/Modal"
 import { useOrders } from "@hooks/orders"
-import { generateId } from "@utils/common"
-import { CreateCustomer } from "forms/customers"
+import { Input } from "@components/Inputs"
 import { useSearchStock } from "@hooks/stocks"
+import { CreateCustomer } from "forms/customers"
 import { Header, Table } from "@components/Table"
 import { Select, SelectType } from "@components/Select"
 import { SearchSelect } from "@components/SearchSelect"
-import { Button, NeutralButton } from "@components/Buttons"
+import { generateId, calcDiscount } from "@utils/common"
 import { useSearchCustomer, useCustomers } from "@hooks/customers"
+import { Button, NeutralButton, IconButton } from "@components/Buttons"
 
 const Content = styled.div`
   width: 100%;
@@ -42,15 +44,29 @@ const Buttons = styled.div`
   margin: ${({ theme }) => theme.gaps.default} 0px;
 `
 
+const Actions = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.gaps.light};
+`
+
 const headers = [
-  { key: 1, name: "Sr.", field: "sr" },
-  { key: 2, name: "Description", field: "description" },
-  { key: 3, name: "Code", field: "code" },
-  { key: 4, name: "Price", field: "sale_price" },
-  { key: 5, name: "Qty", field: "qty" },
-  { key: 6, name: "Disc %", field: "discount" },
-  { key: 7, name: "Disc Price", field: "discounted_price" },
-  { key: 8, name: "Actions", field: "" },
+  { key: 1, name: "Sr.", field: "sr", align: "left", width: "100px" },
+  { key: 2, name: "Description", field: "description", align: "left" },
+  { key: 3, name: "Code", field: "code", align: "left" },
+  { key: 4, name: "Price", field: "sale_price", align: "left", width: "100px" },
+  { key: 5, name: "Qty", field: "qty", align: "left", width: "100px" },
+  { key: 6, name: "Disc %", field: "discount", align: "left", width: "100px" },
+  {
+    key: 7,
+    name: "Disc Price",
+    field: "discounted_price",
+    align: "left",
+    width: "100px",
+  },
+  { key: 8, name: "Actions", field: "actions", align: "center" },
 ]
 
 const paymentTypes = [
@@ -63,17 +79,6 @@ const paymentTypes = [
     value: "installments",
   },
 ]
-
-type RowType = {
-  sr: number
-  qty: number
-  code: string
-  value: string
-  discount: number
-  sale_price: number
-  description: string
-  discounted_price: number
-}
 
 type CustomerType = {
   city: string
@@ -88,13 +93,13 @@ type CustomerType = {
 
 const Orders: NextPage = () => {
   const router = useRouter()
-  const [rows, setRows] = useState<RowType[]>([])
+  const [rows, setRows] = useState<any>([])
 
   const [paymentType, setPaymentType] = useState<SelectType[]>([
     paymentTypes[0],
   ])
 
-  const { addData, loading, error } = useOrders()
+  const { addData, loading } = useOrders()
   const [stockSearch, setstockSearch] = useState("")
   const { stocks, stocksLoading } = useSearchStock(stockSearch)
 
@@ -102,7 +107,7 @@ const Orders: NextPage = () => {
   const [customerSearch, setCustomerSearch] = useState("")
   const { customers, customersLoading } = useSearchCustomer(customerSearch)
 
-  const setStock = (value: any) => {
+  const addStock = (value: any) => {
     const rowsCloned = [...rows]
 
     const rowIndex = rowsCloned.findIndex(
@@ -111,13 +116,9 @@ const Orders: NextPage = () => {
 
     if (rowIndex === -1) {
       rowsCloned.push({
+        ...value,
         qty: 1,
         discount: 0,
-        sr: value.sr,
-        code: value.code,
-        value: value.value,
-        sale_price: value.sale_price,
-        description: value.description,
         discounted_price: value.sale_price,
       })
     } else {
@@ -128,11 +129,17 @@ const Orders: NextPage = () => {
     setstockSearch("")
   }
 
+  const removeStock = (id: string) => {
+    const rowsCloned = [...rows]
+
+    setRows(rowsCloned.filter((d: any) => String(d._id) !== String(id)))
+  }
+
   const onSubmit = async (status: string = "active") => {
     const body = {
       created_for: customer?.value,
       display_id: generateId(),
-      stocks: rows.map((row) => ({
+      stocks: rows.map((row: any) => ({
         stock_id: row.value,
         quantity: row.qty,
         price: row.sale_price,
@@ -170,6 +177,75 @@ const Orders: NextPage = () => {
   }
   // Add Customer <==================
 
+  const onChange = (e: any, field: any, row: any) => {
+    const name = e.target.name
+    const value = e.target.value
+
+    const clonedRows = [...rows]
+    const elemIndex = clonedRows.findIndex(
+      (elem: any) => String(elem._id) === String(row._id)
+    )
+    clonedRows[elemIndex][field] = value
+    setRows(clonedRows)
+
+    setTimeout(() => {
+      const element = document.getElementById(name)
+      element?.focus()
+    }, 0)
+  }
+
+  const renderData = (rows: any) => {
+    return rows.map((row: any) => ({
+      ...row,
+      sale_price: (
+        <Input
+          small
+          min={0}
+          width={100}
+          type="number"
+          value={row.sale_price}
+          name={`sale_price${row._id}`}
+          onChange={(e: any) => onChange(e, "sale_price", row)}
+        />
+      ),
+      qty: (
+        <Input
+          small
+          min={0}
+          width={100}
+          type="number"
+          value={row.qty}
+          name={`qty${row._id}`}
+          onChange={(e: any) => onChange(e, "qty", row)}
+        />
+      ),
+      discount: (
+        <Input
+          small
+          min={0}
+          width={100}
+          type="number"
+          value={row.discount}
+          name={`discount${row._id}`}
+          onChange={(e: any) => onChange(e, "discount", row)}
+        />
+      ),
+      discounted_price: calcDiscount(row.sale_price * row.qty, row.discount),
+      actions: (
+        <Actions>
+          <IconButton onClick={() => removeStock(row._id)}>
+            <Image
+              src="/icons/Delete.svg"
+              alt="search-icon"
+              height={16}
+              width={16}
+            />
+          </IconButton>
+        </Actions>
+      ),
+    }))
+  }
+
   return (
     <Layout>
       <Head>
@@ -206,11 +282,11 @@ const Orders: NextPage = () => {
             options={stocks}
             loading={stocksLoading}
             placeholder="Search Stock"
-            onSelect={(value: any) => setStock(value)}
+            onSelect={(value: any) => addStock(value)}
             onSearch={(text: string) => setstockSearch(text)}
           />
         </Selects>
-        <Table rows={rows} headers={headers} />
+        <Table rows={renderData(rows)} headers={headers} hover={false} />
         <Buttons>
           <NeutralButton onClick={() => onSubmit("quotation")}>
             {loading.add.active ? "Loading..." : "Add Quotation"}

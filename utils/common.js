@@ -1,11 +1,3 @@
-export const currencyFormat = (value, currency) =>
-  isNaN(value || 0)
-    ? value
-    : new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: currency || "USD",
-      }).format(value || 0)
-
 export const isNotEmpty = (item) =>
   item !== undefined && item !== null && item !== "" && item.length !== 0
 
@@ -52,15 +44,6 @@ export const toTitleCase = (phrase) =>
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ")
 
-export const addressText = (address) => {
-  return ` ${address?.address_line_one}
-		${address?.address_line_two ? `, ${address?.address_line_two}` : ""}
-		${address?.city ? ` ${address?.city}` : ""}
-		${address?.state ? ` ${address?.state}` : ""}
-		${address?.country ? ` ${address?.country}` : ""}
-		${address?.zip ? ` ${address?.zip}` : ""}`
-}
-
 export const timeoutPromise = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
@@ -104,4 +87,14 @@ export const generateId = (prefix = "", length = 7) => {
     )
   }
   return result
+}
+
+export const calcDiscount = (value, discount) => {
+  value = Number(value)
+  discount = Number(discount)
+  if (!discount || discount === 0) return value
+  else {
+    discount = (value * discount) / 100
+    return value - discount
+  }
 }

@@ -64,11 +64,16 @@ export const Header = ({
   )
 }
 
-const TableContainer = styled.table`
+type TableType = {
+  hover?: boolean
+  width?: string
+}
+
+const TableContainer = styled.table<TableType>`
   width: 100%;
   font-size: 14px;
   font-weight: 400;
-  table-layout: fixed;
+  table-layout: auto;
   border-collapse: collapse;
   color: ${({ theme }) => theme.colors.placeholder};
   font-family: Segoe UI, Arial, Helvetica, sans-serif;
@@ -82,7 +87,8 @@ const TableContainer = styled.table`
   // }
 
   & tr:hover {
-    background-color: ${({ theme }) => theme.colors.white};
+    background-color: ${({ theme, hover }) =>
+      hover ? theme.colors.white : "transparent"};
   }
 
   & th {
@@ -106,21 +112,27 @@ const TableContainer = styled.table`
 
 export const Table = ({
   rows,
+  hover = true,
   headers,
   loading,
 }: {
   rows: any
   headers: any
+  hover?: boolean
   loading?: boolean
 }) => {
   return (
-    <TableContainer>
+    <TableContainer hover={hover}>
       <thead>
         <tr>
           {headers?.map((header: any) => (
             <th
               key={header.key}
-              style={{ textAlign: header.align || "center" }}
+              // width={header.width}
+              style={{
+                textAlign: header.align || "center",
+                width: header.width,
+              }}
             >
               {header.name}
             </th>

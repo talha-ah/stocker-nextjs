@@ -1,11 +1,15 @@
 import Head from "next/head"
-import { useEffect } from "react"
+import Image from "next/image"
 import type { NextPage } from "next"
 import styled from "styled-components"
 import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
 
 import { Layout } from "@layouts/layout"
+import { Modal } from "@components/Modal"
 import { useOrders } from "@hooks/orders"
+import { AddPayment } from "@forms/orders"
+import { IconButton } from "@components/Buttons"
 import { Header, Table } from "@components/Table"
 
 const Content = styled.div`
@@ -14,10 +18,22 @@ const Content = styled.div`
   flex-direction: column;
   gap: ${({ theme }) => theme.gaps.light};
 `
+
+const Actions = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: ${({ theme }) => theme.gaps.light};
+`
+
 const Orders: NextPage = () => {
   const router = useRouter()
+  const [show, setShow] = useState(false)
+  const [order, setOrder] = useState<any | null>(null)
 
-  const { data, headers, fetchData, loading } = useOrders()
+  const { data, headers, fetchData, loading, addPayment, cancelOrder, error } =
+    useOrders()
 
   useEffect(() => {
     fetchData()
@@ -25,7 +41,46 @@ const Orders: NextPage = () => {
   }, [])
 
   const renderData = (rows: any) => {
-    return rows
+    return rows.map((row: any) => ({
+      ...row,
+      actions: (
+        <Actions>
+          {row.type === "Installments" && row.balance > 0 && (
+            <IconButton
+              onClick={() => {
+                setOrder(row)
+                setShow((s) => !s)
+              }}
+            >
+              <Image
+                src="/icons/Plus.svg"
+                alt="search-icon"
+                height={16}
+                width={16}
+              />
+            </IconButton>
+          )}
+          <IconButton
+            onClick={() => cancelOrder(row._id)}
+            disabled={row.items > 0 || loading.cancelOrder}
+          >
+            <Image
+              src="/icons/Delete.svg"
+              alt="search-icon"
+              height={16}
+              width={16}
+            />
+          </IconButton>
+        </Actions>
+      ),
+    }))
+  }
+
+  const onSubmit = async (body: any, cb: any) => {
+    addPayment(body, order._id, () => {
+      setShow((s) => !s)
+      cb()
+    })
   }
 
   return (
@@ -43,6 +98,17 @@ const Orders: NextPage = () => {
           rows={renderData(data)}
           loading={loading.fetch}
         />
+        <Modal
+          show={show}
+          title={"Add Payment"}
+          setShow={(s: boolean) => setShow(s)}
+        >
+          <AddPayment
+            onSubmit={onSubmit}
+            error={error.addPayment}
+            loading={loading.addPayment}
+          />
+        </Modal>
       </Content>
     </Layout>
   )

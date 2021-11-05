@@ -227,7 +227,7 @@ export const EditStock = ({
         defaultValue={value.description}
       />
 
-      <Button type="submit">{loading ? "Loading..." : "Create"}</Button>
+      <Button type="submit">{loading ? "Loading..." : "Edit"}</Button>
     </Form>
   )
 }

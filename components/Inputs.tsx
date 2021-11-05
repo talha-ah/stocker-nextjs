@@ -8,6 +8,8 @@ type WidthType = {
 }
 
 type InputType = {
+  width?: number
+  small?: boolean
   primary?: boolean
 }
 
@@ -34,12 +36,13 @@ const InputContainer = styled.div`
 const StyledInput = styled.input<InputType>`
   border: 0;
   outline: 0;
-  width: 100%;
-  height: 34px;
   transition: all 0.3s ease 0s;
-  padding: 0px ${({ theme }) => theme.gaps.semiLight};
+  height: ${({ small }) => (small ? "24px" : "34px")};
   border-bottom: ${({ theme }) => theme.borders.input};
+  width: ${({ width }) => (width ? `${width}px` : "100%")};
   border-radius: ${({ theme }) => theme.borders.radius.default};
+  padding: 0px
+    ${({ theme, small }) => (small ? theme.gaps.light : theme.gaps.semiLight)};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
   background-color: ${({ primary, theme }) =>
@@ -62,10 +65,10 @@ const StyledTextArea = styled.textarea<InputType>`
   border-radius: ${({ theme }) => theme.borders.radius.default};
   padding: ${({ theme }) => theme.gaps.light}
     ${({ theme }) => theme.gaps.semiLight};
-  font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
-    Segoe UI Emoji, Segoe UI Symbol;
   background-color: ${({ primary, theme }) =>
     primary ? theme.colors.bg : theme.colors.white};
+  font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
+    Segoe UI Emoji, Segoe UI Symbol;
 
   :focus {
     border-bottom: ${({ theme }) => theme.borders.inputActive};
@@ -73,23 +76,32 @@ const StyledTextArea = styled.textarea<InputType>`
 `
 
 export const Input = ({
+  min,
   name,
   type,
   label,
+  small,
+  width,
   error,
   value,
   primary,
+  pattern,
   required,
   onChange,
   placeholder,
   defaultValue,
 }: {
+  min?: number
   name?: string
   type?: string
+  width?: number
   label?: string
   value?: string
   onChange?: any
+  small?: boolean
+  pattern?: string
   primary?: boolean
+  inputMode?: string
   required?: boolean
   defaultValue?: any
   placeholder?: string
@@ -98,9 +110,13 @@ export const Input = ({
   <InputContainer>
     {label && <label htmlFor={name}>{label}</label>}
     <StyledInput
+      min={min}
       id={name}
       name={name}
+      width={width}
       value={value}
+      small={small}
+      pattern={pattern}
       primary={primary}
       required={required}
       onChange={onChange}

@@ -5,15 +5,51 @@ import { endpoints } from "@utils/constants"
 import { useAppContext } from "@contexts/index"
 
 const headers = [
-  { key: 1, name: "Sr.", field: "sr", align: "left" },
-  { key: 2, name: "Description", field: "description", align: "left" },
-  { key: 3, name: "Cost Price", field: "cost_price", align: "left" },
-  { key: 4, name: "Sale Price", field: "sale_price", align: "left" },
-  { key: 5, name: "Inventory", field: "inventory", align: "left" },
-  { key: 6, name: "Location", field: "location", align: "left" },
-  { key: 7, name: "Code", field: "code", align: "left" },
-  { key: 8, name: "Category", field: "category", align: "left" },
-  { key: 9, name: "Actions", field: "actions", align: "right" },
+  { key: 1, name: "Sr.", field: "sr", align: "left", width: "10px" },
+  {
+    key: 2,
+    name: "Description",
+    field: "description",
+    align: "left",
+    width: "auto",
+  },
+  { key: 3, name: "Code", field: "code", align: "left", width: "100px" },
+  {
+    key: 4,
+    name: "Cost Price",
+    field: "cost_price",
+    align: "left",
+    width: "100px",
+  },
+  {
+    key: 5,
+    name: "Sale Price",
+    field: "sale_price",
+    align: "left",
+    width: "100px",
+  },
+  {
+    key: 6,
+    name: "Inventory",
+    field: "inventory",
+    align: "left",
+    width: "100px",
+  },
+  {
+    key: 7,
+    name: "Category",
+    field: "category",
+    align: "left",
+    width: "auto",
+  },
+  {
+    key: 8,
+    name: "Location",
+    field: "location",
+    align: "left",
+    width: "auto",
+  },
+  { key: 9, name: "Actions", field: "actions", align: "right", width: "100px" },
 ]
 
 export const useStocks = () => {
