@@ -110,19 +110,39 @@ const TableContainer = styled.table<TableType>`
   }
 `
 
+const calculateTotal = (headers: any, data: any, total_field: string) => {
+  let total_value = 0
+  data.map((d: any) => (total_value += d[total_field]))
+
+  let index = 0
+  const rows = headers.map((header: any, ind: number) => (
+    <td key={generateId()}>
+      {header.field === total_field && (index = ind) && total_value}
+    </td>
+  ))
+
+  rows[index - 1] = <td key={rows[index - 1].key}>Sub Total</td>
+
+  return rows
+}
+
 export const Table = ({
+  id,
   rows,
-  hover = true,
   headers,
   loading,
+  total_field,
+  hover = true,
 }: {
   rows: any
+  id?: string
   headers: any
   hover?: boolean
   loading?: boolean
+  total_field?: string
 }) => {
   return (
-    <TableContainer hover={hover}>
+    <TableContainer id={id} hover={hover}>
       <thead>
         <tr>
           {headers?.map((header: any) => (
@@ -160,6 +180,7 @@ export const Table = ({
             </tr>
           ))
         )}
+        {total_field && <tr>{calculateTotal(headers, rows, total_field)}</tr>}
       </tbody>
     </TableContainer>
   )

@@ -3,18 +3,16 @@ import { useState } from "react"
 import Image from "next/image"
 import type { NextPage } from "next"
 import styled from "styled-components"
-import { useRouter } from "next/router"
 
 import { Layout } from "@layouts/layout"
-import { Modal } from "@components/Modal"
 import { useOrders } from "@hooks/orders"
 import { Input } from "@components/Inputs"
+import { generateReceipt } from "@utils/pdfs"
 import { useSearchStock } from "@hooks/stocks"
-import { CreateCustomer } from "forms/customers"
 import { Header, Table } from "@components/Table"
 import { Select, SelectType } from "@components/Select"
 import { SearchSelect } from "@components/SearchSelect"
-import { generateId, calcDiscount } from "@utils/common"
+import { generateId, calculateDiscount } from "@utils/common"
 import { useSearchCustomer, useCustomers } from "@hooks/customers"
 import { Button, NeutralButton, IconButton } from "@components/Buttons"
 
@@ -62,11 +60,17 @@ const headers = [
   {
     key: 7,
     name: "Disc Price",
-    field: "discounted_price",
+    field: "discount_price",
     align: "left",
     width: "100px",
   },
-  { key: 8, name: "Actions", field: "actions", align: "center" },
+  {
+    key: 8,
+    name: "Total Price",
+    field: "total_price",
+    align: "left",
+  },
+  { key: 9, name: "Actions", field: "actions", align: "center" },
 ]
 
 const paymentTypes = [
@@ -92,7 +96,6 @@ type CustomerType = {
 } | null
 
 const Orders: NextPage = () => {
-  const router = useRouter()
   const [rows, setRows] = useState<any>([])
 
   const [paymentType, setPaymentType] = useState<SelectType[]>([
@@ -103,8 +106,8 @@ const Orders: NextPage = () => {
   const [stockSearch, setstockSearch] = useState("")
   const { stocks, stocksLoading } = useSearchStock(stockSearch)
 
-  const [customer, setCustomer] = useState<CustomerType>(null)
   const [customerSearch, setCustomerSearch] = useState("")
+  const [customer, setCustomer] = useState<CustomerType>(null)
   const { customers, customersLoading } = useSearchCustomer(customerSearch)
 
   const addStock = (value: any) => {
@@ -119,7 +122,8 @@ const Orders: NextPage = () => {
         ...value,
         qty: 1,
         discount: 0,
-        discounted_price: value.sale_price,
+        discount_price: 0,
+        total_price: value.sale_price,
       })
     } else {
       rowsCloned[rowIndex].qty++
@@ -133,6 +137,81 @@ const Orders: NextPage = () => {
     const rowsCloned = [...rows]
 
     setRows(rowsCloned.filter((d: any) => String(d._id) !== String(id)))
+  }
+
+  const onChangeRowInput = (e: any, field: any, row: any) => {
+    const name = e.target.name
+    const value = e.target.value
+
+    const clonedRows = [...rows]
+    const elemIndex = clonedRows.findIndex(
+      (elem: any) => String(elem._id) === String(row._id)
+    )
+    clonedRows[elemIndex][field] = value
+    setRows(clonedRows)
+
+    setTimeout(() => {
+      const element = document.getElementById(name)
+      element?.focus()
+    }, 0)
+  }
+
+  const renderData = (rows: any) => {
+    return rows.map((row: any) => ({
+      ...row,
+      sale_price: (
+        <Input
+          small
+          min={0}
+          type="number"
+          value={row.sale_price}
+          name={`sale_price${row._id}`}
+          onChange={(e: any) => onChangeRowInput(e, "sale_price", row)}
+        />
+      ),
+      qty: (
+        <Input
+          small
+          min={0}
+          type="number"
+          value={row.qty}
+          name={`qty${row._id}`}
+          onChange={(e: any) => onChangeRowInput(e, "qty", row)}
+        />
+      ),
+      discount: (
+        <Input
+          small
+          min={0}
+          type="number"
+          value={row.discount}
+          name={`discount${row._id}`}
+          onChange={(e: any) => onChangeRowInput(e, "discount", row)}
+        />
+      ),
+      discount_price: calculateDiscount(row.sale_price, row.qty, row.discount)
+        .discount,
+      total_price: calculateDiscount(row.sale_price, row.qty, row.discount)
+        .value,
+      actions: (
+        <Actions>
+          <IconButton onClick={() => removeStock(row._id)}>
+            <Image
+              src="/icons/Delete.svg"
+              alt="search-icon"
+              height={16}
+              width={16}
+            />
+          </IconButton>
+        </Actions>
+      ),
+    }))
+  }
+
+  const resetForm = () => {
+    setRows([])
+    setCustomer(null)
+    setPaymentType([paymentTypes[0]])
   }
 
   const onSubmit = async (status: string = "active") => {
@@ -157,94 +236,19 @@ const Orders: NextPage = () => {
       country: customer?.country,
     }
 
-    addData(body, () => {
-      // Create invoice
-      router.back()
+    addData(body, (data: any) => {
+      generateReceipt(data)
+      resetForm()
     })
   }
 
   // ==================> Add Customer
-  const [show, setShow] = useState(false)
+  const { addData: addCustomer } = useCustomers()
 
-  const {
-    addData: addCustomer,
-    error: addCustomerError,
-    loading: addCustomerLoading,
-  } = useCustomers()
-
-  const onAddCustomer = async (body: any, cb: any) => {
-    addCustomer(body, cb)
+  const onAddCustomer = async (body: any) => {
+    addCustomer(body)
   }
   // Add Customer <==================
-
-  const onChange = (e: any, field: any, row: any) => {
-    const name = e.target.name
-    const value = e.target.value
-
-    const clonedRows = [...rows]
-    const elemIndex = clonedRows.findIndex(
-      (elem: any) => String(elem._id) === String(row._id)
-    )
-    clonedRows[elemIndex][field] = value
-    setRows(clonedRows)
-
-    setTimeout(() => {
-      const element = document.getElementById(name)
-      element?.focus()
-    }, 0)
-  }
-
-  const renderData = (rows: any) => {
-    return rows.map((row: any) => ({
-      ...row,
-      sale_price: (
-        <Input
-          small
-          min={0}
-          width={100}
-          type="number"
-          value={row.sale_price}
-          name={`sale_price${row._id}`}
-          onChange={(e: any) => onChange(e, "sale_price", row)}
-        />
-      ),
-      qty: (
-        <Input
-          small
-          min={0}
-          width={100}
-          type="number"
-          value={row.qty}
-          name={`qty${row._id}`}
-          onChange={(e: any) => onChange(e, "qty", row)}
-        />
-      ),
-      discount: (
-        <Input
-          small
-          min={0}
-          width={100}
-          type="number"
-          value={row.discount}
-          name={`discount${row._id}`}
-          onChange={(e: any) => onChange(e, "discount", row)}
-        />
-      ),
-      discounted_price: calcDiscount(row.sale_price * row.qty, row.discount),
-      actions: (
-        <Actions>
-          <IconButton onClick={() => removeStock(row._id)}>
-            <Image
-              src="/icons/Delete.svg"
-              alt="search-icon"
-              height={16}
-              width={16}
-            />
-          </IconButton>
-        </Actions>
-      ),
-    }))
-  }
 
   return (
     <Layout>
@@ -272,9 +276,9 @@ const Orders: NextPage = () => {
             loading={customersLoading}
             value={customer?.first_name}
             placeholder="Search Customer"
-            onCreate={() => setShow((s) => !s)}
             onSelect={(value: any) => setCustomer(value)}
             onSearch={(text: string) => setCustomerSearch(text)}
+            onCreate={(value: any) => onAddCustomer({ first_name: value })}
           />
           <SearchSelect
             name="stocks"
@@ -286,7 +290,13 @@ const Orders: NextPage = () => {
             onSearch={(text: string) => setstockSearch(text)}
           />
         </Selects>
-        <Table rows={renderData(rows)} headers={headers} hover={false} />
+        <Table
+          hover={false}
+          id="add_order"
+          headers={headers}
+          rows={renderData(rows)}
+          total_field="total_price"
+        />
         <Buttons>
           <NeutralButton onClick={() => onSubmit("quotation")}>
             {loading.add.active ? "Loading..." : "Add Quotation"}
@@ -295,17 +305,6 @@ const Orders: NextPage = () => {
             {loading.add.quotation ? "Loading..." : "Add Order"}
           </Button>
         </Buttons>
-        <Modal
-          show={show}
-          title="Add Customer"
-          setShow={(s: boolean) => setShow(s)}
-        >
-          <CreateCustomer
-            onSubmit={onAddCustomer}
-            error={addCustomerError.add}
-            loading={addCustomerLoading.add}
-          />
-        </Modal>
       </Content>
     </Layout>
   )

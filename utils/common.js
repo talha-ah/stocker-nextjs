@@ -90,11 +90,24 @@ export const generateId = (prefix = "", length = 7) => {
 }
 
 export const calcDiscount = (value, discount) => {
-  value = Number(value)
-  discount = Number(discount)
-  if (!discount || discount === 0) return value
-  else {
-    discount = (value * discount) / 100
-    return value - discount
+  value = value
+  discount = discount
+  if (!discount || discount === 0) return discount
+  return (value * discount) / 100
+}
+
+export const calculateDiscount = (value, qty, discount) => {
+  value = value * qty
+  discount = calcDiscount(value, discount)
+  return {
+    discount: discount,
+    value: value - discount,
   }
+}
+
+// Pad a number with leading zeros
+export const pad = (num, size = 6) => {
+  let s = num + ""
+  while (s.length < size) s = "0" + s
+  return s
 }

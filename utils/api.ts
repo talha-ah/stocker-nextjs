@@ -38,9 +38,11 @@ export const api = ({
         }
         const error = await err.json()
         console.log(`[API Error at ${DateUtility.getLocaleDate()}]:`, error)
+        console.log(`Error for Body`, body)
         reject(error)
       } else {
         console.log(`[API Error at ${DateUtility.getLocaleDate()}]:`, err)
+        console.log(`Error for Body`, body)
         reject(err)
       }
     }

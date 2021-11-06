@@ -70,13 +70,14 @@ export const useOrders = () => {
       })
 
       response.data.key = response.data._id
-      response.data.customer = response.data.created_for.first_name
       response.data.stocks_length = response.data.stocks.length
+      response.data.customer = response.data.created_for.first_name
 
       const result = response.data
 
       setData([result, ...data])
-      cb()
+
+      cb && cb(response.data)
     } catch (error) {
       setError({ add: error.message })
     } finally {
@@ -107,7 +108,7 @@ export const useOrders = () => {
         clonedData[orderIndex].balance - body.value
 
       setData(clonedData)
-      cb()
+      cb && cb()
     } catch (error) {
       setError({ addPayment: error.message })
     } finally {
@@ -127,7 +128,7 @@ export const useOrders = () => {
       const result = data.filter((d) => String(d._id) !== String(id))
 
       setData(result)
-      cb()
+      cb && cb()
     } catch (error) {
       setError({ cancelOrder: error.message })
     } finally {

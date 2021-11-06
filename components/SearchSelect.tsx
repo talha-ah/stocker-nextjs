@@ -121,13 +121,13 @@ export const SearchSelect = ({
   name,
   label,
   error,
-  value,
   primary,
   loading,
   options,
   onSearch,
   onSelect,
   onCreate,
+  value = "",
   placeholder,
 }: {
   options: any
@@ -142,8 +142,8 @@ export const SearchSelect = ({
   loading?: boolean
   placeholder?: string
 }) => {
-  const [query, setQuery] = useState("")
   const [open, setOpen] = useState(false)
+  const [query, setQuery] = useState<string>("")
 
   const debouncedQuery = useDebounce(query, 500)
 
@@ -151,6 +151,11 @@ export const SearchSelect = ({
     onSearch && onSearch(debouncedQuery)
     // eslint-disable-next-line
   }, [debouncedQuery])
+
+  useEffect(() => {
+    setQuery(value)
+    // eslint-disable-next-line
+  }, [value])
 
   // ============= > Handle outside click
   const ref = useRef(null)
@@ -174,11 +179,12 @@ export const SearchSelect = ({
         <Input
           ref={ref}
           type="text"
-          name="query"
+          value={query}
           onClick={toggle}
           autoComplete="off"
           placeholder={placeholder}
-          value={value ? value : query}
+          id={`query${generateId()}`}
+          name={`query${generateId()}`}
           onChange={(e) => setQuery(e.target.value)}
         />
 
@@ -186,8 +192,8 @@ export const SearchSelect = ({
           <Image
             src="/icons/Search.svg"
             alt="search-icon"
-            width={24}
             height={24}
+            width={24}
           />
         </SelectorIcon>
       </Selector>
@@ -212,13 +218,13 @@ export const SearchSelect = ({
                   <span>{option.label}</span>
                 </Option>
               ))}
-              {onCreate ? (
+              {onCreate && query ? (
                 <NonOption
                   button
                   onClick={() => {
                     toggle()
                     setQuery("")
-                    onCreate && onCreate()
+                    onCreate && onCreate(query)
                   }}
                 >
                   <span>or Create One</span>

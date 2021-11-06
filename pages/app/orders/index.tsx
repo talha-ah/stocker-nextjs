@@ -9,6 +9,8 @@ import { Layout } from "@layouts/layout"
 import { Modal } from "@components/Modal"
 import { useOrders } from "@hooks/orders"
 import { AddPayment } from "@forms/orders"
+
+import { generateReceipt } from "@utils/pdfs"
 import { IconButton } from "@components/Buttons"
 import { Header, Table } from "@components/Table"
 
@@ -40,6 +42,13 @@ const Orders: NextPage = () => {
     // eslint-disable-next-line
   }, [])
 
+  const onSubmit = async (body: any, cb: any) => {
+    addPayment(body, order._id, () => {
+      setShow((s) => !s)
+      cb()
+    })
+  }
+
   const renderData = (rows: any) => {
     return rows.map((row: any) => ({
       ...row,
@@ -61,6 +70,18 @@ const Orders: NextPage = () => {
             </IconButton>
           )}
           <IconButton
+            onClick={() => {
+              generateReceipt(row)
+            }}
+          >
+            <Image
+              src="/icons/Receipt.svg"
+              alt="search-icon"
+              height={16}
+              width={16}
+            />
+          </IconButton>
+          <IconButton
             onClick={() => cancelOrder(row._id)}
             disabled={row.items > 0 || loading.cancelOrder}
           >
@@ -74,13 +95,6 @@ const Orders: NextPage = () => {
         </Actions>
       ),
     }))
-  }
-
-  const onSubmit = async (body: any, cb: any) => {
-    addPayment(body, order._id, () => {
-      setShow((s) => !s)
-      cb()
-    })
   }
 
   return (

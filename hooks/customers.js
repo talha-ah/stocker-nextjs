@@ -69,7 +69,7 @@ export const useCustomers = () => {
       result.balance = result.balance.value
 
       setData([result, ...data])
-      cb()
+      cb && cb()
     } catch (error) {
       setError({ add: error.message })
     } finally {
