@@ -20,24 +20,25 @@ export const useOrders = () => {
   const { state, dispatch } = useAppContext()
 
   const [loading, setLoading] = useState({
-    fetch: true,
+    fetch: false,
+    addPayment: false,
+    cancelOrder: false,
     add: {
       active: false,
       quotation: false,
     },
-    addPayment: false,
-    cancelOrder: false,
   })
 
   const [error, setError] = useState({
-    fetch: null,
     add: null,
+    fetch: null,
     addPayment: null,
     cancelOrder: null,
   })
 
   const fetchData = async () => {
     try {
+      setLoading({ ...loading, fetch: true })
       if (state.orders.ordersFetched) return
 
       const response = await api({
@@ -59,15 +60,15 @@ export const useOrders = () => {
         payload: { orders: result },
       })
     } catch (error) {
-      setError({ fetch: error.message })
+      setError({ ...error, fetch: error.message })
     } finally {
-      setLoading({ fetch: false })
+      setLoading({ ...loading, fetch: false })
     }
   }
 
   const addData = async (body, cb) => {
     try {
-      setLoading({ add: { [body.status]: true } })
+      setLoading({ ...loading, add: { [body.status]: true } })
 
       const response = await api({
         method: "POST",
@@ -88,15 +89,15 @@ export const useOrders = () => {
 
       cb && cb(response.data)
     } catch (error) {
-      setError({ add: error.message })
+      setError({ ...error, add: error.message })
     } finally {
-      setLoading({ add: { [body.status]: false } })
+      setLoading({ ...loading, add: { [body.status]: false } })
     }
   }
 
   const addPayment = async (body, id, cb) => {
     try {
-      setLoading({ addPayment: true })
+      setLoading({ ...loading, addPayment: true })
 
       const response = await api({
         method: "POST",
@@ -117,15 +118,15 @@ export const useOrders = () => {
       })
       cb && cb()
     } catch (error) {
-      setError({ addPayment: error.message })
+      setError({ ...error, addPayment: error.message })
     } finally {
-      setLoading({ addPayment: false })
+      setLoading({ ...loading, addPayment: false })
     }
   }
 
   const cancelOrder = async (id) => {
     try {
-      setLoading({ cancelOrder: true })
+      setLoading({ ...loading, cancelOrder: true })
 
       await api({
         method: "DELETE",
@@ -139,9 +140,9 @@ export const useOrders = () => {
 
       cb && cb()
     } catch (error) {
-      setError({ cancelOrder: error.message })
+      setError({ ...error, cancelOrder: error.message })
     } finally {
-      setLoading({ cancelOrder: false })
+      setLoading({ ...loading, cancelOrder: false })
     }
   }
 

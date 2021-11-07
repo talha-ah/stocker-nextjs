@@ -111,6 +111,9 @@ const Customers: NextPage = () => {
           loading={loading.fetch}
           rows={renderData(state.customers.customers)}
         />
+        {console.log("1", state.customers.customers)}
+        {console.log("2", loading)}
+
         <Modal
           show={show}
           title={customer ? "Edit Customer" : "Add Customer"}

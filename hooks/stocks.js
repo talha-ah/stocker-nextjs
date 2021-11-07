@@ -56,7 +56,7 @@ export const useStocks = () => {
   const { state, dispatch } = useAppContext()
 
   const [loading, setLoading] = useState({
-    fetch: true,
+    fetch: false,
     add: false,
     edit: false,
     delete: false,
@@ -71,6 +71,7 @@ export const useStocks = () => {
 
   const fetchData = async () => {
     try {
+      setLoading({ ...loading, fetch: true })
       if (state.stocks.stocksFetched) return
 
       const response = await api({
@@ -97,15 +98,15 @@ export const useStocks = () => {
         payload: { stocks: result },
       })
     } catch (error) {
-      setError({ fetch: error.message })
+      setError({ ...error, fetch: error.message })
     } finally {
-      setLoading({ fetch: false })
+      setLoading({ ...loading, fetch: false })
     }
   }
 
   const addData = async (body, cb) => {
     try {
-      setLoading({ add: true })
+      setLoading({ ...loading, add: true })
 
       const response = await api({
         method: "POST",
@@ -128,15 +129,15 @@ export const useStocks = () => {
 
       cb()
     } catch (error) {
-      setError({ add: error.message })
+      setError({ ...error, add: error.message })
     } finally {
-      setLoading({ add: false })
+      setLoading({ ...loading, add: false })
     }
   }
 
   const editData = async (body, id, cb) => {
     try {
-      setLoading({ edit: true })
+      setLoading({ ...loading, edit: true })
 
       const response = await api({
         method: "PUT",
@@ -159,15 +160,15 @@ export const useStocks = () => {
 
       cb()
     } catch (error) {
-      setError({ edit: error.message })
+      setError({ ...error, edit: error.message })
     } finally {
-      setLoading({ edit: false })
+      setLoading({ ...loading, edit: false })
     }
   }
 
   const deleteData = async (id) => {
     try {
-      setLoading({ delete: true })
+      setLoading({ ...loading, delete: true })
 
       await api({
         method: "DELETE",
@@ -179,9 +180,9 @@ export const useStocks = () => {
         payload: { _id: id },
       })
     } catch (error) {
-      setError({ delete: error.message })
+      setError({ ...error, delete: error.message })
     } finally {
-      setLoading({ delete: false })
+      setLoading({ ...loading, delete: false })
     }
   }
 

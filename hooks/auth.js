@@ -9,6 +9,7 @@ import { useStocks } from "@hooks/stocks"
 import { useOrders } from "@hooks/orders"
 import { useCustomers } from "@hooks/customers"
 import { useCategories } from "@hooks/categories"
+import { useQuotations } from "@hooks/quotations"
 import { useAppContext, AuthTypes } from "@contexts/index"
 
 export const useRegister = () => {
@@ -87,6 +88,7 @@ export const AuthWrapper = ({ children }) => {
   const { fetchData: fetchOrders } = useOrders()
   const { fetchData: fetchCustomers } = useCustomers()
   const { fetchData: fetchCategories } = useCategories()
+  const { fetchData: fetchQuotations } = useQuotations()
 
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -107,6 +109,7 @@ export const AuthWrapper = ({ children }) => {
         uri: endpoints.profile,
       })
       await fetchCategories()
+      await fetchQuotations()
       await fetchCustomers()
       await fetchOrders()
       await fetchStocks()

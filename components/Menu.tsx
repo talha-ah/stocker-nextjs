@@ -56,6 +56,10 @@ const sidebarMenuList = [
     url: "/app/stocks",
   },
   {
+    name: "Quotations",
+    url: "/app/quotations",
+  },
+  {
     exact: true,
     name: "Orders",
     url: "/app/orders",

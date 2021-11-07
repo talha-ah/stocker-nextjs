@@ -8,6 +8,7 @@ export const OrderTypes = {
   SET_ORDERS: "SET_ORDERS",
   ADD_PAYMENT: "ADD_PAYMENT",
   CANCEL_ORDER: "CANCEL_ORDER",
+  UPDATE_STATUS: "UPDATE_STATUS",
 }
 
 export const OrderReducer = (state, action) => {
@@ -37,6 +38,17 @@ export const OrderReducer = (state, action) => {
       return {
         ...state,
         orders,
+      }
+    case OrderTypes.UPDATE_STATUS:
+      const cloned = [...state.orders]
+      const clonedIndex = cloned.findIndex(
+        (clone) => String(clone._id) === String(action.payload._id)
+      )
+      cloned[clonedIndex].status = action.payload.status
+
+      return {
+        ...state,
+        orders: cloned,
       }
     case OrderTypes.CANCEL_ORDER:
       return {
