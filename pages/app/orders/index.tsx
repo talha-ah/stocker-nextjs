@@ -9,17 +9,11 @@ import { Layout } from "@layouts/layout"
 import { Modal } from "@components/Modal"
 import { useOrders } from "@hooks/orders"
 import { AddPayment } from "@forms/orders"
-
+import { Content } from "@components/Common"
 import { generateReceipt } from "@utils/pdfs"
+import { useAppContext } from "@contexts/index"
 import { IconButton } from "@components/Buttons"
 import { Header, Table } from "@components/Table"
-
-const Content = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.gaps.light};
-`
 
 const Actions = styled.div`
   display: flex;
@@ -31,10 +25,11 @@ const Actions = styled.div`
 
 const Orders: NextPage = () => {
   const router = useRouter()
+  const { state } = useAppContext()
   const [show, setShow] = useState(false)
   const [order, setOrder] = useState<any | null>(null)
 
-  const { data, headers, fetchData, loading, addPayment, cancelOrder, error } =
+  const { headers, fetchData, loading, addPayment, cancelOrder, error } =
     useOrders()
 
   useEffect(() => {
@@ -108,9 +103,10 @@ const Orders: NextPage = () => {
       <Content>
         <Header add={() => router.push("/app/orders/add")} title="Orders" />
         <Table
+          paginate
           headers={headers}
-          rows={renderData(data)}
           loading={loading.fetch}
+          rows={renderData(state.orders.orders)}
         />
         <Modal
           show={show}

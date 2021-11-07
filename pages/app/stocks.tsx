@@ -1,22 +1,17 @@
 import Head from "next/head"
 import Image from "next/image"
-import { useState } from "react"
 import type { NextPage } from "next"
 import styled from "styled-components"
+import { useState, useEffect } from "react"
 
 import { Layout } from "@layouts/layout"
 import { useStocks } from "@hooks/stocks"
 import { Modal } from "@components/Modal"
+import { Content } from "@components/Common"
+import { useAppContext } from "@contexts/index"
 import { IconButton } from "@components/Buttons"
 import { Header, Table } from "@components/Table"
 import { CreateStock, EditStock } from "@forms/stocks"
-
-const Content = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.gaps.light};
-`
 
 const Actions = styled.div`
   display: flex;
@@ -43,11 +38,17 @@ type StockType = {
 } | null
 
 const Stocks: NextPage = () => {
+  const { state } = useAppContext()
   const [show, setShow] = useState(false)
   const [stock, setStock] = useState<StockType>(null)
 
-  const { data, headers, addData, editData, deleteData, error, loading } =
+  const { headers, fetchData, addData, editData, deleteData, error, loading } =
     useStocks()
+
+  useEffect(() => {
+    fetchData()
+    // eslint-disable-next-line
+  }, [])
 
   const onSubmit = async (body: any, cb: any) => {
     addData(body, cb)
@@ -108,8 +109,8 @@ const Stocks: NextPage = () => {
         <Header add={() => setShow((s) => !s)} title="Stocks" />
         <Table
           headers={headers}
-          rows={renderData(data)}
           loading={loading.fetch}
+          rows={renderData(state.stocks.stocks)}
         />
         <Modal
           show={show}

@@ -6,17 +6,12 @@ import { useState, useEffect } from "react"
 
 import { Layout } from "@layouts/layout"
 import { Modal } from "@components/Modal"
+import { Content } from "@components/Common"
+import { useAppContext } from "@contexts/index"
 import { useCustomers } from "@hooks/customers"
 import { IconButton } from "@components/Buttons"
 import { Header, Table } from "@components/Table"
 import { CreateCustomer, EditCustomer } from "forms/customers"
-
-const Content = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.gaps.light};
-`
 
 const Actions = styled.div`
   display: flex;
@@ -43,19 +38,12 @@ type CustomerType = {
 } | null
 
 const Customers: NextPage = () => {
+  const { state } = useAppContext()
   const [show, setShow] = useState(false)
   const [customer, setCustomer] = useState<CustomerType>(null)
 
-  const {
-    data,
-    error,
-    headers,
-    loading,
-    addData,
-    editData,
-    fetchData,
-    deleteData,
-  } = useCustomers()
+  const { error, headers, loading, addData, editData, fetchData, deleteData } =
+    useCustomers()
 
   useEffect(() => {
     fetchData()
@@ -120,8 +108,8 @@ const Customers: NextPage = () => {
         <Header add={() => setShow((s) => !s)} title="Customers" />
         <Table
           headers={headers}
-          rows={renderData(data)}
           loading={loading.fetch}
+          rows={renderData(state.customers.customers)}
         />
         <Modal
           show={show}

@@ -1,15 +1,25 @@
 import { useContext, createContext, useReducer } from "react"
 
 import { AuthInitialState, AuthReducer, AuthTypes } from "./reducers/auth"
+import { StockTypes, StockReducer, StockInitialState } from "./reducers/stocks"
+import { OrderTypes, OrderReducer, OrderInitialState } from "./reducers/orders"
 import {
-  CategoriesTypes,
-  CategoriesReducer,
-  CategoriesInitialState,
+  QuotationTypes,
+  QuotationReducer,
+  QuotationInitialState,
+} from "./reducers/quotations"
+import {
+  CategoryTypes,
+  CategoryReducer,
+  CategoryInitialState,
 } from "./reducers/categories"
+import {
+  CustomerTypes,
+  CustomerReducer,
+  CustomerInitialState,
+} from "./reducers/customers"
 
-// combine reducers ala Redux: each can handle its own slice
 const combineReducers = (slices) => (prevState, action) =>
-  // I like to use array.reduce, you can also just write a for..in loop
   Object.keys(slices).reduce(
     (nextState, nextProp) => ({
       ...nextState,
@@ -20,12 +30,20 @@ const combineReducers = (slices) => (prevState, action) =>
 
 const AppReducer = combineReducers({
   auth: AuthReducer,
-  categories: CategoriesReducer,
+  orders: OrderReducer,
+  stocks: StockReducer,
+  customers: CustomerReducer,
+  categories: CategoryReducer,
+  quotations: QuotationReducer,
 })
 
 const AppInitialState = {
   auth: AuthInitialState,
-  categories: CategoriesInitialState,
+  orders: OrderInitialState,
+  stocks: StockInitialState,
+  customers: CustomerInitialState,
+  categories: CategoryInitialState,
+  quotations: QuotationInitialState,
 }
 
 export const AppContext = createContext({
@@ -43,6 +61,13 @@ export const AppProvider = ({ children }) => {
   )
 }
 
-export { AuthTypes, CategoriesTypes }
+export {
+  AuthTypes,
+  StockTypes,
+  OrderTypes,
+  CategoryTypes,
+  CustomerTypes,
+  QuotationTypes,
+}
 
 export const useAppContext = () => useContext(AppContext)

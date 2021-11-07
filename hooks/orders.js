@@ -3,6 +3,7 @@ import { useState } from "react"
 import { api } from "@utils/api"
 import { toTitleCase } from "@utils/common"
 import { endpoints } from "@utils/constants"
+import { useAppContext, OrderTypes } from "@contexts/index"
 
 const headers = [
   { key: 1, name: "Customer", field: "customer", align: "left" },
@@ -16,7 +17,7 @@ const headers = [
 ]
 
 export const useOrders = () => {
-  const [data, setData] = useState([])
+  const { state, dispatch } = useAppContext()
 
   const [loading, setLoading] = useState({
     fetch: true,
@@ -37,6 +38,8 @@ export const useOrders = () => {
 
   const fetchData = async () => {
     try {
+      if (state.orders.ordersFetched) return
+
       const response = await api({
         method: "GET",
         uri: endpoints.orders,
@@ -51,7 +54,10 @@ export const useOrders = () => {
         installments: `${row.installments} - ${row.payments.length}`,
       }))
 
-      setData(result)
+      dispatch({
+        type: OrderTypes.SET_ORDERS,
+        payload: { orders: result },
+      })
     } catch (error) {
       setError({ fetch: error.message })
     } finally {
@@ -75,7 +81,10 @@ export const useOrders = () => {
 
       const result = response.data
 
-      setData([result, ...data])
+      dispatch({
+        type: OrderTypes.ADD_ORDER,
+        payload: { order: result },
+      })
 
       cb && cb(response.data)
     } catch (error) {
@@ -95,19 +104,17 @@ export const useOrders = () => {
         body: JSON.stringify(body),
       })
 
-      const clonedData = [...data]
-
-      const orderIndex = clonedData.findIndex(
-        (order) => String(order._id) === String(id)
-      )
-
-      clonedData[
-        orderIndex
-      ].installments = `${response.data.installments} - ${response.data.payments.length}`
-      clonedData[orderIndex].balance =
-        clonedData[orderIndex].balance - body.value
-
-      setData(clonedData)
+      dispatch({
+        type: CategoriesTypes.ADD_PAYMENT,
+        payload: {
+          order: {
+            _id: id,
+            value: body.value,
+            payments: response.data.payments.length,
+            installments: response.data.installments,
+          },
+        },
+      })
       cb && cb()
     } catch (error) {
       setError({ addPayment: error.message })
@@ -125,9 +132,11 @@ export const useOrders = () => {
         uri: `${endpoints.orders}/${id}`,
       })
 
-      const result = data.filter((d) => String(d._id) !== String(id))
+      dispatch({
+        type: OrderTypes.CANCEL_ORDER,
+        payload: { _id: id },
+      })
 
-      setData(result)
       cb && cb()
     } catch (error) {
       setError({ cancelOrder: error.message })
@@ -137,7 +146,6 @@ export const useOrders = () => {
   }
 
   return {
-    data,
     error,
     headers,
     loading,

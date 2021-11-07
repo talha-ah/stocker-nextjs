@@ -1,29 +1,29 @@
-export const CategoriesInitialState = {
+export const CategoryInitialState = {
   categories: [],
   categoriesFetched: false,
 }
 
-export const CategoriesTypes = {
+export const CategoryTypes = {
   ADD_CATEGORY: "ADD_CATEGORY",
   EDIT_CATEGORY: "EDIT_CATEGORY",
   SET_CATEGORIES: "SET_CATEGORIES",
   DELETE_CATEGORY: "DELETE_CATEGORY",
 }
 
-export const CategoriesReducer = (state, action) => {
+export const CategoryReducer = (state, action) => {
   switch (action.type) {
-    case CategoriesTypes.SET_CATEGORIES:
+    case CategoryTypes.SET_CATEGORIES:
       return {
         ...state,
         categoriesFetched: true,
         categories: action.payload.categories,
       }
-    case CategoriesTypes.ADD_CATEGORY:
+    case CategoryTypes.ADD_CATEGORY:
       return {
         ...state,
         categories: [action.payload.category, ...state.categories],
       }
-    case CategoriesTypes.EDIT_CATEGORY:
+    case CategoryTypes.EDIT_CATEGORY:
       const categories = [...state.categories]
       const categoryIndex = categories.findIndex(
         (category) =>
@@ -34,7 +34,7 @@ export const CategoriesReducer = (state, action) => {
         ...state,
         categories,
       }
-    case CategoriesTypes.DELETE_CATEGORY:
+    case CategoryTypes.DELETE_CATEGORY:
       return {
         ...state,
         categories: state.categories.filter(

@@ -5,6 +5,9 @@ import { api } from "@utils/api"
 import { endpoints } from "@utils/constants"
 import { getBrowserItem } from "@utils/browser-utility"
 
+import { useStocks } from "@hooks/stocks"
+import { useOrders } from "@hooks/orders"
+import { useCustomers } from "@hooks/customers"
 import { useCategories } from "@hooks/categories"
 import { useAppContext, AuthTypes } from "@contexts/index"
 
@@ -80,6 +83,9 @@ export const useLogout = () => {
 export const AuthWrapper = ({ children }) => {
   const router = useRouter()
   const { dispatch } = useAppContext()
+  const { fetchData: fetchStocks } = useStocks()
+  const { fetchData: fetchOrders } = useOrders()
+  const { fetchData: fetchCustomers } = useCustomers()
   const { fetchData: fetchCategories } = useCategories()
 
   const [error, setError] = useState(null)
@@ -100,7 +106,10 @@ export const AuthWrapper = ({ children }) => {
       const response = await api({
         uri: endpoints.profile,
       })
-      fetchCategories()
+      await fetchCategories()
+      await fetchCustomers()
+      await fetchOrders()
+      await fetchStocks()
 
       dispatch({
         type: AuthTypes.LOGIN,

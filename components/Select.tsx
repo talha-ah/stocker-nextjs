@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { useState, useRef, useEffect } from "react"
 
 import { generateId } from "@utils/common"
-import { DangerText } from "@components/Texts"
+import { DangerText, Label } from "@components/Texts"
 
 type SelectorType = {
   primary?: boolean
@@ -177,7 +177,12 @@ export const Select = (props: any) => {
 
   return (
     <Container onClick={(e) => e.stopPropagation()}>
-      {props.label && <label htmlFor={props.name}>{props.label}</label>}
+      {props.label && (
+        <Label htmlFor={props.name}>
+          {props.label}
+          {props.required && <DangerText>&nbsp;*</DangerText>}
+        </Label>
+      )}
 
       <Selector primary={props.primary} ref={ref} onClick={toggle}>
         {props.multi

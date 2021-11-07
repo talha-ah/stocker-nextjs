@@ -1,6 +1,6 @@
 import Head from "next/head"
-import { useState } from "react"
 import Image from "next/image"
+import { useState } from "react"
 import type { NextPage } from "next"
 import styled from "styled-components"
 
@@ -10,25 +10,14 @@ import { Input } from "@components/Inputs"
 import { generateReceipt } from "@utils/pdfs"
 import { useSearchStock } from "@hooks/stocks"
 import { Header, Table } from "@components/Table"
+import { Content, FlexRow, FlexColumn } from "@components/Common"
 import { Select, SelectType } from "@components/Select"
 import { SearchSelect } from "@components/SearchSelect"
 import { generateId, calculateDiscount } from "@utils/common"
 import { useSearchCustomer, useCustomers } from "@hooks/customers"
 import { Button, NeutralButton, IconButton } from "@components/Buttons"
 
-const Content = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.gaps.light};
-`
-
-const Selects = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: ${({ theme }) => theme.gaps.default};
+const Form = styled(FlexColumn)`
   margin: ${({ theme }) => theme.gaps.light} 0px;
 `
 
@@ -84,17 +73,6 @@ const paymentTypes = [
   },
 ]
 
-type CustomerType = {
-  city: string
-  value: string
-  state: string
-  country: string
-  first_name: string
-  address_one: string
-  address_two: string
-  postal_code: string
-} | null
-
 const Orders: NextPage = () => {
   const [rows, setRows] = useState<any>([])
 
@@ -103,12 +81,14 @@ const Orders: NextPage = () => {
   ])
 
   const { addData, loading } = useOrders()
-  const [stockSearch, setstockSearch] = useState("")
-  const { stocks, stocksLoading } = useSearchStock(stockSearch)
+  const [stockQuery, setstockQuery] = useState("")
+  const { stocks } = useSearchStock(stockQuery)
+  const [customerQuery, setCustomerQuery] = useState("")
+  const { customers } = useSearchCustomer(customerQuery)
 
-  const [customerSearch, setCustomerSearch] = useState("")
-  const [customer, setCustomer] = useState<CustomerType>(null)
-  const { customers, customersLoading } = useSearchCustomer(customerSearch)
+  const [address, setAddress] = useState<string>("")
+  const [displayId, setDisplayId] = useState<string>("")
+  const [customer, setCustomer] = useState<any | null>(null)
 
   const addStock = (value: any) => {
     const rowsCloned = [...rows]
@@ -130,7 +110,7 @@ const Orders: NextPage = () => {
     }
 
     setRows(rowsCloned)
-    setstockSearch("")
+    setstockQuery("")
   }
 
   const removeStock = (id: string) => {
@@ -217,7 +197,7 @@ const Orders: NextPage = () => {
   const onSubmit = async (status: string = "active") => {
     const body = {
       created_for: customer?.value,
-      display_id: generateId(),
+      display_id: displayId || generateId(),
       stocks: rows.map((row: any) => ({
         stock_id: row.value,
         quantity: row.qty,
@@ -228,7 +208,7 @@ const Orders: NextPage = () => {
       type: paymentType[0]?.value,
       installments: 1,
       status: status,
-      address_one: customer?.address_one,
+      address_one: address || customer?.address_one,
       address_two: customer?.address_two,
       postal_code: customer?.postal_code,
       city: customer?.city,
@@ -236,17 +216,25 @@ const Orders: NextPage = () => {
       country: customer?.country,
     }
 
-    addData(body, (data: any) => {
-      generateReceipt(data)
-      resetForm()
-    })
+    console.log(body)
+
+    // addData(body, (data: any) => {
+    //   generateReceipt(data)
+    //   resetForm()
+    // })
   }
 
   // ==================> Add Customer
   const { addData: addCustomer } = useCustomers()
 
   const onAddCustomer = async (body: any) => {
-    addCustomer(body)
+    addCustomer(body, (data: any) => {
+      setCustomer({
+        ...data,
+        value: data._id,
+        label: data.first_name,
+      })
+    })
   }
   // Add Customer <==================
 
@@ -260,50 +248,69 @@ const Orders: NextPage = () => {
 
       <Content>
         <Header title="Add Order" actions={false} />
-        <Selects>
-          <Select
-            name="paymentType"
-            value={paymentType}
-            label="Payment Type"
-            options={paymentTypes}
-            placeholder="Payment Type"
-            onChange={(value: any) => setPaymentType(value)}
-          />
-          <SearchSelect
-            name="customers"
-            label="Customer"
-            options={customers}
-            loading={customersLoading}
-            value={customer?.first_name}
-            placeholder="Search Customer"
-            onSelect={(value: any) => setCustomer(value)}
-            onSearch={(text: string) => setCustomerSearch(text)}
-            onCreate={(value: any) => onAddCustomer({ first_name: value })}
-          />
-          <SearchSelect
-            name="stocks"
-            label="Stock"
-            options={stocks}
-            loading={stocksLoading}
-            placeholder="Search Stock"
-            onSelect={(value: any) => addStock(value)}
-            onSearch={(text: string) => setstockSearch(text)}
-          />
-        </Selects>
+        <Form>
+          <FlexRow>
+            <Input
+              name="displayId"
+              value={displayId}
+              label="Display Id"
+              placeholder="Display Id"
+              onChange={(e: any) => setDisplayId(e.target.value)}
+            />
+            <Input
+              name="address"
+              label="Address"
+              value={address}
+              placeholder="Address"
+              onChange={(e: any) => setAddress(e.target.value)}
+            />
+          </FlexRow>
+          <FlexRow>
+            <Select
+              required
+              name="paymentType"
+              value={paymentType}
+              label="Payment Type"
+              options={paymentTypes}
+              placeholder="Payment Type"
+              onChange={(value: any) => setPaymentType(value)}
+            />
+            <SearchSelect
+              required
+              name="customers"
+              label="Customer"
+              options={customers}
+              value={customer?.first_name}
+              placeholder="Search Customer"
+              onSelect={(value: any) => setCustomer(value)}
+              onSearch={(text: string) => setCustomerQuery(text)}
+              onCreate={(value: any) => onAddCustomer({ first_name: value })}
+            />
+            <SearchSelect
+              required
+              name="stocks"
+              label="Stock"
+              options={stocks}
+              placeholder="Search Stock"
+              onSelect={(value: any) => addStock(value)}
+              onSearch={(text: string) => setstockQuery(text)}
+            />
+          </FlexRow>
+        </Form>
         <Table
           hover={false}
           id="add_order"
           headers={headers}
           rows={renderData(rows)}
-          total_field="total_price"
+          totalField="total_price"
         />
         <Buttons>
-          <NeutralButton onClick={() => onSubmit("quotation")}>
-            {loading.add.active ? "Loading..." : "Add Quotation"}
-          </NeutralButton>
           <Button onClick={() => onSubmit("active")}>
             {loading.add.quotation ? "Loading..." : "Add Order"}
           </Button>
+          <NeutralButton onClick={() => onSubmit("quotation")}>
+            {loading.add.active ? "Loading..." : "Add Quotation"}
+          </NeutralButton>
         </Buttons>
       </Content>
     </Layout>

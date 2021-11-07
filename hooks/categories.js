@@ -2,8 +2,7 @@ import { useState } from "react"
 
 import { api } from "@utils/api"
 import { endpoints } from "@utils/constants"
-
-import { useAppContext, CategoriesTypes } from "@contexts/index"
+import { useAppContext, CategoryTypes } from "@contexts/index"
 
 const headers = [
   { key: 1, name: "Name", field: "name", align: "left" },
@@ -12,7 +11,6 @@ const headers = [
 ]
 
 export const useCategories = () => {
-  const [data, setData] = useState([])
   const { state, dispatch } = useAppContext()
 
   const [loading, setLoading] = useState({
@@ -31,10 +29,7 @@ export const useCategories = () => {
 
   const fetchData = async () => {
     try {
-      if (state.categories.categoriesFetched) {
-        setData(state.categories.categories)
-        return
-      }
+      if (state.categories.categoriesFetched) return
 
       const response = await api({
         method: "GET",
@@ -49,11 +44,9 @@ export const useCategories = () => {
       }))
 
       dispatch({
-        type: CategoriesTypes.SET_CATEGORIES,
+        type: CategoryTypes.SET_CATEGORIES,
         payload: { categories: result },
       })
-
-      setData(result)
     } catch (error) {
       setError({ fetch: error.message })
     } finally {
@@ -74,11 +67,10 @@ export const useCategories = () => {
       const result = response.data
 
       dispatch({
-        type: CategoriesTypes.ADD_CATEGORY,
+        type: CategoryTypes.ADD_CATEGORY,
         payload: { category: result },
       })
 
-      setData([result, ...data])
       cb()
     } catch (error) {
       setError({ add: error.message })
@@ -98,17 +90,10 @@ export const useCategories = () => {
       })
 
       dispatch({
-        type: CategoriesTypes.EDIT_CATEGORY,
+        type: CategoryTypes.EDIT_CATEGORY,
         payload: { category: response.data },
       })
 
-      const result = [...data]
-      const dIndex = result.findIndex(
-        (d) => String(d._id) === String(response.data._id)
-      )
-      result[dIndex] = response.data
-
-      setData(result)
       cb()
     } catch (error) {
       setError({ edit: error.message })
@@ -127,13 +112,9 @@ export const useCategories = () => {
       })
 
       dispatch({
-        type: CategoriesTypes.DELETE_CATEGORY,
+        type: CategoryTypes.DELETE_CATEGORY,
         payload: { _id: id },
       })
-
-      const result = data.filter((d) => String(d._id) !== String(id))
-
-      setData(result)
     } catch (error) {
       setError({ delete: error.message })
     } finally {
@@ -142,7 +123,6 @@ export const useCategories = () => {
   }
 
   return {
-    data,
     error,
     headers,
     loading,

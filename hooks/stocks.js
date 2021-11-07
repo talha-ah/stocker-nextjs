@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 
 import { api } from "@utils/api"
 import { endpoints } from "@utils/constants"
-import { useAppContext } from "@contexts/index"
+import { useAppContext, StockTypes } from "@contexts/index"
 
 const headers = [
   { key: 1, name: "Sr.", field: "sr", align: "left", width: "10px" },
@@ -53,8 +53,7 @@ const headers = [
 ]
 
 export const useStocks = () => {
-  const { state } = useAppContext()
-  const [data, setData] = useState([])
+  const { state, dispatch } = useAppContext()
 
   const [loading, setLoading] = useState({
     fetch: true,
@@ -70,12 +69,10 @@ export const useStocks = () => {
     delete: null,
   })
 
-  useEffect(() => {
-    fetchData()
-  }, [])
-
   const fetchData = async () => {
     try {
+      if (state.stocks.stocksFetched) return
+
       const response = await api({
         method: "GET",
         uri: endpoints.stocks,
@@ -95,7 +92,10 @@ export const useStocks = () => {
         category_id: row.category._id,
       }))
 
-      setData(result)
+      dispatch({
+        type: StockTypes.SET_STOCKS,
+        payload: { stocks: result },
+      })
     } catch (error) {
       setError({ fetch: error.message })
     } finally {
@@ -121,9 +121,11 @@ export const useStocks = () => {
       response.data.category = category.name
       response.data.category_id = category._id
 
-      let result = [response.data, ...data]
+      dispatch({
+        type: StockTypes.ADD_STOCK,
+        payload: { stock: response.data },
+      })
 
-      setData(result)
       cb()
     } catch (error) {
       setError({ add: error.message })
@@ -150,13 +152,11 @@ export const useStocks = () => {
       response.data.category = category.name
       response.data.category_id = category._id
 
-      const result = [...data]
-      const dIndex = result.findIndex(
-        (d) => String(d._id) === String(response.data._id)
-      )
-      result[dIndex] = response.data
+      dispatch({
+        type: StockTypes.EDIT_STOCK,
+        payload: { stock: response.data },
+      })
 
-      setData(result)
       cb()
     } catch (error) {
       setError({ edit: error.message })
@@ -174,9 +174,10 @@ export const useStocks = () => {
         uri: `${endpoints.stocks}/${id}`,
       })
 
-      const result = data.filter((d) => String(d._id) !== String(id))
-
-      setData(result)
+      dispatch({
+        type: StockTypes.DELETE_STOCK,
+        payload: { _id: id },
+      })
     } catch (error) {
       setError({ delete: error.message })
     } finally {
@@ -185,7 +186,6 @@ export const useStocks = () => {
   }
 
   return {
-    data,
     error,
     headers,
     loading,
@@ -196,38 +196,32 @@ export const useStocks = () => {
   }
 }
 
-export const useSearchStock = (text) => {
+export const useSearchStock = (query) => {
+  const { state } = useAppContext()
   const [stocks, setStocks] = useState([])
-  const [stocksError, setStocksError] = useState("")
-  const [stocksLoading, setStocksLoading] = useState(false)
 
   const fetchStocks = async () => {
-    try {
-      setStocksLoading(true)
+    let searched = state.stocks.stocks
 
-      const response = await api({
-        method: "GET",
-        uri: `${endpoints.stocks}?search=${text}`,
-      })
+    searched = searched.filter(
+      (stock) =>
+        stock.description.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        stock.code.toLowerCase().indexOf(query.toLowerCase()) > -1
+    )
 
-      const result = response.data.map((stock) => ({
-        ...stock,
-        value: stock._id,
-        label: stock.description,
-      }))
+    const result = searched.map((stock) => ({
+      ...stock,
+      value: stock._id,
+      label: stock.description,
+    }))
 
-      setStocks(result)
-    } catch (error) {
-      setStocksError(error.message)
-    } finally {
-      setStocksLoading(false)
-    }
+    setStocks(result)
   }
 
   useEffect(() => {
-    text ? fetchStocks() : setStocks([])
+    query ? fetchStocks() : setStocks([])
     // eslint-disable-next-line
-  }, [text])
+  }, [query])
 
-  return { stocks, stocksError, stocksLoading }
+  return { stocks }
 }

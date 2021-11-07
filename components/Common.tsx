@@ -1,13 +1,6 @@
 import styled from "styled-components"
 
-import { device } from "@utils/constants"
-
 type MainType = {
-  width?: string
-  flexDirection?: string
-}
-
-type SectionType = {
   width?: string
   flexDirection?: string
 }
@@ -28,62 +21,48 @@ export const Main = styled.main<MainType>`
   padding: 5rem 0;
   align-items: center;
   justify-content: center;
-  width: ${({ width }) => width || "100%"};
   background-color: #f5f5f5;
-  flex-direction: ${({ flexDirection }) => flexDirection || "column"};
-`
-
-export const Section = styled.section<SectionType>`
-  flex: 1;
-  display: flex;
-  padding: 5rem 0;
-  align-items: center;
-  justify-content: center;
   width: ${({ width }) => width || "100%"};
   flex-direction: ${({ flexDirection }) => flexDirection || "column"};
 `
 
-export const Grid = styled.div`
+export const Content = styled.main`
+  width: 100%;
   display: flex;
-  flex-wrap: wrap;
-  max-width: 800px;
-  margin-top: 3rem;
-  align-items: center;
-  justify-content: center;
-
-  @media (${device.tablet}) {
-    & {
-      width: 100%;
-      flex-direction: column;
-    }
-  }
+  flex-direction: column;
+  gap: ${({ theme }) => theme.gaps.light};
 `
 
 export const FlexRow = styled.div`
   display: flex;
+  flex-direction: row;
   align-items: center;
+  gap: ${({ theme }) => theme.gaps.light};
 `
 
-export const JustifyBetweenRow = styled(FlexRow)`
-  justify-content: space-between;
+export const FlexColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.gaps.light};
 `
 
-export const Box = styled.div`
-  overflow: hidden;
-  margin: 20px auto;
+export const Card = styled.div`
+  width: 100%;
+  display: flex;
   padding: 10px 20px;
   border-radius: 5px;
+  color: rgb(0, 0, 0);
+  flex-direction: column;
+  transition: all 0.3s ease 0s;
+  background-color: transparent;
   border: 2px solid rgb(4, 6, 8);
-  background: rgb(255, 255, 255);
-  transition: transform 0.2s ease 0s;
-  box-shadow: rgb(210 239 253) 8px 8px;
-`
+  box-shadow: rgb(210 239 253) 6px 6px;
+  gap: ${({ theme }) => theme.gaps.light};
+  font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
+    Segoe UI Emoji, Segoe UI Symbol, SF Pro Display, -apple-system, acumin-pro,
+    BlinkMacSystemFont;
 
-export const Code = styled.code`
-  background: #fafafa;
-  border-radius: 5px;
-  padding: 0.75rem;
-  font-size: 1.1rem;
-  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
-    Bitstream Vera Sans Mono, Courier New, monospace;
+  &:hover {
+    color: ${({ theme }) => theme.colors.primary};
+  }
 `

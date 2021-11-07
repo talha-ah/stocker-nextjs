@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 
 import { api } from "@utils/api"
 import { endpoints } from "@utils/constants"
+import { useAppContext, CustomerTypes } from "@contexts/index"
 
 const headers = [
   { key: 1, name: "Name", field: "name", align: "left" },
@@ -15,7 +16,7 @@ const headers = [
 ]
 
 export const useCustomers = () => {
-  const [data, setData] = useState([])
+  const { state, dispatch } = useAppContext()
 
   const [loading, setLoading] = useState({
     fetch: true,
@@ -33,6 +34,8 @@ export const useCustomers = () => {
 
   const fetchData = async () => {
     try {
+      if (state.customers.customersFetched) return
+
       const response = await api({
         method: "GET",
         uri: endpoints.customers,
@@ -45,7 +48,10 @@ export const useCustomers = () => {
         balance: row.balance.value,
       }))
 
-      setData(result)
+      dispatch({
+        type: CustomerTypes.SET_CUSTOMERS,
+        payload: { customers: result },
+      })
     } catch (error) {
       setError({ fetch: error.message })
     } finally {
@@ -68,8 +74,12 @@ export const useCustomers = () => {
       result.name = result.first_name
       result.balance = result.balance.value
 
-      setData([result, ...data])
-      cb && cb()
+      dispatch({
+        type: CustomerTypes.ADD_CUSTOMER,
+        payload: { customer: result },
+      })
+
+      cb && cb(result)
     } catch (error) {
       setError({ add: error.message })
     } finally {
@@ -91,13 +101,11 @@ export const useCustomers = () => {
       response.data.name = response.data.first_name
       response.data.balance = response.data.balance.value
 
-      const result = [...data]
-      const dIndex = result.findIndex(
-        (d) => String(d._id) === String(response.data._id)
-      )
-      result[dIndex] = response.data
+      dispatch({
+        type: CustomerTypes.EDIT_CUSTOMER,
+        payload: { customer: response.data },
+      })
 
-      setData(result)
       cb()
     } catch (error) {
       setError({ edit: error.message })
@@ -115,9 +123,10 @@ export const useCustomers = () => {
         uri: `${endpoints.customers}/${id}`,
       })
 
-      const result = data.filter((d) => String(d._id) !== String(id))
-
-      setData(result)
+      dispatch({
+        type: CustomerTypes.DELETE_CUSTOMER,
+        payload: { _id: id },
+      })
     } catch (error) {
       setError({ delete: error.message })
     } finally {
@@ -126,7 +135,6 @@ export const useCustomers = () => {
   }
 
   return {
-    data,
     error,
     headers,
     loading,
@@ -137,38 +145,31 @@ export const useCustomers = () => {
   }
 }
 
-export const useSearchCustomer = (text) => {
+export const useSearchCustomer = (query) => {
+  const { state } = useAppContext()
   const [customers, setCustomers] = useState([])
-  const [customersError, setCustomersError] = useState("")
-  const [customersLoading, setCustomersLoading] = useState(false)
 
   const fetchCustomers = async () => {
-    try {
-      setCustomersLoading(true)
+    let searched = state.customers.customers
 
-      const response = await api({
-        method: "GET",
-        uri: `${endpoints.customers}?search=${text}`,
-      })
+    searched = searched.filter(
+      (stock) =>
+        stock.first_name.toLowerCase().indexOf(query.toLowerCase()) > -1
+    )
 
-      const result = response.data.map((customer) => ({
-        ...customer,
-        value: customer._id,
-        label: customer.first_name,
-      }))
+    const result = searched.map((customer) => ({
+      ...customer,
+      value: customer._id,
+      label: customer.first_name,
+    }))
 
-      setCustomers(result)
-    } catch (error) {
-      setCustomersError(error.message)
-    } finally {
-      setCustomersLoading(false)
-    }
+    setCustomers(result)
   }
 
   useEffect(() => {
-    text ? fetchCustomers() : setCustomers([])
+    query ? fetchCustomers() : setCustomers([])
     // eslint-disable-next-line
-  }, [text])
+  }, [query])
 
-  return { customers, customersLoading, customersError }
+  return { customers }
 }

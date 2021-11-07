@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 import { device } from "@utils/constants"
-import { DangerText } from "@components/Texts"
+import { DangerText, Label } from "@components/Texts"
 
 type WidthType = {
   width?: string
@@ -108,7 +108,12 @@ export const Input = ({
   error?: string | null
 }) => (
   <InputContainer>
-    {label && <label htmlFor={name}>{label}</label>}
+    {label && (
+      <Label htmlFor={name}>
+        {label}
+        {required && <DangerText>&nbsp;*</DangerText>}
+      </Label>
+    )}
     <StyledInput
       min={min}
       id={name}
@@ -150,7 +155,12 @@ export const TextArea = ({
   error?: string | null
 }) => (
   <InputContainer>
-    {label && <label htmlFor={name}>{label}</label>}
+    {label && (
+      <Label htmlFor={name}>
+        {label}
+        {required && <DangerText>&nbsp;*</DangerText>}
+      </Label>
+    )}
     <StyledTextArea
       id={name}
       name={name}

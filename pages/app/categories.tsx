@@ -6,17 +6,12 @@ import { useState, useEffect } from "react"
 
 import { Layout } from "@layouts/layout"
 import { Modal } from "@components/Modal"
+import { Content } from "@components/Common"
+import { useAppContext } from "@contexts/index"
 import { IconButton } from "@components/Buttons"
 import { Header, Table } from "@components/Table"
 import { useCategories } from "@hooks/categories"
 import { CreateCategory, EditCategory } from "@forms/categories"
-
-const Content = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.gaps.light};
-`
 
 const Actions = styled.div`
   display: flex;
@@ -36,20 +31,12 @@ type CategoryType = {
 } | null
 
 const Categories: NextPage = () => {
+  const { state } = useAppContext()
   const [show, setShow] = useState(false)
-
   const [category, setCategory] = useState<CategoryType>(null)
 
-  const {
-    data,
-    error,
-    loading,
-    headers,
-    addData,
-    editData,
-    fetchData,
-    deleteData,
-  } = useCategories()
+  const { error, loading, headers, addData, editData, fetchData, deleteData } =
+    useCategories()
 
   useEffect(() => {
     fetchData()
@@ -114,8 +101,8 @@ const Categories: NextPage = () => {
         <Header add={() => setShow((s) => !s)} title="Categories" />
         <Table
           headers={headers}
-          rows={renderData(data)}
           loading={loading.fetch}
+          rows={renderData(state.categories.categories)}
         />
         <Modal
           show={show}

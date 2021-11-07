@@ -4,35 +4,27 @@ import styled from "styled-components"
 import { Menu } from "@components/Menu"
 import { useLogout } from "@hooks/auth"
 import { Heading } from "@components/Texts"
-import { useAppContext } from "@contexts/index"
+import { FlexRow } from "@components/Common"
 import { IconButton } from "@components/Buttons"
 
 const Container = styled.div`
   width: 100%;
   height: 100vh;
   display: flex;
+  position: fixed;
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.bg};
 `
 
 const Header = styled.div`
   width: 100%;
-  height: 50px;
   display: flex;
-  padding: 0 ${({ theme }) => theme.gaps.semiLight};
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   gap: ${({ theme }) => theme.gaps.light};
+  padding: 12px ${({ theme }) => theme.gaps.semiLight};
   background-color: ${({ theme }) => theme.colors.primary};
-`
-
-const Brand = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  justify-content: center;
-  gap: ${({ theme }) => theme.gaps.semiLight};
 `
 
 const WhiteHeading = styled(Heading)`
@@ -40,8 +32,8 @@ const WhiteHeading = styled(Heading)`
 `
 
 const Avatar = styled.div`
-  width: 25px;
-  height: 25px;
+  width: 24px;
+  height: 24px;
   display: flex;
   cursor: pointer;
   border-radius: 50%;
@@ -61,10 +53,10 @@ const Page = styled.div`
 
 const Sidebar = styled.div`
   height: 100%;
-  padding: 8px;
   display: flex;
   flex-direction: column;
   border-right: 1px solid white;
+  padding: ${({ theme }) => theme.gaps.light};
 `
 
 const Content = styled.div`
@@ -75,13 +67,11 @@ const Content = styled.div`
 
 export const Layout = ({ children }: { children: any }) => {
   const { doLogout } = useLogout()
-  const { state } = useAppContext()
 
   return (
     <Container>
-      {console.log("State Layout", state)}
       <Header>
-        <Brand>
+        <FlexRow>
           <IconButton>
             <Image
               src="/icons/Burger.svg"
@@ -90,8 +80,8 @@ export const Layout = ({ children }: { children: any }) => {
               height={24}
             />
           </IconButton>
-          <WhiteHeading>Stock Management System</WhiteHeading>
-        </Brand>
+          <WhiteHeading>Stocker</WhiteHeading>
+        </FlexRow>
         <Avatar onClick={() => doLogout()}>
           <Image src="/images/avatar.png" alt="avatar" width={25} height={25} />
         </Avatar>

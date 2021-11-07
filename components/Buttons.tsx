@@ -89,28 +89,12 @@ export const Anchor = styled.button`
   }
 `
 
-export const Logo = styled.button`
-  margin: 0;
+export const Logo = styled.div`
   top: 20px;
   left: 20px;
   cursor: pointer;
-  font-size: 18px;
-  line-height: 1.2;
-  font-weight: bold;
   position: absolute;
-  padding: 10px 20px;
-  border-radius: 5px;
-  color: rgb(0, 0, 0);
-  text-decoration: none;
-  transition: all 0.3s ease 0s;
-  background-color: transparent;
-  border: 2px solid rgb(4, 6, 8);
-  box-shadow: rgb(210 239 253) 6px 6px;
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol, SF Pro Display, -apple-system, acumin-pro,
     BlinkMacSystemFont;
-
-  &:hover {
-    color: ${({ theme }) => theme.colors.primary};
-  }
 `

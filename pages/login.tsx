@@ -8,7 +8,7 @@ import { DoLogin } from "@forms/auth"
 import { useLogin } from "@hooks/auth"
 import { Logo } from "@components/Buttons"
 import { Main, Container } from "@components/Common"
-import { BigHeading, Small } from "@components/Texts"
+import { BigHeading, Small, Heading } from "@components/Texts"
 
 const FormWrapper = styled.div`
   width: 100%;
@@ -48,7 +48,11 @@ const Login: NextPage = () => {
       </Head>
 
       <Main width="100%">
-        <Logo onClick={() => router.replace("/")}>Stocker</Logo>
+        <Logo>
+          <Heading primary onClick={() => router.replace("/")}>
+            Stocker
+          </Heading>
+        </Logo>
         <FormWrapper>
           <Texts>
             <BigHeading>Welcome</BigHeading>

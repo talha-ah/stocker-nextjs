@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react"
 
 import { generateId } from "@utils/common"
 import { useDebounce } from "@hooks/debounce"
-import { DangerText } from "@components/Texts"
+import { DangerText, Label } from "@components/Texts"
 
 type SelectorType = {
   primary?: boolean
@@ -126,6 +126,7 @@ export const SearchSelect = ({
   options,
   onSearch,
   onSelect,
+  required,
   onCreate,
   value = "",
   placeholder,
@@ -140,12 +141,13 @@ export const SearchSelect = ({
   error?: string
   primary?: boolean
   loading?: boolean
+  required?: boolean
   placeholder?: string
 }) => {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState<string>("")
 
-  const debouncedQuery = useDebounce(query, 500)
+  const debouncedQuery = useDebounce(query, 100)
 
   useEffect(() => {
     onSearch && onSearch(debouncedQuery)
@@ -173,7 +175,12 @@ export const SearchSelect = ({
 
   return (
     <Container onClick={(e) => e.stopPropagation()}>
-      {label && <label htmlFor={name}>{label}</label>}
+      {label && (
+        <Label htmlFor={name}>
+          {label}
+          {required && <DangerText>&nbsp;*</DangerText>}
+        </Label>
+      )}
 
       <Selector primary={primary}>
         <Input
