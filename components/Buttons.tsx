@@ -108,3 +108,22 @@ export const Logo = styled.div`
     Segoe UI Emoji, Segoe UI Symbol, SF Pro Display, -apple-system, acumin-pro,
     BlinkMacSystemFont;
 `
+
+type TabButtonType = {
+  active?: boolean
+}
+
+export const TabButton = styled.div<TabButtonType>`
+  border: 0;
+  outline: 0;
+  margin: 8px 0;
+  padding: 0 8px;
+  cursor: pointer;
+  line-height: 32px;
+  transition: all 0.3s ease 0s;
+  background-color: transparent;
+  color: ${({ theme, active }) =>
+    active ? theme.colors.text : theme.colors.placeholder};
+  border-bottom: 2px solid
+    ${({ theme, active }) => (active ? theme.colors.primary : "transparent")};
+`

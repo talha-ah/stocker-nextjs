@@ -8,12 +8,12 @@ import { Layout } from "@layouts/layout"
 import { Modal } from "@components/Modal"
 import { useOrders } from "@hooks/orders"
 import { AddPayment } from "@forms/orders"
-import { Button } from "@components/Buttons"
 import { Spinner } from "@components/Spinner"
 import { SubHeading } from "@components/Texts"
 import { useCustomers } from "@hooks/customers"
 import { Header, Table } from "@components/Table"
 import { Content, FlexRow } from "@components/Common"
+import { TabButton, Button } from "@components/Buttons"
 
 const headers = [
   { key: 1, name: "Order #", field: "order_id", align: "left" },
@@ -37,6 +37,7 @@ const Buttons = styled.div`
 const Customers: NextPage = () => {
   const router = useRouter()
   const [show, setShow] = useState(false)
+  const [tab, setTab] = useState("unpaid")
   const [customer, setCustomer] = useState<any>(null)
 
   const {
@@ -51,22 +52,22 @@ const Customers: NextPage = () => {
   useEffect(() => {
     const { id } = router.query
     setCustomer(fetchCustomer(id))
-    fetchCustomerOrders(id)
+
     // eslint-disable-next-line
   }, [])
 
-  const renderData = (rows: any) => {
-    return rows.map((row: any) => ({
-      ...row,
-    }))
-  }
+  useEffect(() => {
+    const { id } = router.query
+    fetchCustomerOrders(id, tab)
+
+    // eslint-disable-next-line
+  }, [tab])
 
   const addPayment = (body: any, cb: any) => {
-    console.log("Add Payment", body)
-    // addGeneralPayment(body, () => {
-    //   setShow((s) => !s)
-    //   cb()
-    // })
+    addGeneralPayment({ ...body, customerId: customer._id }, () => {
+      setShow((s) => !s)
+      cb()
+    })
   }
 
   return (
@@ -86,22 +87,33 @@ const Customers: NextPage = () => {
           <SubHeading>Email: {customer?.email}</SubHeading>
         </FlexRow>
 
+        <FlexRow>
+          <TabButton active={tab === "unpaid"} onClick={() => setTab("unpaid")}>
+            UnPaid
+          </TabButton>
+          <TabButton active={tab === "paid"} onClick={() => setTab("paid")}>
+            Paid
+          </TabButton>
+        </FlexRow>
+
         <Table
           headers={headers}
           totalField="balance"
+          rows={customerOrders}
           loading={loading.fetch}
-          rows={renderData(customerOrders)}
         />
 
-        <Buttons>
-          <Button onClick={() => setShow((s) => !s)}>
-            {loading.addGeneralPayment ? (
-              <Spinner size={16} text="Loading..." position="left" />
-            ) : (
-              "Add Payment"
-            )}
-          </Button>
-        </Buttons>
+        {customerOrders.length > 0 && tab === "unpaid" && (
+          <Buttons>
+            <Button onClick={() => setShow((s) => !s)}>
+              {loading.addGeneralPayment ? (
+                <Spinner size={16} text="Loading..." position="left" />
+              ) : (
+                "Add Payment"
+              )}
+            </Button>
+          </Buttons>
+        )}
 
         <Modal
           show={show}

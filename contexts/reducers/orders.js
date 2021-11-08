@@ -9,6 +9,7 @@ export const OrderTypes = {
   ADD_PAYMENT: "ADD_PAYMENT",
   CANCEL_ORDER: "CANCEL_ORDER",
   UPDATE_STATUS: "UPDATE_STATUS",
+  ADD_GENERAL_PAYMENT: "ADD_GENERAL_PAYMENT",
 }
 
 export const OrderReducer = (state, action) => {
@@ -39,16 +40,35 @@ export const OrderReducer = (state, action) => {
         ...state,
         orders,
       }
-    case OrderTypes.UPDATE_STATUS:
-      const cloned = [...state.orders]
-      const clonedIndex = cloned.findIndex(
-        (clone) => String(clone._id) === String(action.payload._id)
-      )
-      cloned[clonedIndex].status = action.payload.status
+    case OrderTypes.ADD_GENERAL_PAYMENT:
+      const clonedA = [...state.orders]
+      action.payload.orders.forEach((order) => {
+        const clonedAIndex = clonedA.findIndex(
+          (o) => String(o._id) === String(order.orderId)
+        )
+        clonedA[clonedAIndex].payments.push(order.payment)
+        clonedA[clonedAIndex].paid = order.paid
+        clonedA[
+          clonedAIndex
+        ].installments = `${clonedA[clonedAIndex].installments} - ${clonedA[clonedAIndex].payments.length}`
+        clonedA[clonedAIndex].balance =
+          clonedA[clonedAIndex].balance - order.payment.value
+      })
 
       return {
         ...state,
-        orders: cloned,
+        orders: clonedA,
+      }
+    case OrderTypes.UPDATE_STATUS:
+      const clonedU = [...state.orders]
+      const clonedUIndex = clonedU.findIndex(
+        (clone) => String(clone._id) === String(action.payload._id)
+      )
+      clonedU[clonedUIndex].status = action.payload.status
+
+      return {
+        ...state,
+        orders: clonedU,
       }
     case OrderTypes.CANCEL_ORDER:
       return {

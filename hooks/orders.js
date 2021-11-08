@@ -118,7 +118,7 @@ export const useOrders = () => {
       })
 
       dispatch({
-        type: CategoriesTypes.ADD_PAYMENT,
+        type: OrderTypes.ADD_PAYMENT,
         payload: {
           order: {
             _id: id,
@@ -142,21 +142,14 @@ export const useOrders = () => {
 
       const response = await api({
         method: "POST",
-        uri: endpoints.ordersGeneralPayment,
         body: JSON.stringify(body),
+        uri: endpoints.ordersGeneralPayment,
       })
 
-      // dispatch({
-      //   type: CategoriesTypes.ADD_PAYMENT,
-      //   payload: {
-      //     order: {
-      //       _id: id,
-      //       value: body.value,
-      //       payments: response.data.payments.length,
-      //       installments: response.data.installments,
-      //     },
-      //   },
-      // })
+      dispatch({
+        type: OrderTypes.ADD_GENERAL_PAYMENT,
+        payload: { orders: response.data },
+      })
       cb && cb()
     } catch (error) {
       setError({ ...error, addGeneralPayment: error.message })
@@ -187,11 +180,17 @@ export const useOrders = () => {
     }
   }
 
-  const fetchCustomerOrders = (id) => {
+  const fetchCustomerOrders = (id, tab) => {
     setCustomerOrders(
-      state.orders.orders.filter(
-        (order) => String(order.created_for._id) === String(id)
-      )
+      tab
+        ? state.orders.orders.filter((order) =>
+            String(order.created_for._id) === String(id) && tab === "paid"
+              ? order.paid
+              : !order.paid
+          )
+        : state.orders.orders.filter(
+            (order) => String(order.created_for._id) === String(id)
+          )
     )
   }
 
