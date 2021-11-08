@@ -1,6 +1,6 @@
 export const itemKey = "stocker"
 
-export const setBrowserItem = (key = itemKey, value) => {
+export const setBrowserItem = (key = itemKey, value: string) => {
   window.localStorage.setItem(key, value)
 }
 
@@ -8,7 +8,7 @@ export const getBrowserItem = (key = itemKey) => {
   return window.localStorage.getItem(key)
 }
 
-export const saveBrowserObj = (key = itemKey, obj) => {
+export const saveBrowserObj = (key = itemKey, obj: any) => {
   window.localStorage.setItem(key, JSON.stringify(obj))
 }
 

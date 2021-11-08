@@ -3,6 +3,7 @@ import Image from "next/image"
 import { useEffect } from "react"
 import type { NextPage } from "next"
 import styled from "styled-components"
+import { useRouter } from "next/router"
 
 import { Layout } from "@layouts/layout"
 import { Content } from "@components/Common"
@@ -21,6 +22,7 @@ const Actions = styled.div`
 `
 
 const Quotations: NextPage = () => {
+  const router = useRouter()
   const { state } = useAppContext()
 
   const { headers, fetchData, toOrder, loading } = useQuotations()
@@ -79,7 +81,7 @@ const Quotations: NextPage = () => {
       </Head>
 
       <Content>
-        <Header title="Quotations" actions={false} />
+        <Header title="Quotations" add={() => router.push("/app/orders/add")} />
         <Table
           paginate
           headers={headers}

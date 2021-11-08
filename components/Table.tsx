@@ -175,7 +175,7 @@ export const Table = ({
       setData(rows)
     }
     // eslint-disable-next-line
-  }, [page])
+  }, [page, rows, loading])
 
   return (
     <>

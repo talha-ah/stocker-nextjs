@@ -7,6 +7,7 @@ import { getBrowserItem } from "@utils/browser-utility"
 
 import { useStocks } from "@hooks/stocks"
 import { useOrders } from "@hooks/orders"
+import { Spinner } from "@components/Spinner"
 import { useCustomers } from "@hooks/customers"
 import { useCategories } from "@hooks/categories"
 import { useQuotations } from "@hooks/quotations"
@@ -94,14 +95,13 @@ export const AuthWrapper = ({ children }) => {
   const [loading, setLoading] = useState(true)
 
   const checkAuth = async () => {
+    let route = "/"
     try {
       const token = getBrowserItem()
       if (!token) {
-        if (router.asPath.startsWith("/app")) {
-          router.replace("/")
-        } else {
-          router.replace(router.asPath)
-        }
+        if (router.asPath.startsWith("/app")) route = "/"
+        else route = router.asPath
+
         return
       }
 
@@ -119,14 +119,13 @@ export const AuthWrapper = ({ children }) => {
         payload: { token: token, user: response.data },
       })
 
-      if (router.asPath.startsWith("/app")) {
-        router.replace(router.asPath)
-      } else {
-        router.replace("/app")
-      }
+      if (router.asPath.startsWith("/app")) route = router.asPath
+      else route = "/app"
     } catch (error) {
       setError(error.message)
     } finally {
+      router.prefetch(route)
+      router.replace(route)
       setLoading(false)
     }
   }
@@ -136,7 +135,13 @@ export const AuthWrapper = ({ children }) => {
     // eslint-disable-next-line
   }, [])
 
-  if (loading) return <div>Loading...</div>
+  if (loading) {
+    return (
+      <div style={{ height: "100vh", width: "100%" }}>
+        <Spinner size={32} text="Setting up the App..." position="top" />
+      </div>
+    )
+  }
 
   return children
 }

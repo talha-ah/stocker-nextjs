@@ -136,6 +136,54 @@ const Orders: NextPage = () => {
     }, 0)
   }
 
+  const resetForm = () => {
+    setRows([])
+    setCustomer(null)
+    setPaymentType([paymentTypes[0]])
+  }
+
+  const onSubmit = async (status: string = "active") => {
+    const body = {
+      created_for: customer?.value,
+      display_id: displayId || generateId(),
+      stocks: rows.map((row: any) => ({
+        stock_id: row.value,
+        quantity: row.qty,
+        price: row.sale_price,
+        discount: row.discount,
+        discount_type: "percentage",
+      })),
+      type: paymentType[0]?.value,
+      installments: 1,
+      status: status,
+      address_one: address || customer?.address_one,
+      address_two: customer?.address_two,
+      postal_code: customer?.postal_code,
+      city: customer?.city,
+      state: customer?.state,
+      country: customer?.country,
+    }
+
+    addData(body, (data: any) => {
+      generateReceipt(data)
+      resetForm()
+    })
+  }
+
+  // ==================> Add Customer
+  const { addData: addCustomer } = useCustomers()
+
+  const onAddCustomer = async (body: any) => {
+    addCustomer(body, (data: any) => {
+      setCustomer({
+        ...data,
+        value: data._id,
+        label: data.first_name,
+      })
+    })
+  }
+  // Add Customer <==================
+
   const renderData = (rows: any) => {
     return rows.map((row: any) => ({
       ...row,
@@ -187,56 +235,6 @@ const Orders: NextPage = () => {
       ),
     }))
   }
-
-  const resetForm = () => {
-    setRows([])
-    setCustomer(null)
-    setPaymentType([paymentTypes[0]])
-  }
-
-  const onSubmit = async (status: string = "active") => {
-    const body = {
-      created_for: customer?.value,
-      display_id: displayId || generateId(),
-      stocks: rows.map((row: any) => ({
-        stock_id: row.value,
-        quantity: row.qty,
-        price: row.sale_price,
-        discount: row.discount,
-        discount_type: "percentage",
-      })),
-      type: paymentType[0]?.value,
-      installments: 1,
-      status: status,
-      address_one: address || customer?.address_one,
-      address_two: customer?.address_two,
-      postal_code: customer?.postal_code,
-      city: customer?.city,
-      state: customer?.state,
-      country: customer?.country,
-    }
-
-    console.log(body)
-
-    // addData(body, (data: any) => {
-    //   generateReceipt(data)
-    //   resetForm()
-    // })
-  }
-
-  // ==================> Add Customer
-  const { addData: addCustomer } = useCustomers()
-
-  const onAddCustomer = async (body: any) => {
-    addCustomer(body, (data: any) => {
-      setCustomer({
-        ...data,
-        value: data._id,
-        label: data.first_name,
-      })
-    })
-  }
-  // Add Customer <==================
 
   return (
     <Layout>

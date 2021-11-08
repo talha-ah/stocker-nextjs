@@ -70,6 +70,7 @@ const Input = styled.input`
 const Options = styled.div`
   top: 0;
   left: 0;
+  z-index: 90;
   width: 100%;
   display: flex;
   position: absolute;

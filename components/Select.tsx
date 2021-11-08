@@ -86,6 +86,7 @@ const Options = styled.div`
   top: 0;
   left: 0;
   width: 100%;
+  z-index: 90;
   display: flex;
   position: absolute;
   flex-direction: column;

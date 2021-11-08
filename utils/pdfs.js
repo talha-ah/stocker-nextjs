@@ -43,7 +43,7 @@ export const generateReceipt = (data) => {
   let pdfData = data.stocks.map((stock, index) => ({
     sr: String(index + 1),
     id: String(index + 1),
-    code: stock.stock_id.code,
+    code: `${stock.stock_id.sr} - ${stock.stock_id.code}`,
     price: String(stock.sale_price),
     quantity: String(stock.quantity),
     discount: String(stock.discount.value),

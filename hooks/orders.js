@@ -3,7 +3,7 @@ import { useState } from "react"
 import { api } from "@utils/api"
 import { toTitleCase } from "@utils/common"
 import { endpoints } from "@utils/constants"
-import { useAppContext, OrderTypes } from "@contexts/index"
+import { useAppContext, OrderTypes, QuotationTypes } from "@contexts/index"
 
 const headers = [
   { key: 1, name: "Customer", field: "customer", align: "left" },
@@ -77,15 +77,24 @@ export const useOrders = () => {
       })
 
       response.data.key = response.data._id
+      response.data.type = toTitleCase(response.data.type)
       response.data.stocks_length = response.data.stocks.length
       response.data.customer = response.data.created_for.first_name
+      response.data.installments = `${response.data.installments} - ${response.data.payments.length}`
 
       const result = response.data
 
-      dispatch({
-        type: OrderTypes.ADD_ORDER,
-        payload: { order: result },
-      })
+      if (body.status === "quotation") {
+        dispatch({
+          type: QuotationTypes.ADD_QUOTATION,
+          payload: { quotation: result },
+        })
+      } else {
+        dispatch({
+          type: OrderTypes.ADD_ORDER,
+          payload: { order: result },
+        })
+      }
 
       cb && cb(response.data)
     } catch (error) {

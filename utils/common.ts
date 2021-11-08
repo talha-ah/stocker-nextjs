@@ -1,15 +1,15 @@
-export const isNotEmpty = (item) =>
+export const isNotEmpty = (item: any) =>
   item !== undefined && item !== null && item !== "" && item.length !== 0
 
-export const truncateString = (text, ellipsisString) =>
+export const truncateString = (text: any, ellipsisString: string) =>
   (text || "").length > ellipsisString
     ? text.substring(0, ellipsisString) + "..."
     : text
 
-export const numberWithCommas = (x) =>
+export const numberWithCommas = (x: any) =>
   x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
-export const objectToParams = (obj) => {
+export const objectToParams = (obj: any) => {
   let str = ""
   for (const key in obj) {
     if (obj[key] !== undefined && obj[key] !== null) {
@@ -22,7 +22,7 @@ export const objectToParams = (obj) => {
   return str
 }
 
-export const base64ToBlob = (base64) => {
+export const base64ToBlob = (base64: string) => {
   var byteString = atob(base64.split(",")[1])
   var ab = new ArrayBuffer(byteString.length)
   var ia = new Uint8Array(ab)
@@ -33,25 +33,27 @@ export const base64ToBlob = (base64) => {
   return new Blob([ab], { type: "image/png" })
 }
 
-export const removeDuplicateRow = (array, key) => [
-  ...array.reduce((map, obj) => map.set(obj[key], obj), new Map()).values(),
+export const removeDuplicateRow = (array: any, key: string) => [
+  ...array
+    .reduce((map: any, obj: any) => map.set(obj[key], obj), new Map())
+    .values(),
 ]
 
-export const toTitleCase = (phrase) =>
+export const toTitleCase = (phrase: string) =>
   phrase
     .toLowerCase()
     .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ")
 
-export const timeoutPromise = (ms) => {
+export const timeoutPromise = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-export const roundNumber = (num) =>
+export const roundNumber = (num: number) =>
   Math.round((num + Number.EPSILON) * 100) / 100
 
-export const downloadFile = (url, fileName) => {
+export const downloadFile = (url: string, fileName: string) => {
   // for non-IE
   const req = new XMLHttpRequest()
   req.open("GET", url, true)
@@ -61,9 +63,9 @@ export const downloadFile = (url, fileName) => {
     const blob = new Blob([req.response], { type: "application/octetstream" })
 
     //Check the Browser type and download the File.
-    const isIE = false || !!document.documentMode
+    const isIE = false || !!document.DOCUMENT_NODE
     if (isIE) {
-      window.navigator.msSaveBlob(blob, fileName)
+      // window.navigator.msSaveBlob(blob, fileName)
     } else {
       const url = window.URL || window.webkitURL
       const link = url.createObjectURL(blob)
@@ -89,14 +91,18 @@ export const generateId = (prefix = "", length = 7) => {
   return result
 }
 
-export const calcDiscount = (value, discount) => {
+export const calcDiscount = (value: number, discount: number) => {
   value = value
   discount = discount
   if (!discount || discount === 0) return discount
   return (value * discount) / 100
 }
 
-export const calculateDiscount = (value, qty, discount) => {
+export const calculateDiscount = (
+  value: number,
+  qty: number,
+  discount: number
+) => {
   value = value * qty
   discount = calcDiscount(value, discount)
   return {
@@ -106,7 +112,7 @@ export const calculateDiscount = (value, qty, discount) => {
 }
 
 // Pad a number with leading zeros
-export const pad = (num, size = 6) => {
+export const pad = (num: number | string, size = 6) => {
   let s = num + ""
   while (s.length < size) s = "0" + s
   return s
