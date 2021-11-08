@@ -7,13 +7,14 @@ import styled from "styled-components"
 import { Layout } from "@layouts/layout"
 import { useOrders } from "@hooks/orders"
 import { Input } from "@components/Inputs"
+import { Spinner } from "@components/Spinner"
 import { generateReceipt } from "@utils/pdfs"
 import { useSearchStock } from "@hooks/stocks"
 import { Header, Table } from "@components/Table"
-import { Content, FlexRow, FlexColumn } from "@components/Common"
 import { Select, SelectType } from "@components/Select"
 import { SearchSelect } from "@components/SearchSelect"
 import { generateId, calculateDiscount } from "@utils/common"
+import { Content, FlexRow, FlexColumn } from "@components/Common"
 import { useSearchCustomer, useCustomers } from "@hooks/customers"
 import { Button, NeutralButton, IconButton } from "@components/Buttons"
 
@@ -304,10 +305,18 @@ const Orders: NextPage = () => {
         />
         <Buttons>
           <Button onClick={() => onSubmit("active")}>
-            {loading.add.quotation ? "Loading..." : "Add Order"}
+            {loading.add.quotation ? (
+              <Spinner size={16} text="Loading..." position="left" />
+            ) : (
+              "Add Order"
+            )}
           </Button>
           <NeutralButton onClick={() => onSubmit("quotation")}>
-            {loading.add.active ? "Loading..." : "Add Quotation"}
+            {loading.add.active ? (
+              <Spinner size={16} text="Loading..." position="left" />
+            ) : (
+              "Add Quotation"
+            )}
           </NeutralButton>
         </Buttons>
       </Content>

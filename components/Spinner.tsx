@@ -1,10 +1,11 @@
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 import { SubHeading } from "@components/Texts"
 
 type SpinnerType = {
   size?: number
   text?: string
+  color?: string
   position?: "top" | "bottom" | "left" | "right"
 }
 
@@ -13,7 +14,7 @@ const SpinnerWrapper = styled.div<SpinnerType>`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: ${({ theme }) => theme.gaps.default};
+  gap: ${({ theme }) => theme.gaps.light};
   flex-direction: ${({ position }) =>
     position === "top"
       ? "column"
@@ -31,7 +32,8 @@ const SpinnerWrapper = styled.div<SpinnerType>`
     border-width: 1.5px;
     border-style: solid;
     box-sizing: border-box;
-    border-color: rgb(0, 120, 212) rgb(199, 224, 244) rgb(199, 224, 244);
+    border-color: ${({ theme }) => theme.colors.primary}
+      ${({ theme }) => theme.colors.bg} ${({ theme }) => theme.colors.primary};
     border-image: initial;
     animation-name: spinner;
     animation-duration: 1.3s;
@@ -50,11 +52,11 @@ const SpinnerWrapper = styled.div<SpinnerType>`
   }
 `
 
-export const Spinner = ({ size, text, position }: SpinnerType) => {
+export const Spinner = ({ size, text, color, position }: SpinnerType) => {
   return (
     <SpinnerWrapper size={size} position={position}>
       <span />
-      {text && <SubHeading>{text}</SubHeading>}
+      {text && <SubHeading color={color}>{text}</SubHeading>}
     </SpinnerWrapper>
   )
 }

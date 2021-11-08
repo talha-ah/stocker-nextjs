@@ -69,7 +69,6 @@ const Stocks: NextPage = () => {
         <Actions>
           <IconButton
             onClick={() => {
-              console.log("row", row)
               setStock(row)
               setShow((s) => !s)
             }}

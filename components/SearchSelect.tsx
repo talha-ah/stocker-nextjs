@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react"
 
 import { generateId } from "@utils/common"
 import { useDebounce } from "@hooks/debounce"
+import { Spinner } from "@components/Spinner"
 import { DangerText, Label } from "@components/Texts"
 
 type SelectorType = {
@@ -210,7 +211,7 @@ export const SearchSelect = ({
         <Options>
           {loading ? (
             <NonOption>
-              <span>Loading...</span>
+              <Spinner size={16} text="Loading..." position="left" />
             </NonOption>
           ) : (
             <>

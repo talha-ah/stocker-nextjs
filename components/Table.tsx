@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 
 import { generateId } from "@utils/common"
 import { Heading } from "@components/Texts"
+import { Spinner } from "@components/Spinner"
 import { IconButton } from "@components/Buttons"
 import { Pagination } from "@components/Pagination"
 import { SearchIconInput } from "@components/SearchInput"
@@ -201,7 +202,7 @@ export const Table = ({
             {loading ? (
               <tr>
                 <td colSpan={headers?.length} style={{ textAlign: "center" }}>
-                  Loading...
+                  <Spinner size={16} text="Loading..." position="left" />
                 </td>
               </tr>
             ) : (

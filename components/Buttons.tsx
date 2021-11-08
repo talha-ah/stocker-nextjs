@@ -9,6 +9,7 @@ export const BaseButton = styled.button<ButtonType>`
   border: 0;
   margin: 0;
   outline: 0;
+  height: 34px;
   display: block;
   font-size: 14px;
   font-size: 1rem;
