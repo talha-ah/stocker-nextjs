@@ -135,6 +135,12 @@ export const useCustomers = () => {
     }
   }
 
+  const fetchCustomer = (id) => {
+    return state.customers.customers.find(
+      (customer) => String(customer._id) === String(id)
+    )
+  }
+
   return {
     error,
     headers,
@@ -143,6 +149,7 @@ export const useCustomers = () => {
     editData,
     fetchData,
     deleteData,
+    fetchCustomer,
   }
 }
 

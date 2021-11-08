@@ -6,13 +6,12 @@ import { endpoints } from "@utils/constants"
 import { useAppContext, QuotationTypes, OrderTypes } from "@contexts/index"
 
 const headers = [
+  { key: 2, name: "Quotation #", field: "order_id", align: "left" },
   { key: 1, name: "Customer", field: "customer", align: "left" },
-  { key: 2, name: "Display ID", field: "display_id", align: "left" },
-  { key: 3, name: "type", field: "type", align: "left" },
-  { key: 4, name: "Price", field: "total_price", align: "left" },
+  { key: 2, name: "Display Id", field: "display_id", align: "left" },
+  { key: 3, name: "Type", field: "type", align: "left" },
+  { key: 4, name: "Total Price", field: "total_price", align: "left" },
   { key: 5, name: "Stocks", field: "stocks_length", align: "left" },
-  { key: 6, name: "Installments", field: "installments", align: "left" },
-  { key: 7, name: "Balance", field: "balance", align: "left" },
   { key: 8, name: "Actions", field: "actions", align: "right" },
 ]
 

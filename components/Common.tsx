@@ -34,6 +34,7 @@ export const Content = styled.main`
 `
 
 export const FlexRow = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;

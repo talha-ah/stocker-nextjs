@@ -23,6 +23,7 @@ export const endpoints = {
   // Orders
   orders: base + "/orders",
   ordersPayment: base + "/orders/payment",
+  ordersGeneralPayment: base + "/orders/general-payment",
 
   // Sale Reports
   sales: base + "/sales",

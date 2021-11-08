@@ -1,5 +1,6 @@
 import Head from "next/head"
 import Image from "next/image"
+import router from "next/router"
 import type { NextPage } from "next"
 import styled from "styled-components"
 import { useState, useEffect } from "react"
@@ -9,8 +10,8 @@ import { Modal } from "@components/Modal"
 import { Content } from "@components/Common"
 import { useAppContext } from "@contexts/index"
 import { useCustomers } from "@hooks/customers"
-import { IconButton } from "@components/Buttons"
 import { Header, Table } from "@components/Table"
+import { IconButton, TextButton } from "@components/Buttons"
 import { CreateCustomer, EditCustomer } from "forms/customers"
 
 const Actions = styled.div`
@@ -65,6 +66,22 @@ const Customers: NextPage = () => {
   const renderData = (rows: any) => {
     return rows.map((row: any) => ({
       ...row,
+      balance:
+        row.balance !== 0 ? (
+          <TextButton onClick={() => router.push(`/app/customers/${row._id}`)}>
+            {row.balance}
+          </TextButton>
+        ) : (
+          row.balance
+        ),
+      orders:
+        row.orders !== 0 ? (
+          <TextButton onClick={() => router.push(`/app/customers/${row._id}`)}>
+            {row.orders}
+          </TextButton>
+        ) : (
+          row.orders
+        ),
       actions: (
         <Actions>
           <IconButton

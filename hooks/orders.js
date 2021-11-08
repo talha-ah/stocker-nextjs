@@ -6,23 +6,25 @@ import { endpoints } from "@utils/constants"
 import { useAppContext, OrderTypes, QuotationTypes } from "@contexts/index"
 
 const headers = [
-  { key: 1, name: "Customer", field: "customer", align: "left" },
-  { key: 2, name: "Display ID", field: "display_id", align: "left" },
-  { key: 3, name: "type", field: "type", align: "left" },
-  { key: 4, name: "Price", field: "total_price", align: "left" },
-  { key: 5, name: "Stocks", field: "stocks_length", align: "left" },
-  { key: 6, name: "Installments", field: "installments", align: "left" },
+  { key: 1, name: "Order #", field: "order_id", align: "left" },
+  { key: 2, name: "Customer", field: "customer", align: "left" },
+  { key: 3, name: "Display Id", field: "display_id", align: "left" },
+  { key: 4, name: "Type", field: "type", align: "left" },
+  { key: 5, name: "Total Price", field: "total_price", align: "left" },
+  { key: 6, name: "Stocks", field: "stocks_length", align: "left" },
   { key: 7, name: "Balance", field: "balance", align: "left" },
   { key: 8, name: "Actions", field: "actions", align: "right" },
 ]
 
 export const useOrders = () => {
   const { state, dispatch } = useAppContext()
+  const [customerOrders, setCustomerOrders] = useState([])
 
   const [loading, setLoading] = useState({
     fetch: false,
     addPayment: false,
     cancelOrder: false,
+    addGeneralPayment: false,
     add: {
       active: false,
       quotation: false,
@@ -34,6 +36,7 @@ export const useOrders = () => {
     fetch: null,
     addPayment: null,
     cancelOrder: null,
+    addGeneralPayment: null,
   })
 
   const fetchData = async () => {
@@ -133,6 +136,35 @@ export const useOrders = () => {
     }
   }
 
+  const addGeneralPayment = async (body, cb) => {
+    try {
+      setLoading({ ...loading, addGeneralPayment: true })
+
+      const response = await api({
+        method: "POST",
+        uri: endpoints.ordersGeneralPayment,
+        body: JSON.stringify(body),
+      })
+
+      // dispatch({
+      //   type: CategoriesTypes.ADD_PAYMENT,
+      //   payload: {
+      //     order: {
+      //       _id: id,
+      //       value: body.value,
+      //       payments: response.data.payments.length,
+      //       installments: response.data.installments,
+      //     },
+      //   },
+      // })
+      cb && cb()
+    } catch (error) {
+      setError({ ...error, addGeneralPayment: error.message })
+    } finally {
+      setLoading({ ...loading, addGeneralPayment: false })
+    }
+  }
+
   const cancelOrder = async (id) => {
     try {
       setLoading({ ...loading, cancelOrder: true })
@@ -155,6 +187,14 @@ export const useOrders = () => {
     }
   }
 
+  const fetchCustomerOrders = (id) => {
+    setCustomerOrders(
+      state.orders.orders.filter(
+        (order) => String(order.created_for._id) === String(id)
+      )
+    )
+  }
+
   return {
     error,
     headers,
@@ -163,5 +203,8 @@ export const useOrders = () => {
     fetchData,
     addPayment,
     cancelOrder,
+    customerOrders,
+    addGeneralPayment,
+    fetchCustomerOrders,
   }
 }

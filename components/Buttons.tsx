@@ -51,6 +51,15 @@ export const GhostButton = styled(BaseButton)`
   border-radius: ${({ theme }) => theme.borders.radius.default};
 `
 
+export const TextButton = styled.button`
+  margin: 0;
+  border: 0;
+  outline: 0;
+  padding: 0;
+  cursor: pointer;
+  background-color: transparent;
+`
+
 export const IconButton = styled.button`
   border: 0;
   margin: 0;
