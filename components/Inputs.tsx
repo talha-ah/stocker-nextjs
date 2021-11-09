@@ -18,7 +18,6 @@ export const Form = styled.form<WidthType>`
   flex-direction: column;
   justify-content: space-between;
   width: ${({ width }) => width || "100%"};
-  gap: ${({ theme }) => theme.gaps.semiLight};
   max-width: ${({ width }) => width || "100%"};
 
   @media (${device.tablet}) {
@@ -31,6 +30,8 @@ export const Form = styled.form<WidthType>`
 
 const InputContainer = styled.div`
   width: 100%;
+  position: relative;
+  margin-bottom: ${({ theme }) => theme.gaps.semiLight};
 `
 
 const StyledInput = styled.input<InputType>`
@@ -73,6 +74,12 @@ const StyledTextArea = styled.textarea<InputType>`
   :focus {
     border-bottom: ${({ theme }) => theme.borders.inputActive};
   }
+`
+
+const DangerTextS = styled(DangerText)`
+  left: 0;
+  bottom: -16px;
+  position: absolute;
 `
 
 export const Input = ({
@@ -129,7 +136,7 @@ export const Input = ({
       placeholder={placeholder}
       defaultValue={defaultValue}
     />
-    {error && <DangerText>{error}</DangerText>}
+    {error && <DangerTextS>{error}</DangerTextS>}
   </InputContainer>
 )
 

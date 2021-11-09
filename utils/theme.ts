@@ -39,6 +39,7 @@ export const gaps = {
   extraLight: "4px",
   light: "8px",
   semiLight: "16px",
+  defaultN: 24,
   default: "24px",
   bold: "32px",
   extraBold: "64px",

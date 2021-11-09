@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react"
 
-import { api } from "@utils/api"
+import { useAPI } from "@utils/api"
 import { endpoints } from "@utils/constants"
-import { useAppContext, CustomerTypes } from "@contexts/index"
+import { useAppContext, CustomerTypes, NotifierTypes } from "@contexts/index"
 
 const headers = [
   { key: 1, name: "Name", field: "name", align: "left" },
@@ -15,25 +15,40 @@ const headers = [
   { key: 8, name: "Actions", field: "actions", align: "right" },
 ]
 
+const defaultLoading = {
+  fetch: false,
+  add: false,
+  edit: false,
+  delete: false,
+}
+
+const defaultError = {
+  fetch: null,
+  add: null,
+  edit: null,
+  delete: null,
+}
+
 export const useCustomers = () => {
+  const { api } = useAPI()
   const { state, dispatch } = useAppContext()
 
-  const [loading, setLoading] = useState({
-    fetch: false,
-    add: false,
-    edit: false,
-    delete: false,
-  })
+  const [error, setError] = useState(defaultError)
+  const [loading, setLoading] = useState(defaultLoading)
 
-  const [error, setError] = useState({
-    fetch: null,
-    add: null,
-    edit: null,
-    delete: null,
-  })
+  const triggerNotification = (type, message) => {
+    dispatch({
+      type: NotifierTypes.ADD_NOTIFICATION,
+      payload: {
+        type: type,
+        message: message,
+      },
+    })
+  }
 
   const fetchData = async () => {
     try {
+      setError(defaultError)
       setLoading({ ...loading, fetch: true })
       if (state.customers.customersFetched) return
 
@@ -54,7 +69,8 @@ export const useCustomers = () => {
         payload: { customers: result },
       })
     } catch (error) {
-      setError({ ...error, fetch: error.message })
+      setError({ ...error, fetch: error?.data })
+      triggerNotification("error", error?.message)
     } finally {
       setLoading({ ...loading, fetch: false })
     }
@@ -62,6 +78,7 @@ export const useCustomers = () => {
 
   const addData = async (body, cb) => {
     try {
+      setError(defaultError)
       setLoading({ ...loading, add: true })
 
       const response = await api({
@@ -80,9 +97,12 @@ export const useCustomers = () => {
         payload: { customer: result },
       })
 
+      triggerNotification("success", "Customer added successfully.")
+
       cb && cb(result)
     } catch (error) {
-      setError({ ...error, add: error.message })
+      setError({ ...error, add: error?.data })
+      triggerNotification("error", error?.message)
     } finally {
       setLoading({ ...loading, add: false })
     }
@@ -90,6 +110,7 @@ export const useCustomers = () => {
 
   const editData = async (body, id, cb) => {
     try {
+      setError(defaultError)
       setLoading({ ...loading, edit: true })
 
       const response = await api({
@@ -107,16 +128,20 @@ export const useCustomers = () => {
         payload: { customer: response.data },
       })
 
-      cb()
+      triggerNotification("success", "Customer updated successfully.")
+
+      cb && cb()
     } catch (error) {
-      setError({ ...error, edit: error.message })
+      setError({ ...error, edit: error?.data })
+      triggerNotification("error", error?.message)
     } finally {
       setLoading({ ...loading, edit: false })
     }
   }
 
-  const deleteData = async (_id) => {
+  const deleteData = async (_id, cb) => {
     try {
+      setError(defaultError)
       setLoading({ ...loading, delete: true })
 
       await api({
@@ -128,8 +153,13 @@ export const useCustomers = () => {
         type: CustomerTypes.DELETE_CUSTOMER,
         payload: { _id },
       })
+
+      triggerNotification("success", "Customer deleted successfully.")
+
+      cb && cb()
     } catch (error) {
-      setError({ ...error, delete: error.message })
+      setError({ ...error, delete: error?.data })
+      triggerNotification("error", error?.message)
     } finally {
       setLoading({ ...loading, delete: false })
     }

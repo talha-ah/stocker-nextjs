@@ -5,6 +5,7 @@ import { createGlobalStyle, ThemeProvider } from "styled-components"
 
 import { AuthWrapper } from "@hooks/auth"
 import { AppProvider } from "@contexts/index"
+import { Notifier } from "@components/Notifier"
 import { colors, gaps, borders, sidebar } from "@utils/theme"
 
 const theme = {
@@ -31,6 +32,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <AuthWrapper>
           <Component {...pageProps} />
         </AuthWrapper>
+        <Notifier title="Success" message="Login was successful." />
       </AppProvider>
     </ThemeProvider>
   )

@@ -1,4 +1,5 @@
 import { Button } from "@components/Buttons"
+import { Spinner } from "@components/Spinner"
 import { Form, Input, TextArea } from "@components/Inputs"
 
 export const CreateCustomer = ({
@@ -6,9 +7,9 @@ export const CreateCustomer = ({
   loading,
   onSubmit,
 }: {
+  error?: any
   onSubmit: any
   loading?: boolean
-  error?: string | null
 }) => {
   const submitHandler = async (e: any) => {
     e.preventDefault()
@@ -30,43 +31,49 @@ export const CreateCustomer = ({
         required
         type="text"
         label="Name"
-        error={error}
         name="first_name"
         placeholder="Name"
+        error={error?.first_name}
       />
       <Input
         primary
         type="email"
         name="email"
         label="Email"
-        error={error}
         placeholder="Email"
+        error={error?.email}
       />
       <Input
         primary
         type="text"
         name="phone"
         label="Phone"
-        error={error}
         placeholder="Phone"
+        error={error?.phone}
       />
       <Input
         primary
         type="text"
         label="Address"
-        error={error}
         name="address_one"
         placeholder="Address"
+        error={error?.address_one}
       />
       <TextArea
         primary
         label="Details"
-        error={error}
         name="description"
         placeholder="Details"
+        error={error?.description}
       />
 
-      <Button type="submit">{loading ? "Loading..." : "Create"}</Button>
+      <Button type="submit">
+        {loading ? (
+          <Spinner size={16} text="Loading..." position="left" />
+        ) : (
+          "Create"
+        )}
+      </Button>
     </Form>
   )
 }
@@ -78,9 +85,9 @@ export const EditCustomer = ({
   onSubmit,
 }: {
   value: any
+  error?: any
   onSubmit: any
   loading?: boolean
-  error?: string | null
 }) => {
   const submitHandler = async (e: any) => {
     e.preventDefault()
@@ -102,9 +109,9 @@ export const EditCustomer = ({
         required
         type="text"
         label="Name"
-        error={error}
         name="first_name"
         placeholder="Name"
+        error={error?.first_name}
         defaultValue={value.first_name}
       />
       <Input
@@ -112,8 +119,8 @@ export const EditCustomer = ({
         type="email"
         name="email"
         label="Email"
-        error={error}
         placeholder="Email"
+        error={error?.email}
         defaultValue={value.email}
       />
       <Input
@@ -121,29 +128,35 @@ export const EditCustomer = ({
         type="text"
         name="phone"
         label="Phone"
-        error={error}
         placeholder="Phone"
+        error={error?.phone}
         defaultValue={value.phone}
       />
       <Input
         primary
         type="text"
         label="Address"
-        error={error}
         name="address_one"
         placeholder="Address"
+        error={error?.address_one}
         defaultValue={value.address_one}
       />
       <TextArea
         primary
-        error={error}
         name="description"
         label="Description"
+        error={error?.description}
         placeholder="Description"
         defaultValue={value.description}
       />
 
-      <Button type="submit">{loading ? "Loading..." : "Edit"}</Button>
+      <Button type="submit">
+        {loading ? (
+          <Spinner size={16} text="Loading..." position="left" />
+        ) : (
+          "Edit"
+        )}
+      </Button>
     </Form>
   )
 }

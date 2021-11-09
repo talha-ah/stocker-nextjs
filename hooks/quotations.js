@@ -1,35 +1,55 @@
 import { useState } from "react"
 
-import { api } from "@utils/api"
+import { useAPI } from "@utils/api"
 import { toTitleCase } from "@utils/common"
 import { endpoints } from "@utils/constants"
-import { useAppContext, QuotationTypes, OrderTypes } from "@contexts/index"
+import {
+  OrderTypes,
+  useAppContext,
+  NotifierTypes,
+  QuotationTypes,
+} from "@contexts/index"
 
 const headers = [
-  { key: 2, name: "Quotation #", field: "order_id", align: "left" },
-  { key: 1, name: "Customer", field: "customer", align: "left" },
-  { key: 2, name: "Display Id", field: "display_id", align: "left" },
-  { key: 3, name: "Type", field: "type", align: "left" },
-  { key: 4, name: "Total Price", field: "total_price", align: "left" },
-  { key: 5, name: "Stocks", field: "stocks_length", align: "left" },
-  { key: 8, name: "Actions", field: "actions", align: "right" },
+  { key: 1, name: "Quotation #", field: "order_id", align: "left" },
+  { key: 2, name: "Customer", field: "customer", align: "left" },
+  { key: 3, name: "Display Id", field: "display_id", align: "left" },
+  { key: 4, name: "Type", field: "type", align: "left" },
+  { key: 5, name: "Total Price", field: "total_price", align: "left" },
+  { key: 6, name: "Stocks", field: "stocks_length", align: "left" },
+  { key: 7, name: "Actions", field: "actions", align: "right" },
 ]
 
+const defaultLoading = {
+  fetch: false,
+  toOrder: false,
+}
+
+const defaultError = {
+  fetch: null,
+  toOrder: null,
+}
+
 export const useQuotations = () => {
+  const { api } = useAPI()
   const { state, dispatch } = useAppContext()
 
-  const [loading, setLoading] = useState({
-    fetch: false,
-    toOrder: false,
-  })
+  const [error, setError] = useState(defaultError)
+  const [loading, setLoading] = useState(defaultLoading)
 
-  const [error, setError] = useState({
-    fetch: null,
-    toOrder: null,
-  })
+  const triggerNotification = (type, message) => {
+    dispatch({
+      type: NotifierTypes.ADD_NOTIFICATION,
+      payload: {
+        type: type,
+        message: message,
+      },
+    })
+  }
 
   const fetchData = async () => {
     try {
+      setError(defaultError)
       setLoading({ ...loading, fetch: true })
       if (state.quotations.quotationsFetched) return
 
@@ -52,14 +72,18 @@ export const useQuotations = () => {
         payload: { quotations: result },
       })
     } catch (error) {
-      setError({ ...error, fetch: error.message })
+      setError({ ...error, fetch: error?.data })
+      triggerNotification("error", error?.message)
     } finally {
       setLoading({ ...loading, fetch: false })
     }
   }
 
-  const toOrder = async (_id) => {
+  const toOrder = async (_id, cb) => {
     try {
+      setError(defaultError)
+      setLoading({ ...loading, toOrder: true })
+
       await api({
         method: "PUT",
         uri: `${endpoints.orders}/${_id}`,
@@ -79,10 +103,15 @@ export const useQuotations = () => {
         type: OrderTypes.ADD_ORDER,
         payload: { order: quotation },
       })
+
+      triggerNotification("success", "Order added successfully.")
+
+      cb && cb()
     } catch (error) {
-      setError({ ...error, fetch: error.message })
+      setError({ ...error, toOrder: error?.data })
+      triggerNotification("error", error?.message)
     } finally {
-      setLoading({ ...loading, fetch: false })
+      setLoading({ ...loading, toOrder: false })
     }
   }
 

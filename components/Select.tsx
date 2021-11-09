@@ -24,6 +24,13 @@ const Container = styled.div`
   position: relative;
   flex-direction: column;
   transition: all 0.3s ease 0s;
+  margin-bottom: ${({ theme }) => theme.gaps.semiLight};
+`
+
+const DangerTextS = styled(DangerText)`
+  left: 0;
+  bottom: -16px;
+  position: absolute;
 `
 
 const Selector = styled.div<SelectorType>`
@@ -201,7 +208,7 @@ export const Select = (props: any) => {
           />
         </SelectorIcon>
       </Selector>
-      {props.error && <DangerText>{props.error}</DangerText>}
+      {props.error && <DangerTextS>{props.error}</DangerTextS>}
       {open && (
         <Options>
           <InputContainer>

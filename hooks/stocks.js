@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react"
 
-import { api } from "@utils/api"
+import { useAPI } from "@utils/api"
 import { endpoints } from "@utils/constants"
-import { useAppContext, StockTypes } from "@contexts/index"
+import { useAppContext, StockTypes, NotifierTypes } from "@contexts/index"
 
 const headers = [
   { key: 1, name: "Sr.", field: "sr", align: "left", width: "10px" },
@@ -52,25 +52,40 @@ const headers = [
   { key: 9, name: "Actions", field: "actions", align: "right", width: "100px" },
 ]
 
+const defaultLoading = {
+  fetch: false,
+  add: false,
+  edit: false,
+  delete: false,
+}
+
+const defaultError = {
+  fetch: null,
+  add: null,
+  edit: null,
+  delete: null,
+}
+
 export const useStocks = () => {
+  const { api } = useAPI()
   const { state, dispatch } = useAppContext()
 
-  const [loading, setLoading] = useState({
-    fetch: false,
-    add: false,
-    edit: false,
-    delete: false,
-  })
+  const [error, setError] = useState(defaultError)
+  const [loading, setLoading] = useState(defaultLoading)
 
-  const [error, setError] = useState({
-    fetch: null,
-    add: null,
-    edit: null,
-    delete: null,
-  })
+  const triggerNotification = (type, message) => {
+    dispatch({
+      type: NotifierTypes.ADD_NOTIFICATION,
+      payload: {
+        type: type,
+        message: message,
+      },
+    })
+  }
 
   const fetchData = async () => {
     try {
+      setError(defaultError)
       setLoading({ ...loading, fetch: true })
       if (state.stocks.stocksFetched) return
 
@@ -98,7 +113,8 @@ export const useStocks = () => {
         payload: { stocks: result },
       })
     } catch (error) {
-      setError({ ...error, fetch: error.message })
+      setError({ ...error, fetch: error?.data })
+      triggerNotification("error", error?.message)
     } finally {
       setLoading({ ...loading, fetch: false })
     }
@@ -106,6 +122,7 @@ export const useStocks = () => {
 
   const addData = async (body, cb) => {
     try {
+      setError(defaultError)
       setLoading({ ...loading, add: true })
 
       const response = await api({
@@ -127,9 +144,12 @@ export const useStocks = () => {
         payload: { stock: response.data },
       })
 
-      cb()
+      triggerNotification("success", "Stock added successfully.")
+
+      cb && cb()
     } catch (error) {
-      setError({ ...error, add: error.message })
+      setError({ ...error, add: error?.data })
+      triggerNotification("error", error?.message)
     } finally {
       setLoading({ ...loading, add: false })
     }
@@ -137,6 +157,7 @@ export const useStocks = () => {
 
   const editData = async (body, id, cb) => {
     try {
+      setError(defaultError)
       setLoading({ ...loading, edit: true })
 
       const response = await api({
@@ -158,16 +179,20 @@ export const useStocks = () => {
         payload: { stock: response.data },
       })
 
-      cb()
+      triggerNotification("success", "Stock updated successfully.")
+
+      cb && cb()
     } catch (error) {
-      setError({ ...error, edit: error.message })
+      setError({ ...error, edit: error?.data })
+      triggerNotification("error", error?.message)
     } finally {
       setLoading({ ...loading, edit: false })
     }
   }
 
-  const deleteData = async (id) => {
+  const deleteData = async (id, cb) => {
     try {
+      setError(defaultError)
       setLoading({ ...loading, delete: true })
 
       await api({
@@ -179,8 +204,13 @@ export const useStocks = () => {
         type: StockTypes.DELETE_STOCK,
         payload: { _id: id },
       })
+
+      triggerNotification("success", "Stock deleted successfully.")
+
+      cb && cb()
     } catch (error) {
-      setError({ ...error, delete: error.message })
+      setError({ ...error, delete: error?.data })
+      triggerNotification("error", error?.message)
     } finally {
       setLoading({ ...loading, delete: false })
     }

@@ -1,4 +1,5 @@
 import { Button } from "@components/Buttons"
+import { Spinner } from "@components/Spinner"
 import { Form, Input } from "@components/Inputs"
 
 export const CreateCategory = ({
@@ -6,9 +7,9 @@ export const CreateCategory = ({
   loading,
   onSubmit,
 }: {
+  error?: any
   onSubmit: any
   loading?: boolean
-  error?: string | null
 }) => {
   const submitHandler = async (e: any) => {
     e.preventDefault()
@@ -23,12 +24,18 @@ export const CreateCategory = ({
         required
         type="text"
         name="name"
-        error={error}
+        error={error?.name}
         label="Category Name"
         placeholder="Category name"
       />
 
-      <Button type="submit">{loading ? "Loading..." : "Create"}</Button>
+      <Button type="submit">
+        {loading ? (
+          <Spinner size={16} text="Loading..." position="left" />
+        ) : (
+          "Create"
+        )}
+      </Button>
     </Form>
   )
 }
@@ -39,10 +46,10 @@ export const EditCategory = ({
   loading,
   onSubmit,
 }: {
+  error?: any
   value?: any
   onSubmit: any
   loading?: boolean
-  error?: string | null
 }) => {
   const submitHandler = async (e: any) => {
     e.preventDefault()
@@ -57,13 +64,19 @@ export const EditCategory = ({
         required
         type="text"
         name="name"
-        error={error}
+        error={error?.name}
         label="Category Name"
         defaultValue={value.name}
         placeholder="Category name"
       />
 
-      <Button type="submit">{loading ? "Loading..." : "Edit"}</Button>
+      <Button type="submit">
+        {loading ? (
+          <Spinner size={16} text="Loading..." position="left" />
+        ) : (
+          "Edit"
+        )}
+      </Button>
     </Form>
   )
 }

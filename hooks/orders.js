@@ -1,9 +1,14 @@
 import { useState } from "react"
 
-import { api } from "@utils/api"
+import { useAPI } from "@utils/api"
 import { toTitleCase } from "@utils/common"
 import { endpoints } from "@utils/constants"
-import { useAppContext, OrderTypes, QuotationTypes } from "@contexts/index"
+import {
+  OrderTypes,
+  useAppContext,
+  NotifierTypes,
+  QuotationTypes,
+} from "@contexts/index"
 
 const headers = [
   { key: 1, name: "Order #", field: "order_id", align: "left" },
@@ -16,31 +21,46 @@ const headers = [
   { key: 8, name: "Actions", field: "actions", align: "right" },
 ]
 
+const defaultLoading = {
+  fetch: false,
+  addPayment: false,
+  cancelOrder: false,
+  addGeneralPayment: false,
+  add: {
+    active: false,
+    quotation: false,
+  },
+}
+
+const defaultError = {
+  add: null,
+  fetch: null,
+  addPayment: null,
+  cancelOrder: null,
+  addGeneralPayment: null,
+}
+
 export const useOrders = () => {
+  const { api } = useAPI()
   const { state, dispatch } = useAppContext()
   const [customerOrders, setCustomerOrders] = useState([])
 
-  const [loading, setLoading] = useState({
-    fetch: false,
-    addPayment: false,
-    cancelOrder: false,
-    addGeneralPayment: false,
-    add: {
-      active: false,
-      quotation: false,
-    },
-  })
+  const [error, setError] = useState(defaultError)
+  const [loading, setLoading] = useState(defaultLoading)
 
-  const [error, setError] = useState({
-    add: null,
-    fetch: null,
-    addPayment: null,
-    cancelOrder: null,
-    addGeneralPayment: null,
-  })
+  const triggerNotification = (type, message) => {
+    dispatch({
+      type: NotifierTypes.ADD_NOTIFICATION,
+      payload: {
+        type: type,
+        message: message,
+      },
+    })
+  }
 
   const fetchData = async () => {
     try {
+      setError(defaultError)
       setLoading({ ...loading, fetch: true })
       if (state.orders.ordersFetched) return
 
@@ -63,7 +83,8 @@ export const useOrders = () => {
         payload: { orders: result },
       })
     } catch (error) {
-      setError({ ...error, fetch: error.message })
+      setError({ ...error, fetch: error?.data })
+      triggerNotification("error", error?.message)
     } finally {
       setLoading({ ...loading, fetch: false })
     }
@@ -71,6 +92,7 @@ export const useOrders = () => {
 
   const addData = async (body, cb) => {
     try {
+      setError(defaultError)
       setLoading({ ...loading, add: { [body.status]: true } })
 
       const response = await api({
@@ -92,16 +114,19 @@ export const useOrders = () => {
           type: QuotationTypes.ADD_QUOTATION,
           payload: { quotation: result },
         })
+        triggerNotification("success", "Quotation added successfully.")
       } else {
         dispatch({
           type: OrderTypes.ADD_ORDER,
           payload: { order: result },
         })
+        triggerNotification("success", "Order added successfully.")
       }
 
       cb && cb(response.data)
     } catch (error) {
-      setError({ ...error, add: error.message })
+      setError({ ...error, add: error?.data })
+      triggerNotification("error", error?.message)
     } finally {
       setLoading({ ...loading, add: { [body.status]: false } })
     }
@@ -109,6 +134,7 @@ export const useOrders = () => {
 
   const addPayment = async (body, id, cb) => {
     try {
+      setError(defaultError)
       setLoading({ ...loading, addPayment: true })
 
       const response = await api({
@@ -128,9 +154,13 @@ export const useOrders = () => {
           },
         },
       })
+
+      triggerNotification("success", "Payment added successfully.")
+
       cb && cb()
     } catch (error) {
-      setError({ ...error, addPayment: error.message })
+      setError({ ...error, addPayment: error?.data })
+      triggerNotification("error", error?.message)
     } finally {
       setLoading({ ...loading, addPayment: false })
     }
@@ -138,6 +168,7 @@ export const useOrders = () => {
 
   const addGeneralPayment = async (body, cb) => {
     try {
+      setError(defaultError)
       setLoading({ ...loading, addGeneralPayment: true })
 
       const response = await api({
@@ -150,9 +181,13 @@ export const useOrders = () => {
         type: OrderTypes.ADD_GENERAL_PAYMENT,
         payload: { orders: response.data },
       })
+
+      triggerNotification("success", "Payment added successfully.")
+
       cb && cb()
     } catch (error) {
-      setError({ ...error, addGeneralPayment: error.message })
+      setError({ ...error, addGeneralPayment: error?.data })
+      triggerNotification("error", error?.message)
     } finally {
       setLoading({ ...loading, addGeneralPayment: false })
     }
@@ -160,6 +195,7 @@ export const useOrders = () => {
 
   const cancelOrder = async (id) => {
     try {
+      setError(defaultError)
       setLoading({ ...loading, cancelOrder: true })
 
       await api({
@@ -172,9 +208,12 @@ export const useOrders = () => {
         payload: { _id: id },
       })
 
+      triggerNotification("success", "Order cancelled successfully.")
+
       cb && cb()
     } catch (error) {
-      setError({ ...error, cancelOrder: error.message })
+      setError({ ...error, cancelOrder: error?.data })
+      triggerNotification("error", error?.message)
     } finally {
       setLoading({ ...loading, cancelOrder: false })
     }

@@ -1,7 +1,7 @@
 import { useRouter } from "next/router"
 import { useState, useEffect } from "react"
 
-import { api } from "@utils/api"
+import { useAPI } from "@utils/api"
 import { endpoints } from "@utils/constants"
 import { getBrowserItem } from "@utils/browser-utility"
 
@@ -14,23 +14,25 @@ import { useQuotations } from "@hooks/quotations"
 import { useAppContext, AuthTypes } from "@contexts/index"
 
 export const useRegister = () => {
+  const { api } = useAPI()
   const router = useRouter()
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
 
   const doRegister = async (body) => {
     try {
+      setError(null)
       setLoading(true)
+
       await api({
         method: "POST",
         uri: endpoints.register,
         body: JSON.stringify(body),
       })
 
-      setLoading(false)
       router.replace("/")
     } catch (error) {
-      setError(error.message)
+      setError(error?.data)
     } finally {
       setLoading(false)
     }
@@ -40,6 +42,7 @@ export const useRegister = () => {
 }
 
 export const useLogin = () => {
+  const { api } = useAPI()
   const router = useRouter()
   const { dispatch } = useAppContext()
 
@@ -48,7 +51,9 @@ export const useLogin = () => {
 
   const doLogin = async (body) => {
     try {
+      setError(null)
       setLoading(true)
+
       const response = await api({
         method: "POST",
         uri: endpoints.login,
@@ -59,9 +64,10 @@ export const useLogin = () => {
         type: AuthTypes.LOGIN,
         payload: { user: response.user, token: response.data.token },
       })
+
       router.push("/app")
     } catch (error) {
-      setError(error.message)
+      setError(error?.data)
       setLoading(false)
     } finally {
     }
@@ -71,6 +77,7 @@ export const useLogin = () => {
 }
 
 export const useLogout = () => {
+  const { api } = useAPI()
   const router = useRouter()
   const { dispatch } = useAppContext()
 
@@ -83,6 +90,7 @@ export const useLogout = () => {
 }
 
 export const AuthWrapper = ({ children }) => {
+  const { api } = useAPI()
   const router = useRouter()
   const { dispatch } = useAppContext()
   const { fetchData: fetchStocks } = useStocks()
@@ -97,6 +105,7 @@ export const AuthWrapper = ({ children }) => {
   const checkAuth = async () => {
     let route = "/"
     try {
+      setError(null)
       const token = getBrowserItem()
       if (!token) {
         if (router.asPath.startsWith("/app")) route = "/"
@@ -122,7 +131,7 @@ export const AuthWrapper = ({ children }) => {
       if (router.asPath.startsWith("/app")) route = router.asPath
       else route = "/app"
     } catch (error) {
-      setError(error.message)
+      setError(error?.data)
     } finally {
       router.prefetch(route)
       router.replace(route)

@@ -81,9 +81,11 @@ const Orders: NextPage = () => {
     paymentTypes[0],
   ])
 
-  const { addData, loading } = useOrders()
+  const { addData, loading, error } = useOrders()
+
   const [stockQuery, setstockQuery] = useState("")
   const { stocks } = useSearchStock(stockQuery)
+
   const [customerQuery, setCustomerQuery] = useState("")
   const { customers } = useSearchCustomer(customerQuery)
 
@@ -272,6 +274,7 @@ const Orders: NextPage = () => {
               label="Payment Type"
               options={paymentTypes}
               placeholder="Payment Type"
+              error={error?.add?.paymentType}
               onChange={(value: any) => setPaymentType(value)}
             />
             <SearchSelect
@@ -281,6 +284,7 @@ const Orders: NextPage = () => {
               options={customers}
               value={customer?.first_name}
               placeholder="Search Customer"
+              error={error?.add?.created_for}
               onSelect={(value: any) => setCustomer(value)}
               onSearch={(text: string) => setCustomerQuery(text)}
               onCreate={(value: any) => onAddCustomer({ first_name: value })}
@@ -291,6 +295,7 @@ const Orders: NextPage = () => {
               label="Stock"
               options={stocks}
               placeholder="Search Stock"
+              error={error?.add?.stocks}
               onSelect={(value: any) => addStock(value)}
               onSearch={(text: string) => setstockQuery(text)}
             />

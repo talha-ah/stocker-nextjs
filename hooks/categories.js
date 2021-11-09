@@ -1,8 +1,8 @@
 import { useState } from "react"
 
-import { api } from "@utils/api"
+import { useAPI } from "@utils/api"
 import { endpoints } from "@utils/constants"
-import { useAppContext, CategoryTypes } from "@contexts/index"
+import { useAppContext, CategoryTypes, NotifierTypes } from "@contexts/index"
 
 const headers = [
   { key: 1, name: "Name", field: "name", align: "left" },
@@ -10,25 +10,40 @@ const headers = [
   { key: 3, name: "Actions", field: "actions", align: "right" },
 ]
 
+const defaultLoading = {
+  fetch: false,
+  add: false,
+  edit: false,
+  delete: false,
+}
+
+const defaultError = {
+  fetch: null,
+  add: null,
+  edit: null,
+  delete: null,
+}
+
 export const useCategories = () => {
+  const { api } = useAPI()
   const { state, dispatch } = useAppContext()
 
-  const [loading, setLoading] = useState({
-    fetch: false,
-    add: false,
-    edit: false,
-    delete: false,
-  })
+  const [error, setError] = useState(defaultError)
+  const [loading, setLoading] = useState(defaultLoading)
 
-  const [error, setError] = useState({
-    fetch: null,
-    add: null,
-    edit: null,
-    delete: null,
-  })
+  const triggerNotification = (type, message) => {
+    dispatch({
+      type: NotifierTypes.ADD_NOTIFICATION,
+      payload: {
+        type: type,
+        message: message,
+      },
+    })
+  }
 
   const fetchData = async () => {
     try {
+      setError(defaultError)
       setLoading({ ...loading, fetch: true })
       if (state.categories.categoriesFetched) return
 
@@ -49,7 +64,7 @@ export const useCategories = () => {
         payload: { categories: result },
       })
     } catch (error) {
-      setError({ ...error, fetch: error.message })
+      setError({ ...error, fetch: error?.data })
     } finally {
       setLoading({ ...loading, fetch: false })
     }
@@ -57,6 +72,7 @@ export const useCategories = () => {
 
   const addData = async (body, cb) => {
     try {
+      setError(defaultError)
       setLoading({ ...loading, add: true })
 
       const response = await api({
@@ -65,6 +81,7 @@ export const useCategories = () => {
         body: JSON.stringify(body),
       })
 
+      response.data.items = 0
       const result = response.data
 
       dispatch({
@@ -72,9 +89,12 @@ export const useCategories = () => {
         payload: { category: result },
       })
 
-      cb()
+      triggerNotification("success", "Category added successfully.")
+
+      cb && cb()
     } catch (error) {
-      setError({ ...error, add: error.message })
+      setError({ ...error, add: error?.data })
+      triggerNotification("error", error?.message)
     } finally {
       setLoading({ ...loading, add: false })
     }
@@ -82,6 +102,7 @@ export const useCategories = () => {
 
   const editData = async (body, _id, cb) => {
     try {
+      setError(defaultError)
       setLoading({ ...loading, edit: true })
 
       const response = await api({
@@ -95,16 +116,20 @@ export const useCategories = () => {
         payload: { category: response.data },
       })
 
-      cb()
+      triggerNotification("success", "Category updated successfully.")
+
+      cb && cb()
     } catch (error) {
-      setError({ ...error, edit: error.message })
+      setError({ ...error, edit: error?.data })
+      triggerNotification("error", error?.message)
     } finally {
       setLoading({ ...loading, edit: false })
     }
   }
 
-  const deleteData = async (_id) => {
+  const deleteData = async (_id, cb) => {
     try {
+      setError(defaultError)
       setLoading({ ...loading, delete: true })
 
       await api({
@@ -116,8 +141,13 @@ export const useCategories = () => {
         type: CategoryTypes.DELETE_CATEGORY,
         payload: { _id },
       })
+
+      triggerNotification("success", "Category deleted successfully.")
+
+      cb && cb()
     } catch (error) {
-      setError({ ...error, delete: error.message })
+      setError({ ...error, delete: error?.data })
+      triggerNotification("error", error?.message)
     } finally {
       setLoading({ ...loading, delete: false })
     }

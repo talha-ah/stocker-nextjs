@@ -113,7 +113,7 @@ const Stocks: NextPage = () => {
         />
         <Modal
           show={show}
-          title={stock ? "Edit Category" : "Add Category"}
+          title={stock ? "Edit Stock" : "Add Stock"}
           setShow={(s: boolean) => {
             setShow(s)
             if (!s) setStock(null)

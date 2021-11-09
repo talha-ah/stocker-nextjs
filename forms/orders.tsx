@@ -1,4 +1,5 @@
 import { Button } from "@components/Buttons"
+import { Spinner } from "@components/Spinner"
 import { Form, Input } from "@components/Inputs"
 
 export const AddPayment = ({
@@ -6,9 +7,9 @@ export const AddPayment = ({
   loading,
   onSubmit,
 }: {
+  error?: any
   onSubmit: any
   loading?: boolean
-  error?: string | null
 }) => {
   const submitHandler = async (e: any) => {
     e.preventDefault()
@@ -24,12 +25,18 @@ export const AddPayment = ({
         required
         name="value"
         type="number"
-        error={error}
+        error={error?.value}
         label="Payment value"
         placeholder="Payment value"
       />
 
-      <Button type="submit">{loading ? "Loading..." : "Add"}</Button>
+      <Button type="submit">
+        {loading ? (
+          <Spinner size={16} text="Loading..." position="left" />
+        ) : (
+          "Add"
+        )}
+      </Button>
     </Form>
   )
 }

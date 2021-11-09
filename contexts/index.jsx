@@ -4,6 +4,11 @@ import { AuthInitialState, AuthReducer, AuthTypes } from "./reducers/auth"
 import { StockTypes, StockReducer, StockInitialState } from "./reducers/stocks"
 import { OrderTypes, OrderReducer, OrderInitialState } from "./reducers/orders"
 import {
+  NotifierTypes,
+  NotifierReducer,
+  NotifierInitialState,
+} from "./reducers/notifier"
+import {
   QuotationTypes,
   QuotationReducer,
   QuotationInitialState,
@@ -35,6 +40,7 @@ const AppReducer = combineReducers({
   customers: CustomerReducer,
   categories: CategoryReducer,
   quotations: QuotationReducer,
+  notifications: NotifierReducer,
 })
 
 const AppInitialState = {
@@ -44,6 +50,7 @@ const AppInitialState = {
   customers: CustomerInitialState,
   categories: CategoryInitialState,
   quotations: QuotationInitialState,
+  notifications: NotifierInitialState,
 }
 
 export const AppContext = createContext({
@@ -65,6 +72,7 @@ export {
   AuthTypes,
   StockTypes,
   OrderTypes,
+  NotifierTypes,
   CategoryTypes,
   CustomerTypes,
   QuotationTypes,

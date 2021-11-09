@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 
 import { Button } from "@components/Buttons"
+import { Spinner } from "@components/Spinner"
 import { useAppContext } from "@contexts/index"
 import { Select, SelectType } from "@components/Select"
 import { Form, Input, TextArea } from "@components/Inputs"
@@ -10,9 +11,9 @@ export const CreateStock = ({
   loading,
   onSubmit,
 }: {
+  error?: any
   onSubmit: any
   loading?: boolean
-  error?: string | null
 }) => {
   const { state } = useAppContext()
   const [category, setCategory] = useState<SelectType[]>([])
@@ -37,11 +38,11 @@ export const CreateStock = ({
       <Select
         primary
         required
-        error={error}
         name="category"
         label="Category"
         value={category}
         placeholder="Category"
+        error={error?.category}
         onChange={(value: any) => setCategory(value)}
         options={state.categories.categories.map((category: any) => ({
           label: category?.name,
@@ -54,54 +55,60 @@ export const CreateStock = ({
         type="text"
         name="code"
         label="Code"
-        error={error}
         placeholder="Code"
+        error={error?.code}
       />
       <Input
         primary
         required
-        type="text"
-        error={error}
+        type="number"
         name="cost_price"
         label="Cost Price"
         placeholder="Cost Price"
+        error={error?.cost_price}
       />
       <Input
         primary
         required
-        type="text"
-        error={error}
+        type="number"
         name="sale_price"
         label="Sale Price"
         placeholder="Sale Price"
+        error={error?.sale_price}
       />
       <Input
         primary
         required
-        type="text"
-        error={error}
+        type="number"
         name="inventory"
         label="Inventory"
         placeholder="Inventory"
+        error={error?.inventory}
       />
       <Input
         primary
         required
         type="text"
-        error={error}
         name="location"
         label="Location"
         placeholder="Location"
+        error={error?.location}
       />
       <TextArea
         primary
-        error={error}
         name="description"
         label="Description"
         placeholder="Description"
+        error={error?.description}
       />
 
-      <Button type="submit">{loading ? "Loading..." : "Create"}</Button>
+      <Button type="submit">
+        {loading ? (
+          <Spinner size={16} text="Loading..." position="left" />
+        ) : (
+          "Create"
+        )}
+      </Button>
     </Form>
   )
 }
@@ -113,9 +120,9 @@ export const EditStock = ({
   onSubmit,
 }: {
   value: any
+  error?: any
   onSubmit: any
   loading?: boolean
-  error?: string | null
 }) => {
   const { state } = useAppContext()
   const [category, setCategory] = useState<SelectType[]>([])
@@ -136,7 +143,6 @@ export const EditStock = ({
   }
 
   useEffect(() => {
-    console.log("GOOGLE", value)
     const cat: any = state.categories.categories.find(
       (d: any) => String(d._id) === String(value.category_id)
     )
@@ -157,11 +163,11 @@ export const EditStock = ({
       <Select
         primary
         required
-        error={error}
         name="category"
         label="Category"
         value={category}
         placeholder="Category"
+        error={error?.category}
         onChange={(value: any) => setCategory(value)}
         options={state.categories.categories.map((category: any) => ({
           label: category?.name,
@@ -174,60 +180,66 @@ export const EditStock = ({
         type="text"
         name="code"
         label="Code"
-        error={error}
         placeholder="Code"
+        error={error?.code}
         defaultValue={value.code}
       />
       <Input
         primary
         required
-        type="text"
-        error={error}
+        type="number"
         name="cost_price"
         label="Cost Price"
         placeholder="Cost Price"
+        error={error?.cost_price}
         defaultValue={value.cost_price}
       />
       <Input
         primary
         required
-        type="text"
-        error={error}
+        type="number"
         name="sale_price"
         label="Sale Price"
         placeholder="Sale Price"
+        error={error?.sale_price}
         defaultValue={value.sale_price}
       />
       <Input
         primary
         required
-        type="text"
-        error={error}
+        type="number"
         name="inventory"
         label="Inventory"
         placeholder="Inventory"
+        error={error?.inventory}
         defaultValue={value.inventory}
       />
       <Input
         primary
         required
         type="text"
-        error={error}
         name="location"
         label="Location"
         placeholder="Location"
+        error={error?.location}
         defaultValue={value.location}
       />
       <TextArea
         primary
-        error={error}
         name="description"
         label="Description"
         placeholder="Description"
+        error={error?.description}
         defaultValue={value.description}
       />
 
-      <Button type="submit">{loading ? "Loading..." : "Edit"}</Button>
+      <Button type="submit">
+        {loading ? (
+          <Spinner size={16} text="Loading..." position="left" />
+        ) : (
+          "Edit"
+        )}
+      </Button>
     </Form>
   )
 }

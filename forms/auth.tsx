@@ -1,6 +1,7 @@
 import Link from "next/link"
 import styled from "styled-components"
 
+import { Spinner } from "@components/Spinner"
 import { Form, Input } from "@components/Inputs"
 import { Button, GhostButton } from "@components/Buttons"
 
@@ -17,9 +18,9 @@ export const DoLogin = ({
   loading,
   onSubmit,
 }: {
+  error?: any
   onSubmit: any
   loading?: boolean
-  error?: string | null
 }) => {
   const submitHandler = async (e: any) => {
     e.preventDefault()
@@ -34,23 +35,27 @@ export const DoLogin = ({
         required
         name="email"
         type="email"
-        error={error}
+        error={error?.email}
         label="Email Address"
         placeholder="name@domain.com"
       />
 
       <Input
         required
-        error={error}
         name="password"
         type="password"
         label="Password"
+        error={error?.password}
         placeholder="*********"
       />
 
       <Actions>
         <Button fluid type="submit">
-          {loading ? "Loading..." : "Login"}
+          {loading ? (
+            <Spinner size={16} text="Loading..." position="left" />
+          ) : (
+            "Login"
+          )}
         </Button>
         <Link href="/register" passHref>
           <GhostButton fluid>Create new account</GhostButton>
@@ -65,9 +70,9 @@ export const DoRegister = ({
   loading,
   onSubmit,
 }: {
+  error?: any
   onSubmit: any
   loading?: boolean
-  error?: string | null
 }) => {
   const submitHandler = async (e: any) => {
     e.preventDefault()
@@ -82,43 +87,47 @@ export const DoRegister = ({
     <Form onSubmit={submitHandler}>
       <Input
         required
-        error={error}
         type="text"
         label="Name"
         name="first_name"
         placeholder="name"
+        error={error?.first_name}
       />
 
       <Input
         required
-        error={error}
         name="email"
         type="email"
+        error={error?.email}
         label="Email Address"
         placeholder="name@domain.com"
       />
 
       <Input
         required
-        error={error}
         name="password"
         type="password"
         label="Password"
+        error={error?.password}
         placeholder="*********"
       />
 
       <Input
         required
         name="secret"
-        error={error}
         label="Secret"
         type="password"
+        error={error?.secret}
         placeholder="XXXX XXXX XXXX"
       />
 
       <Actions>
         <Button fluid type="submit">
-          {loading ? "Loading..." : "Register"}
+          {loading ? (
+            <Spinner size={16} text="Loading..." position="left" />
+          ) : (
+            "Register"
+          )}
         </Button>
         <Link href="/login" passHref>
           <GhostButton fluid>Login</GhostButton>
