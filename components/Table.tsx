@@ -154,10 +154,10 @@ export const Table = ({
   rows,
   headers,
   loading,
-  paginate,
   totalField,
   onClickRow,
   hover = true,
+  paginate = true,
 }: {
   rows: any
   id?: string
@@ -175,7 +175,8 @@ export const Table = ({
     if (paginate) {
       const trimStart = (page - 1) * LIMIT
       const trimEnd = trimStart + LIMIT
-      setData(rows.slice(trimStart, trimEnd))
+      const slicedArray = rows.slice(trimStart, trimEnd)
+      setData(slicedArray)
     } else {
       setData(rows)
     }
