@@ -82,19 +82,20 @@ const Customers: NextPage = () => {
               width={16}
             />
           </Button>
-          <Button
-            iconed
-            loading={loading.delete}
-            disabled={row.orders > 0}
-            onClick={() => deleteData(row._id)}
-          >
-            <Image
-              src="/icons/Delete.svg"
-              alt="search-icon"
-              height={16}
-              width={16}
-            />
-          </Button>
+          {row.orders <= 0 && (
+            <Button
+              iconed
+              loading={loading.delete}
+              onClick={() => deleteData(row._id)}
+            >
+              <Image
+                src="/icons/Delete.svg"
+                alt="search-icon"
+                height={16}
+                width={16}
+              />
+            </Button>
+          )}
         </Actions>
       ),
     }))

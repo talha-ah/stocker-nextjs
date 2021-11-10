@@ -166,7 +166,7 @@ export const Table = ({
   onClickRow?: any
   loading?: boolean
   paginate?: boolean
-  totalField?: string | null | boolean
+  totalField?: any
 }) => {
   const [data, setData] = useState<any[]>([])
   const [page, setPage] = useState<number>(1)

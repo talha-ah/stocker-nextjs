@@ -8,6 +8,7 @@ export const OrderTypes = {
   SET_ORDERS: "SET_ORDERS",
   ADD_PAYMENT: "ADD_PAYMENT",
   CANCEL_ORDER: "CANCEL_ORDER",
+  RESET_ORDERS: "RESET_ORDERS",
   UPDATE_STATUS: "UPDATE_STATUS",
   ADD_GENERAL_PAYMENT: "ADD_GENERAL_PAYMENT",
 }
@@ -77,6 +78,8 @@ export const OrderReducer = (state, action) => {
           (order) => String(order._id) !== String(action.payload._id)
         ),
       }
+    case OrderTypes.RESET_ORDERS:
+      return OrderInitialState
     default:
       return state
   }

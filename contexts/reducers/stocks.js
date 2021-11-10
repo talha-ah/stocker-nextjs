@@ -8,6 +8,7 @@ export const StockTypes = {
   EDIT_STOCK: "EDIT_STOCK",
   SET_STOCKS: "SET_STOCKS",
   DELETE_STOCK: "DELETE_STOCK",
+  RESET_STOCKS: "RESET_STOCKS",
 }
 
 export const StockReducer = (state, action) => {
@@ -40,6 +41,8 @@ export const StockReducer = (state, action) => {
           (stock) => String(stock._id) !== String(action.payload._id)
         ),
       }
+    case StockTypes.RESET_STOCKS:
+      return StockInitialState
     default:
       return state
   }

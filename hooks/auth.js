@@ -11,7 +11,16 @@ import { Spinner } from "@components/Spinner"
 import { useCustomers } from "@hooks/customers"
 import { useCategories } from "@hooks/categories"
 import { useQuotations } from "@hooks/quotations"
-import { useAppContext, AuthTypes } from "@contexts/index"
+import {
+  useAppContext,
+  AuthTypes,
+  NotifierTypes,
+  CategoryTypes,
+  CustomerTypes,
+  OrderTypes,
+  QuotationTypes,
+  StockTypes,
+} from "@contexts/index"
 
 export const useRegister = () => {
   const { api } = useAPI()
@@ -46,6 +55,12 @@ export const useLogin = () => {
   const router = useRouter()
   const { dispatch } = useAppContext()
 
+  const { fetchData: fetchStocks } = useStocks()
+  const { fetchData: fetchOrders } = useOrders()
+  const { fetchData: fetchCustomers } = useCustomers()
+  const { fetchData: fetchCategories } = useCategories()
+  const { fetchData: fetchQuotations } = useQuotations()
+
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
 
@@ -65,6 +80,12 @@ export const useLogin = () => {
         payload: { user: response.user, token: response.data.token },
       })
 
+      await fetchCategories()
+      await fetchQuotations()
+      await fetchCustomers()
+      await fetchOrders()
+      await fetchStocks()
+
       router.push("/app")
     } catch (error) {
       setError(error?.data)
@@ -77,12 +98,16 @@ export const useLogin = () => {
 }
 
 export const useLogout = () => {
-  const { api } = useAPI()
   const router = useRouter()
   const { dispatch } = useAppContext()
 
   const doLogout = async () => {
     dispatch({ type: AuthTypes.LOGOUT })
+    dispatch({ type: CategoryTypes.RESET_CATEGORIES })
+    dispatch({ type: CustomerTypes.RESET_CUSTOMERS })
+    dispatch({ type: OrderTypes.RESET_ORDERS })
+    dispatch({ type: QuotationTypes.RESET_QUOTATIONS })
+    dispatch({ type: StockTypes.RESET_STOCKS })
     router.push("/")
   }
 
@@ -93,19 +118,28 @@ export const AuthWrapper = ({ children }) => {
   const { api } = useAPI()
   const router = useRouter()
   const { dispatch } = useAppContext()
+
   const { fetchData: fetchStocks } = useStocks()
   const { fetchData: fetchOrders } = useOrders()
   const { fetchData: fetchCustomers } = useCustomers()
   const { fetchData: fetchCategories } = useCategories()
   const { fetchData: fetchQuotations } = useQuotations()
 
-  const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
+
+  const triggerNotification = (type, message) => {
+    dispatch({
+      type: NotifierTypes.ADD_NOTIFICATION,
+      payload: {
+        type: type,
+        message: message,
+      },
+    })
+  }
 
   const checkAuth = async () => {
     let route = "/"
     try {
-      setError(null)
       const token = getBrowserItem()
       if (!token) {
         if (router.asPath.startsWith("/app")) route = "/"
@@ -131,7 +165,7 @@ export const AuthWrapper = ({ children }) => {
       if (router.asPath.startsWith("/app")) route = router.asPath
       else route = "/app"
     } catch (error) {
-      setError(error?.data)
+      triggerNotification("error", error?.message)
     } finally {
       router.prefetch(route)
       router.replace(route)

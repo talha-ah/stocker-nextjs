@@ -8,6 +8,7 @@ export const CategoryTypes = {
   EDIT_CATEGORY: "EDIT_CATEGORY",
   SET_CATEGORIES: "SET_CATEGORIES",
   DELETE_CATEGORY: "DELETE_CATEGORY",
+  RESET_CATEGORIES: "RESET_CATEGORIES",
 }
 
 export const CategoryReducer = (state, action) => {
@@ -41,6 +42,8 @@ export const CategoryReducer = (state, action) => {
           (category) => String(category._id) !== String(action.payload._id)
         ),
       }
+    case CategoryTypes.RESET_CATEGORIES:
+      return CategoryInitialState
     default:
       return state
   }

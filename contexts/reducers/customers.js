@@ -8,6 +8,7 @@ export const CustomerTypes = {
   EDIT_CUSTOMER: "EDIT_CUSTOMER",
   SET_CUSTOMERS: "SET_CUSTOMERS",
   DELETE_CUSTOMER: "DELETE_CUSTOMER",
+  RESET_CUSTOMERS: "RESET_CUSTOMERS",
 }
 
 export const CustomerReducer = (state, action) => {
@@ -41,6 +42,8 @@ export const CustomerReducer = (state, action) => {
           (customer) => String(customer._id) !== String(action.payload._id)
         ),
       }
+    case CustomerTypes.RESET_CUSTOMERS:
+      return CustomerInitialState
     default:
       return state
   }

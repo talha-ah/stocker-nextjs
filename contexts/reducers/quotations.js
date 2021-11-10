@@ -7,6 +7,7 @@ export const QuotationTypes = {
   ADD_QUOTATION: "ADD_QUOTATION",
   SET_QUOTATIONS: "SET_QUOTATIONS",
   REMOVE_QUOTATION: "REMOVE_QUOTATION",
+  RESET_QUOTATIONS: "RESET_QUOTATIONS",
 }
 
 export const QuotationReducer = (state, action) => {
@@ -29,6 +30,8 @@ export const QuotationReducer = (state, action) => {
           (quotation) => String(quotation._id) !== String(action.payload._id)
         ),
       }
+    case QuotationTypes.RESET_QUOTATIONS:
+      return QuotationInitialState
     default:
       return state
   }
