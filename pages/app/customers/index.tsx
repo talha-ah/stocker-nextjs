@@ -8,10 +8,10 @@ import { useState, useEffect } from "react"
 import { Layout } from "@layouts/layout"
 import { Modal } from "@components/Modal"
 import { Content } from "@components/Common"
+import { Button } from "@components/Buttons"
 import { useAppContext } from "@contexts/index"
 import { useCustomers } from "@hooks/customers"
 import { Header, Table } from "@components/Table"
-import { IconButton, TextButton } from "@components/Buttons"
 import { CreateCustomer, EditCustomer } from "forms/customers"
 
 const Actions = styled.div`
@@ -66,25 +66,10 @@ const Customers: NextPage = () => {
   const renderData = (rows: any) => {
     return rows.map((row: any) => ({
       ...row,
-      balance:
-        row.balance !== 0 ? (
-          <TextButton onClick={() => router.push(`/app/customers/${row._id}`)}>
-            {row.balance}
-          </TextButton>
-        ) : (
-          row.balance
-        ),
-      orders:
-        row.orders !== 0 ? (
-          <TextButton onClick={() => router.push(`/app/customers/${row._id}`)}>
-            {row.orders}
-          </TextButton>
-        ) : (
-          row.orders
-        ),
       actions: (
         <Actions>
-          <IconButton
+          <Button
+            iconed
             onClick={() => {
               setCustomer(row)
               setShow((s) => !s)
@@ -96,10 +81,12 @@ const Customers: NextPage = () => {
               height={16}
               width={16}
             />
-          </IconButton>
-          <IconButton
+          </Button>
+          <Button
+            iconed
+            loading={loading.delete}
+            disabled={row.orders > 0}
             onClick={() => deleteData(row._id)}
-            disabled={row.orders > 0 || loading.delete}
           >
             <Image
               src="/icons/Delete.svg"
@@ -107,7 +94,7 @@ const Customers: NextPage = () => {
               height={16}
               width={16}
             />
-          </IconButton>
+          </Button>
         </Actions>
       ),
     }))
@@ -127,6 +114,7 @@ const Customers: NextPage = () => {
           headers={headers}
           loading={loading.fetch}
           rows={renderData(state.customers.customers)}
+          onClickRow={(row: any) => router.push(`/app/customers/${row._id}`)}
         />
         <Modal
           show={show}

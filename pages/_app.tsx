@@ -32,7 +32,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <AuthWrapper>
           <Component {...pageProps} />
         </AuthWrapper>
-        <Notifier title="Success" message="Login was successful." />
+        <Notifier />
       </AppProvider>
     </ThemeProvider>
   )

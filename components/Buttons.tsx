@@ -1,9 +1,19 @@
+import React from "react"
 import styled from "styled-components"
+
+import { Spinner } from "@components/Spinner"
 
 type ButtonType = {
   fluid?: boolean
   loading?: boolean
 }
+
+// type Props = {
+//   id: number,
+//   name: string;
+//   // All other props
+//   [x:string]: any;
+// }
 
 export const BaseButton = styled.button<ButtonType>`
   border: 0;
@@ -28,36 +38,27 @@ export const BaseButton = styled.button<ButtonType>`
   // }
 `
 
-export const Button = styled(BaseButton)`
+const ButtonPrimary = styled(BaseButton)`
   color: ${({ theme }) => theme.colors.white};
   background: ${({ theme }) => theme.colors.primary};
 `
 
-export const NeutralButton = styled(BaseButton)`
+const NeutralButton = styled(BaseButton)`
   color: ${({ theme }) => theme.colors.primary};
   background: ${({ theme }) => theme.colors.white};
   border-radius: ${({ theme }) => theme.borders.radius.default};
 `
 
-export const BorderedButton = styled(BaseButton)`
+const BorderedButton = styled(BaseButton)`
   color: ${({ theme }) => theme.colors.primary};
   border: ${({ theme }) => theme.borders.light};
   border-radius: ${({ theme }) => theme.borders.radius.default};
 `
 
-export const GhostButton = styled(BaseButton)`
+const GhostButton = styled(BaseButton)`
   background: transparent;
   color: ${({ theme }) => theme.colors.primary};
   border-radius: ${({ theme }) => theme.borders.radius.default};
-`
-
-export const TextButton = styled.button`
-  margin: 0;
-  border: 0;
-  outline: 0;
-  padding: 0;
-  cursor: pointer;
-  background-color: transparent;
 `
 
 export const IconButton = styled.button`
@@ -73,6 +74,116 @@ export const IconButton = styled.button`
   background-color: none;
   justify-content: center;
   transition: all 0.3s ease 0s;
+`
+
+// eslint-disable-next-line
+export const Button = React.forwardRef((props: any, ref): JSX.Element => {
+  const {
+    ghost,
+    iconed,
+    primary,
+    neutral,
+    loading,
+    bordered,
+    children,
+    disabled,
+    ...rest
+  } = props
+
+  if (iconed) {
+    return (
+      <IconButton
+        {...rest}
+        ref={ref}
+        disabled={loading || disabled}
+        onClick={(e) => {
+          e.stopPropagation()
+          rest.onClick()
+        }}
+      >
+        {loading ? <Spinner size={16} /> : children}
+      </IconButton>
+    )
+  } else if (primary) {
+    return (
+      <ButtonPrimary {...rest} ref={ref} disabled={loading || disabled}>
+        {loading ? (
+          <Spinner size={16} text="Loading..." position="left" color="white" />
+        ) : (
+          children
+        )}
+      </ButtonPrimary>
+    )
+  } else if (neutral) {
+    return (
+      <NeutralButton {...rest} ref={ref} disabled={loading || disabled}>
+        {loading ? (
+          <Spinner
+            size={16}
+            text="Loading..."
+            position="left"
+            color="primary"
+          />
+        ) : (
+          children
+        )}
+      </NeutralButton>
+    )
+  } else if (bordered) {
+    return (
+      <BorderedButton {...rest} ref={ref} disabled={loading || disabled}>
+        {loading ? (
+          <Spinner
+            size={16}
+            text="Loading..."
+            position="left"
+            color="primary"
+          />
+        ) : (
+          children
+        )}
+      </BorderedButton>
+    )
+  } else if (ghost) {
+    return (
+      <GhostButton {...rest} ref={ref} disabled={loading || disabled}>
+        {loading ? (
+          <Spinner
+            size={16}
+            text="Loading..."
+            position="left"
+            color="primary"
+          />
+        ) : (
+          children
+        )}
+      </GhostButton>
+    )
+  } else {
+    return (
+      <BaseButton {...rest} ref={ref} disabled={loading || disabled}>
+        {loading ? (
+          <Spinner
+            size={16}
+            text="Loading..."
+            position="left"
+            color="primary"
+          />
+        ) : (
+          children
+        )}
+      </BaseButton>
+    )
+  }
+})
+
+export const TextButton = styled.button`
+  margin: 0;
+  border: 0;
+  outline: 0;
+  padding: 0;
+  cursor: pointer;
+  background-color: transparent;
 `
 
 export const Anchor = styled.button`

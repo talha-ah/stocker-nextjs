@@ -1,5 +1,4 @@
 import { Button } from "@components/Buttons"
-import { Spinner } from "@components/Spinner"
 import { Form, Input } from "@components/Inputs"
 
 export const AddPayment = ({
@@ -30,12 +29,8 @@ export const AddPayment = ({
         placeholder="Payment value"
       />
 
-      <Button type="submit">
-        {loading ? (
-          <Spinner size={16} text="Loading..." position="left" />
-        ) : (
-          "Add"
-        )}
+      <Button type="submit" primary loading={loading}>
+        Add
       </Button>
     </Form>
   )

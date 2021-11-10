@@ -1,5 +1,4 @@
 import { Button } from "@components/Buttons"
-import { Spinner } from "@components/Spinner"
 import { Form, Input } from "@components/Inputs"
 
 export const CreateCategory = ({
@@ -29,12 +28,8 @@ export const CreateCategory = ({
         placeholder="Category name"
       />
 
-      <Button type="submit">
-        {loading ? (
-          <Spinner size={16} text="Loading..." position="left" />
-        ) : (
-          "Create"
-        )}
+      <Button type="submit" primary loading={loading}>
+        Create
       </Button>
     </Form>
   )
@@ -70,12 +65,8 @@ export const EditCategory = ({
         placeholder="Category name"
       />
 
-      <Button type="submit">
-        {loading ? (
-          <Spinner size={16} text="Loading..." position="left" />
-        ) : (
-          "Edit"
-        )}
+      <Button type="submit" primary loading={loading}>
+        Edit
       </Button>
     </Form>
   )

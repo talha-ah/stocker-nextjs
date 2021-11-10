@@ -6,9 +6,9 @@ import type { NextPage } from "next"
 import styled from "styled-components"
 import { useRouter } from "next/router"
 
+import { Button } from "@components/Buttons"
 import { Container, Main } from "@components/Common"
 import { Heading, SemiSmall } from "@components/Texts"
-import { Button, GhostButton } from "@components/Buttons"
 
 const Content = styled.div`
   width: 100%;
@@ -76,10 +76,14 @@ const Home: NextPage = () => {
           </ContentItem>
           <ContentActions>
             <Link href="/login" passHref>
-              <Button fluid>Sign In</Button>
+              <Button fluid primary>
+                Sign In
+              </Button>
             </Link>
             <Link href="/register" passHref>
-              <GhostButton fluid>Create new account</GhostButton>
+              <Button fluid ghost>
+                Create new account
+              </Button>
             </Link>
           </ContentActions>
         </Content>

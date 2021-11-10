@@ -8,7 +8,6 @@ import { Layout } from "@layouts/layout"
 import { Modal } from "@components/Modal"
 import { useOrders } from "@hooks/orders"
 import { AddPayment } from "@forms/orders"
-import { Spinner } from "@components/Spinner"
 import { SubHeading } from "@components/Texts"
 import { useCustomers } from "@hooks/customers"
 import { Header, Table } from "@components/Table"
@@ -98,19 +97,19 @@ const Customers: NextPage = () => {
 
         <Table
           headers={headers}
-          totalField="balance"
           rows={customerOrders}
           loading={loading.fetch}
+          totalField={tab === "unpaid" && "balance"}
         />
 
         {customerOrders.length > 0 && tab === "unpaid" && (
           <Buttons>
-            <Button onClick={() => setShow((s) => !s)}>
-              {loading.addGeneralPayment ? (
-                <Spinner size={16} text="Loading..." position="left" />
-              ) : (
-                "Add Payment"
-              )}
+            <Button
+              primary
+              onClick={() => setShow((s) => !s)}
+              loading={loading.addGeneralPayment}
+            >
+              Add Payment
             </Button>
           </Buttons>
         )}

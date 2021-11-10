@@ -78,25 +78,29 @@ export const Notifier = () => {
     })
   }
 
-  return state.notifications.map((notification: any, index: number) => (
-    <Container
-      place={index}
-      className="is-open"
-      key={notification.key}
-      type={notification.type}
-    >
-      <Header>
-        <SubHeading>{toTitleCase(notification.type)}</SubHeading>
-        <IconButton onClick={() => removeNotification(notification.key)}>
-          <Image
-            src="/icons/Cross.svg"
-            alt="search-icon"
-            width={16}
-            height={16}
-          />
-        </IconButton>
-      </Header>
-      <Placeholder>{notification.message}</Placeholder>
-    </Container>
-  ))
+  return (
+    <>
+      {state.notifications.map((notification: any, index: number) => (
+        <Container
+          place={index}
+          className="is-open"
+          key={notification.key}
+          type={notification.type}
+        >
+          <Header>
+            <SubHeading>{toTitleCase(notification.type)}</SubHeading>
+            <IconButton onClick={() => removeNotification(notification.key)}>
+              <Image
+                src="/icons/Cross.svg"
+                alt="search-icon"
+                width={16}
+                height={16}
+              />
+            </IconButton>
+          </Header>
+          <Placeholder>{notification.message}</Placeholder>
+        </Container>
+      ))}
+    </>
+  )
 }

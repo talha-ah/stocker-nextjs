@@ -1,11 +1,11 @@
-import styled, { useTheme } from "styled-components"
+import styled from "styled-components"
 
 import { SubHeading } from "@components/Texts"
 
 type SpinnerType = {
   size?: number
   text?: string
-  color?: string
+  color?: "primary" | "white" | "text"
   position?: "top" | "bottom" | "left" | "right"
 }
 
@@ -32,8 +32,9 @@ const SpinnerWrapper = styled.div<SpinnerType>`
     border-width: 1.5px;
     border-style: solid;
     box-sizing: border-box;
-    border-color: ${({ theme }) => theme.colors.primary}
-      ${({ theme }) => theme.colors.bg} ${({ theme }) => theme.colors.primary};
+    border-color: ${({ theme, color = "text" }) => theme.colors[color]}
+      rgb(0, 0, 0, 0.2) rgb(0, 0, 0, 0.2);
+
     border-image: initial;
     animation-name: spinner;
     animation-duration: 1.3s;
@@ -52,9 +53,14 @@ const SpinnerWrapper = styled.div<SpinnerType>`
   }
 `
 
-export const Spinner = ({ size, text, color, position }: SpinnerType) => {
+export const Spinner = ({
+  size,
+  text,
+  position,
+  color = "white",
+}: SpinnerType) => {
   return (
-    <SpinnerWrapper size={size} position={position}>
+    <SpinnerWrapper size={size} position={position} color={color}>
       <span />
       {text && <SubHeading color={color}>{text}</SubHeading>}
     </SpinnerWrapper>

@@ -1,9 +1,9 @@
 import Link from "next/link"
 import styled from "styled-components"
 
-import { Spinner } from "@components/Spinner"
+import { Button } from "@components/Buttons"
+
 import { Form, Input } from "@components/Inputs"
-import { Button, GhostButton } from "@components/Buttons"
 
 const Actions = styled.div`
   width: 100%;
@@ -50,15 +50,13 @@ export const DoLogin = ({
       />
 
       <Actions>
-        <Button fluid type="submit">
-          {loading ? (
-            <Spinner size={16} text="Loading..." position="left" />
-          ) : (
-            "Login"
-          )}
+        <Button primary fluid type="submit" loading={loading}>
+          Login
         </Button>
         <Link href="/register" passHref>
-          <GhostButton fluid>Create new account</GhostButton>
+          <Button fluid ghost>
+            Create new account
+          </Button>
         </Link>
       </Actions>
     </Form>
@@ -122,15 +120,13 @@ export const DoRegister = ({
       />
 
       <Actions>
-        <Button fluid type="submit">
-          {loading ? (
-            <Spinner size={16} text="Loading..." position="left" />
-          ) : (
-            "Register"
-          )}
+        <Button fluid primary type="submit" loading={loading}>
+          Register
         </Button>
         <Link href="/login" passHref>
-          <GhostButton fluid>Login</GhostButton>
+          <Button ghost fluid>
+            Login
+          </Button>
         </Link>
       </Actions>
     </Form>

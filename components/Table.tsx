@@ -12,6 +12,7 @@ import { SearchIconInput } from "@components/SearchInput"
 type TableType = {
   hover?: boolean
   width?: string
+  hoverRow?: any
 }
 
 const HeaderContainer = styled.div`
@@ -61,6 +62,7 @@ const TableContainer = styled.table<TableType>`
 
   & tr {
     border-radius: 60px;
+    cursor: ${({ hoverRow }) => (hoverRow ? "pointer" : "default")};
   }
 
   & tr:hover {
@@ -154,15 +156,17 @@ export const Table = ({
   loading,
   paginate,
   totalField,
+  onClickRow,
   hover = true,
 }: {
   rows: any
   id?: string
   headers: any
   hover?: boolean
+  onClickRow?: any
   loading?: boolean
   paginate?: boolean
-  totalField?: string
+  totalField?: string | null | boolean
 }) => {
   const [data, setData] = useState<any[]>([])
   const [page, setPage] = useState<number>(1)
@@ -181,7 +185,7 @@ export const Table = ({
   return (
     <>
       <TableScroll>
-        <TableContainer id={id} hover={hover}>
+        <TableContainer id={id} hover={hover} hoverRow={onClickRow}>
           <thead>
             <tr>
               {headers?.map((header: any) => (
@@ -207,7 +211,10 @@ export const Table = ({
               </tr>
             ) : (
               data?.map((row: any) => (
-                <tr key={generateId()}>
+                <tr
+                  key={generateId()}
+                  onClick={() => onClickRow && onClickRow(row)}
+                >
                   {headers.map((header: any) => (
                     <td
                       key={generateId()}

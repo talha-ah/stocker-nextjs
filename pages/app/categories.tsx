@@ -7,8 +7,8 @@ import { useState, useEffect } from "react"
 import { Layout } from "@layouts/layout"
 import { Modal } from "@components/Modal"
 import { Content } from "@components/Common"
+import { Button } from "@components/Buttons"
 import { useAppContext } from "@contexts/index"
-import { IconButton } from "@components/Buttons"
 import { Header, Table } from "@components/Table"
 import { useCategories } from "@hooks/categories"
 import { CreateCategory, EditCategory } from "@forms/categories"
@@ -60,7 +60,8 @@ const Categories: NextPage = () => {
       ...row,
       actions: (
         <Actions>
-          <IconButton
+          <Button
+            iconed
             onClick={() => {
               setCategory(row)
               setShow((s) => !s)
@@ -72,10 +73,12 @@ const Categories: NextPage = () => {
               height={16}
               width={16}
             />
-          </IconButton>
-          <IconButton
+          </Button>
+          <Button
+            iconed
+            disabled={row.items > 0}
+            loading={loading.delete}
             onClick={() => deleteData(row._id)}
-            disabled={row.items > 0 || loading.delete}
           >
             <Image
               src="/icons/Delete.svg"
@@ -83,7 +86,7 @@ const Categories: NextPage = () => {
               height={16}
               width={16}
             />
-          </IconButton>
+          </Button>
         </Actions>
       ),
     }))

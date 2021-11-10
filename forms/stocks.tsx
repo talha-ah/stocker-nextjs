@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 
 import { Button } from "@components/Buttons"
-import { Spinner } from "@components/Spinner"
 import { useAppContext } from "@contexts/index"
 import { Select, SelectType } from "@components/Select"
 import { Form, Input, TextArea } from "@components/Inputs"
@@ -102,12 +101,8 @@ export const CreateStock = ({
         error={error?.description}
       />
 
-      <Button type="submit">
-        {loading ? (
-          <Spinner size={16} text="Loading..." position="left" />
-        ) : (
-          "Create"
-        )}
+      <Button type="submit" primary loading={loading}>
+        Create
       </Button>
     </Form>
   )
@@ -233,12 +228,8 @@ export const EditStock = ({
         defaultValue={value.description}
       />
 
-      <Button type="submit">
-        {loading ? (
-          <Spinner size={16} text="Loading..." position="left" />
-        ) : (
-          "Edit"
-        )}
+      <Button type="submit" primary loading={loading}>
+        Edit
       </Button>
     </Form>
   )

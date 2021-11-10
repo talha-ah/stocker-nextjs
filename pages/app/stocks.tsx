@@ -8,8 +8,8 @@ import { Layout } from "@layouts/layout"
 import { useStocks } from "@hooks/stocks"
 import { Modal } from "@components/Modal"
 import { Content } from "@components/Common"
+import { Button } from "@components/Buttons"
 import { useAppContext } from "@contexts/index"
-import { IconButton } from "@components/Buttons"
 import { Header, Table } from "@components/Table"
 import { CreateStock, EditStock } from "@forms/stocks"
 
@@ -67,7 +67,8 @@ const Stocks: NextPage = () => {
       ...row,
       actions: (
         <Actions>
-          <IconButton
+          <Button
+            iconed
             onClick={() => {
               setStock(row)
               setShow((s) => !s)
@@ -79,9 +80,10 @@ const Stocks: NextPage = () => {
               height={16}
               width={16}
             />
-          </IconButton>
-          <IconButton
-            disabled={loading.delete}
+          </Button>
+          <Button
+            iconed
+            loading={loading.delete}
             onClick={() => deleteData(row._id)}
           >
             <Image
@@ -90,7 +92,7 @@ const Stocks: NextPage = () => {
               height={16}
               width={16}
             />
-          </IconButton>
+          </Button>
         </Actions>
       ),
     }))

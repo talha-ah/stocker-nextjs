@@ -1,8 +1,7 @@
 import styled from "styled-components"
 
 type PrimaryType = {
-  color?: string
-  primary?: boolean
+  color?: "primary" | "white" | "text"
 }
 
 export const BigText = styled.h1<PrimaryType>`
@@ -14,8 +13,7 @@ export const BigText = styled.h1<PrimaryType>`
   margin-bottom: 48px;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme, primary, color }) =>
-    primary ? theme.colors.primary : color || theme.colors.text};
+  color: ${({ theme, color = "text" }) => theme.colors[color]};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -27,8 +25,7 @@ export const BigHeading = styled.p<PrimaryType>`
   line-height: auto;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme, primary, color }) =>
-    primary ? theme.colors.primary : color || theme.colors.text};
+  color: ${({ theme, color = "text" }) => theme.colors[color]};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -40,8 +37,7 @@ export const Heading = styled.p<PrimaryType>`
   line-height: auto;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme, primary, color }) =>
-    primary ? theme.colors.primary : color || theme.colors.text};
+  color: ${({ theme, color = "text" }) => theme.colors[color]};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -53,8 +49,7 @@ export const SubHeading = styled.p<PrimaryType>`
   line-height: auto;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme, primary, color }) =>
-    primary ? theme.colors.primary : color || theme.colors.text};
+  color: ${({ theme, color = "text" }) => theme.colors[color]};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -66,8 +61,7 @@ export const Description = styled.p<PrimaryType>`
   line-height: auto;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme, primary, color }) =>
-    primary ? theme.colors.primary : color || theme.colors.text};
+  color: ${({ theme, color = "text" }) => theme.colors[color]};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -79,8 +73,7 @@ export const SemiSmall = styled.p<PrimaryType>`
   line-height: auto;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme, primary, color }) =>
-    primary ? theme.colors.primary : color || theme.colors.text};
+  color: ${({ theme, color = "text" }) => theme.colors[color]};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `

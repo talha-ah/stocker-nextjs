@@ -7,9 +7,9 @@ import { useRouter } from "next/router"
 
 import { Layout } from "@layouts/layout"
 import { Content } from "@components/Common"
+import { Button } from "@components/Buttons"
 import { generateReceipt } from "@utils/pdfs"
 import { useAppContext } from "@contexts/index"
-import { IconButton } from "@components/Buttons"
 import { Header, Table } from "@components/Table"
 import { useQuotations } from "@hooks/quotations"
 
@@ -37,8 +37,9 @@ const Quotations: NextPage = () => {
       ...row,
       actions: (
         <Actions>
-          <IconButton
-            disabled={loading.toOrder}
+          <Button
+            iconed
+            loading={loading.toOrder}
             onClick={() => toOrder(row._id)}
           >
             <Image
@@ -47,16 +48,17 @@ const Quotations: NextPage = () => {
               height={16}
               width={16}
             />
-          </IconButton>
-          <IconButton onClick={() => generateReceipt(row)}>
+          </Button>
+          <Button iconed onClick={() => generateReceipt(row)}>
             <Image
               src="/icons/Receipt.svg"
               alt="search-icon"
               height={16}
               width={16}
             />
-          </IconButton>
-          <IconButton
+          </Button>
+          <Button
+            iconed
             // onClick={() => cancelOrder(row._id)}
             disabled={row.items > 0}
           >
@@ -66,7 +68,7 @@ const Quotations: NextPage = () => {
               height={16}
               width={16}
             />
-          </IconButton>
+          </Button>
         </Actions>
       ),
     }))

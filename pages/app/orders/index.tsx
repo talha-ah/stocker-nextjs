@@ -10,9 +10,9 @@ import { Modal } from "@components/Modal"
 import { useOrders } from "@hooks/orders"
 import { AddPayment } from "@forms/orders"
 import { Content } from "@components/Common"
+import { Button } from "@components/Buttons"
 import { generateReceipt } from "@utils/pdfs"
 import { useAppContext } from "@contexts/index"
-import { IconButton } from "@components/Buttons"
 import { Header, Table } from "@components/Table"
 
 const Actions = styled.div`
@@ -50,7 +50,8 @@ const Orders: NextPage = () => {
       actions: (
         <Actions>
           {row.type === "Installments" && row.balance > 0 && (
-            <IconButton
+            <Button
+              iconed
               onClick={() => {
                 setOrder(row)
                 setShow((s) => !s)
@@ -62,9 +63,10 @@ const Orders: NextPage = () => {
                 height={16}
                 width={16}
               />
-            </IconButton>
+            </Button>
           )}
-          <IconButton
+          <Button
+            iconed
             onClick={() => {
               generateReceipt(row)
             }}
@@ -75,10 +77,12 @@ const Orders: NextPage = () => {
               height={16}
               width={16}
             />
-          </IconButton>
-          <IconButton
+          </Button>
+          <Button
+            iconed
+            disabled={row.items > 0}
+            loading={loading.cancelOrder}
             onClick={() => cancelOrder(row._id)}
-            disabled={row.items > 0 || loading.cancelOrder}
           >
             <Image
               src="/icons/Delete.svg"
@@ -86,7 +90,7 @@ const Orders: NextPage = () => {
               height={16}
               width={16}
             />
-          </IconButton>
+          </Button>
         </Actions>
       ),
     }))
