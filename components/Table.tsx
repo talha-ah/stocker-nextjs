@@ -17,6 +17,7 @@ type TableType = {
 
 const HeaderContainer = styled.div`
   width: 100%;
+  height: 30px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -111,20 +112,42 @@ const calculateTotal = (headers: any, data: any, totalField: string) => {
 }
 
 export const Header = ({
+  name,
   title,
+  error,
+  primary,
+  loading,
+  onSearch,
+  value = "",
+  placeholder,
   actions = true,
   add = () => null,
 }: {
-  title: string
-  actions?: boolean
   add?: any
+  title: string
+  name?: string
+  onSearch?: any
+  value?: string
+  error?: string
+  actions?: boolean
+  primary?: boolean
+  loading?: boolean
+  placeholder?: string
 }) => {
   return (
     <HeaderContainer>
       <Heading>{title}</Heading>
       {actions && (
         <Icons>
-          <SearchIconInput />
+          <SearchIconInput
+            name={name}
+            value={value}
+            error={error}
+            primary={primary}
+            loading={loading}
+            onSearch={onSearch}
+            placeholder={placeholder}
+          />
           <IconButton onClick={add}>
             <StyledImage
               src="/icons/Plus.svg"

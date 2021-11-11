@@ -1,9 +1,9 @@
 import Head from "next/head"
 import Image from "next/image"
-import { useEffect } from "react"
 import type { NextPage } from "next"
 import styled from "styled-components"
 import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
 
 import { Layout } from "@layouts/layout"
 import { Content } from "@components/Common"
@@ -24,13 +24,24 @@ const Actions = styled.div`
 const Quotations: NextPage = () => {
   const router = useRouter()
   const { state } = useAppContext()
-
+  const [query, setQuery] = useState<any>("")
+  const [dataList, setDataList] = useState([])
   const { headers, fetchData, toOrder, loading } = useQuotations()
 
   useEffect(() => {
     fetchData()
     // eslint-disable-next-line
   }, [])
+
+  useEffect(() => {
+    const filtered = state.quotations.quotations.filter(
+      (option: any) =>
+        option.display_id.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        String(option.order_id).toLowerCase().indexOf(query.toLowerCase()) > -1
+    )
+    setDataList(filtered)
+    // eslint-disable-next-line
+  }, [query])
 
   const renderData = (rows: any) => {
     return rows.map((row: any) => ({
@@ -83,12 +94,18 @@ const Quotations: NextPage = () => {
       </Head>
 
       <Content>
-        <Header title="Quotations" add={() => router.push("/app/orders/add")} />
+        <Header
+          title="Quotations"
+          name={"search_quotations"}
+          placeholder={"Search Quotations"}
+          add={() => router.push("/app/orders/add")}
+          onSearch={(value: any) => setQuery(value)}
+        />
         <Table
           paginate
           headers={headers}
           loading={loading.fetch}
-          rows={renderData(state.quotations.quotations)}
+          rows={renderData(dataList)}
         />
       </Content>
     </Layout>

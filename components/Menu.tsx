@@ -19,7 +19,8 @@ const Item = styled.div<ItemType>`
   display: flex;
   margin: 8px 0px;
   cursor: pointer;
-  padding: 8px 16px;
+  padding: 8px 24px;
+  position: relative;
   align-items: center;
   flex-direction: row;
   transition: all 0.3s ease 0s;
@@ -34,6 +35,19 @@ const Item = styled.div<ItemType>`
 
   & a {
     color: red;
+  }
+
+  ::before {
+    top: 50%;
+    left: 12px;
+    width: 4px;
+    height: 50%;
+    content: "";
+    position: absolute;
+    transform: translate(-50%, -50%);
+    border-radius: ${({ theme }) => theme.borders.radius.default};
+    background-color: ${({ active, theme }) =>
+      active ? theme.colors.primary : "transparent"};
   }
 `
 

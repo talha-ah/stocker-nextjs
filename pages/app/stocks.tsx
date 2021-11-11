@@ -40,6 +40,8 @@ type StockType = {
 const Stocks: NextPage = () => {
   const { state } = useAppContext()
   const [show, setShow] = useState(false)
+  const [query, setQuery] = useState<any>("")
+  const [dataList, setDataList] = useState([])
   const [stock, setStock] = useState<StockType>(null)
 
   const { headers, fetchData, addData, editData, deleteData, error, loading } =
@@ -49,6 +51,18 @@ const Stocks: NextPage = () => {
     fetchData()
     // eslint-disable-next-line
   }, [])
+
+  useEffect(() => {
+    const filtered = state.stocks.stocks.filter(
+      (option: any) =>
+        option.code.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        option.description.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        option.location.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        String(option.sr).toLowerCase().indexOf(query.toLowerCase()) > -1
+    )
+    setDataList(filtered)
+    // eslint-disable-next-line
+  }, [query])
 
   const onSubmit = async (body: any, cb: any) => {
     addData(body, cb)
@@ -107,11 +121,17 @@ const Stocks: NextPage = () => {
       </Head>
 
       <Content>
-        <Header add={() => setShow((s) => !s)} title="Stocks" />
+        <Header
+          title="Stocks"
+          name={"search_stocks"}
+          placeholder={"Search Stocks"}
+          add={() => setShow((s) => !s)}
+          onSearch={(value: any) => setQuery(value)}
+        />
         <Table
           headers={headers}
           loading={loading.fetch}
-          rows={renderData(state.stocks.stocks)}
+          rows={renderData(dataList)}
         />
         <Modal
           show={show}

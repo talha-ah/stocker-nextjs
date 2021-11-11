@@ -33,6 +33,8 @@ type CategoryType = {
 const Categories: NextPage = () => {
   const { state } = useAppContext()
   const [show, setShow] = useState(false)
+  const [query, setQuery] = useState<any>("")
+  const [dataList, setDataList] = useState([])
   const [category, setCategory] = useState<CategoryType>(null)
 
   const { error, loading, headers, addData, editData, fetchData, deleteData } =
@@ -42,6 +44,15 @@ const Categories: NextPage = () => {
     fetchData()
     // eslint-disable-next-line
   }, [])
+
+  useEffect(() => {
+    const filtered = state.categories.categories.filter(
+      (option: any) =>
+        option.name.toLowerCase().indexOf(query.toLowerCase()) > -1
+    )
+    setDataList(filtered)
+    // eslint-disable-next-line
+  }, [query])
 
   const onSubmit = async (body: any, cb: any) => {
     addData(body, cb)
@@ -101,11 +112,17 @@ const Categories: NextPage = () => {
       </Head>
 
       <Content>
-        <Header add={() => setShow((s) => !s)} title="Categories" />
+        <Header
+          title="Categories"
+          name={"search_categories"}
+          add={() => setShow((s) => !s)}
+          placeholder={"Search Categories"}
+          onSearch={(value: any) => setQuery(value)}
+        />
         <Table
           headers={headers}
           loading={loading.fetch}
-          rows={renderData(state.categories.categories)}
+          rows={renderData(dataList)}
         />
         <Modal
           show={show}

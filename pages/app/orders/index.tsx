@@ -27,6 +27,8 @@ const Orders: NextPage = () => {
   const router = useRouter()
   const { state } = useAppContext()
   const [show, setShow] = useState(false)
+  const [query, setQuery] = useState<any>("")
+  const [dataList, setDataList] = useState([])
   const [order, setOrder] = useState<any | null>(null)
 
   const { headers, fetchData, loading, addPayment, cancelOrder, error } =
@@ -36,6 +38,16 @@ const Orders: NextPage = () => {
     fetchData()
     // eslint-disable-next-line
   }, [])
+
+  useEffect(() => {
+    const filtered = state.orders.orders.filter(
+      (option: any) =>
+        option.display_id.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        String(option.order_id).toLowerCase().indexOf(query.toLowerCase()) > -1
+    )
+    setDataList(filtered)
+    // eslint-disable-next-line
+  }, [query])
 
   const onSubmit = async (body: any, cb: any) => {
     addPayment(body, order._id, () => {
@@ -105,12 +117,18 @@ const Orders: NextPage = () => {
       </Head>
 
       <Content>
-        <Header add={() => router.push("/app/orders/add")} title="Orders" />
+        <Header
+          title="Orders"
+          name={"search_orders"}
+          placeholder={"Search Order"}
+          add={() => router.push("/app/orders/add")}
+          onSearch={(value: any) => setQuery(value)}
+        />
         <Table
           paginate
           headers={headers}
           loading={loading.fetch}
-          rows={renderData(state.orders.orders)}
+          rows={renderData(dataList)}
         />
         <Modal
           show={show}

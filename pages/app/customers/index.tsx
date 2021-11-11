@@ -41,6 +41,8 @@ type CustomerType = {
 const Customers: NextPage = () => {
   const { state } = useAppContext()
   const [show, setShow] = useState(false)
+  const [query, setQuery] = useState<any>("")
+  const [dataList, setDataList] = useState([])
   const [customer, setCustomer] = useState<CustomerType>(null)
 
   const { error, headers, loading, addData, editData, fetchData, deleteData } =
@@ -50,6 +52,15 @@ const Customers: NextPage = () => {
     fetchData()
     // eslint-disable-next-line
   }, [])
+
+  useEffect(() => {
+    const filtered = state.customers.customers.filter(
+      (option: any) =>
+        option.first_name.toLowerCase().indexOf(query.toLowerCase()) > -1
+    )
+    setDataList(filtered)
+    // eslint-disable-next-line
+  }, [query])
 
   const onSubmit = async (body: any, cb: any) => {
     addData(body, cb)
@@ -110,11 +121,17 @@ const Customers: NextPage = () => {
       </Head>
 
       <Content>
-        <Header add={() => setShow((s) => !s)} title="Customers" />
+        <Header
+          title="Customers"
+          name={"search_customers"}
+          add={() => setShow((s) => !s)}
+          placeholder={"Search Customer"}
+          onSearch={(value: any) => setQuery(value)}
+        />
         <Table
           headers={headers}
           loading={loading.fetch}
-          rows={renderData(state.customers.customers)}
+          rows={renderData(dataList)}
           onClickRow={(row: any) => router.push(`/app/customers/${row._id}`)}
         />
         <Modal
