@@ -166,6 +166,12 @@ export const AuthWrapper = ({ children }) => {
       else route = "/app"
     } catch (error) {
       triggerNotification("error", error?.message)
+      dispatch({ type: AuthTypes.LOGOUT })
+      dispatch({ type: CategoryTypes.RESET_CATEGORIES })
+      dispatch({ type: CustomerTypes.RESET_CUSTOMERS })
+      dispatch({ type: OrderTypes.RESET_ORDERS })
+      dispatch({ type: QuotationTypes.RESET_QUOTATIONS })
+      dispatch({ type: StockTypes.RESET_STOCKS })
     } finally {
       router.prefetch(route)
       router.replace(route)
@@ -181,7 +187,12 @@ export const AuthWrapper = ({ children }) => {
   if (loading) {
     return (
       <div style={{ height: "100vh", width: "100%" }}>
-        <Spinner size={32} text="Setting up the App..." position="top" />
+        <Spinner
+          size={32}
+          position="top"
+          color="primary"
+          text="Setting up the App..."
+        />
       </div>
     )
   }

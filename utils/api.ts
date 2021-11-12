@@ -29,14 +29,17 @@ export const useAPI = () => {
 
         if (!response.ok) throw response
         let data = await response.json()
+        if (process && process.env.NODE_ENV === "development") {
+          console.log(`[API Data at ${DateUtility.getLocaleDate()}]:`, data)
+        }
 
-        console.log(`[API Data at ${DateUtility.getLocaleDate()}]:`, data)
         resolve(data)
       } catch (err: any) {
         if (err.status) {
-          if (err.status === 403) {
-            removeBrowserItem()
-          }
+          if (err.status === 403) removeBrowserItem()
+
+          if (err.statusText === "Not Found") reject(err)
+
           const error = await err.json()
           console.log(`[API Error at ${DateUtility.getLocaleDate()}]:`, error)
           console.log(`Error for Body`, body)

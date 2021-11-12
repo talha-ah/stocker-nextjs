@@ -1,4 +1,4 @@
-const host = "http://localhost:5000"
+const host = process.env.NEXT_PUBLIC_SERVER_URL
 const base = host + "/api/v1"
 
 export const endpoints = {
