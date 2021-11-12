@@ -149,7 +149,7 @@ export const SearchSelect = ({
   onCreate?: any
   value?: string
   label?: string
-  error?: string
+  error?: string | null | undefined
   primary?: boolean
   loading?: boolean
   required?: boolean

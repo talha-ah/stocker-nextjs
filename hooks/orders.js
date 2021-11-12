@@ -33,7 +33,11 @@ const defaultLoading = {
 }
 
 const defaultError = {
-  add: null,
+  add: {
+    paymentType: null,
+    created_for: null,
+    stocks: null,
+  },
   fetch: null,
   addPayment: null,
   cancelOrder: null,

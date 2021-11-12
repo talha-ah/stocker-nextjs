@@ -49,7 +49,7 @@ const Login: NextPage = () => {
 
       <Main width="100%">
         <Logo>
-          <Heading primary onClick={() => router.replace("/")}>
+          <Heading color="primary" onClick={() => router.replace("/")}>
             Stocker
           </Heading>
         </Logo>
