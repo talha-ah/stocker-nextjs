@@ -81,6 +81,8 @@ const Options = styled.div`
   z-index: 90;
   width: 100%;
   display: flex;
+  max-height: 366px;
+  overflow-y: scroll;
   position: absolute;
   flex-direction: column;
   align-items: flex-start;
@@ -96,14 +98,14 @@ const Options = styled.div`
 
 const Option = styled.div<OptionType>`
   width: 100%;
-  height: 34px;
   display: flex;
   font-size: 14px;
   cursor: pointer;
   align-items: center;
   font-weight: normal;
   justify-content: space-between;
-  padding: 0px ${({ theme }) => theme.gaps.semiLight};
+  padding: ${({ theme }) => theme.gaps.light}
+    ${({ theme }) => theme.gaps.semiLight};
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.bg};

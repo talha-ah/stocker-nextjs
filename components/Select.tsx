@@ -95,6 +95,8 @@ const Options = styled.div`
   width: 100%;
   z-index: 90;
   display: flex;
+  max-height: 366px;
+  overflow-y: scroll;
   position: absolute;
   flex-direction: column;
   align-items: flex-start;
@@ -110,14 +112,14 @@ const Options = styled.div`
 
 const Option = styled.div<OptionType>`
   width: 100%;
-  height: 34px;
   display: flex;
   font-size: 14px;
   cursor: pointer;
   align-items: center;
   justify-content: space-between;
-  padding: 0px ${({ theme }) => theme.gaps.semiLight};
   font-weight: ${({ active }) => (active ? 500 : "normal")};
+  padding: ${({ theme }) => theme.gaps.light}
+    ${({ theme }) => theme.gaps.semiLight};
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.bg};
@@ -166,7 +168,7 @@ export const Select = (props: any) => {
   const filter = (options: any) => {
     return options.filter(
       (option: any) =>
-        option.value.toLowerCase().indexOf(query.toLowerCase()) > -1
+        option.label.toLowerCase().indexOf(query.toLowerCase()) > -1
     )
   }
 
