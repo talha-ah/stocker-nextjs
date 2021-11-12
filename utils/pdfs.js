@@ -2,7 +2,7 @@ import jsPDF from "jspdf"
 import "jspdf-autotable"
 
 import DateUtility from "@utils/date"
-import { calculateDiscount, pad } from "@utils/common"
+import { calculateDiscount, pad, truncate } from "@utils/common"
 
 export const generateReceipt = (data) => {
   const pdfHeaders = [
@@ -44,17 +44,27 @@ export const generateReceipt = (data) => {
     sr: String(index + 1),
     id: String(index + 1),
     code: `${stock.stock_id.sr} - ${stock.stock_id.code}`,
-    price: String(stock.sale_price),
+    price: String(truncate(stock.sale_price, 2)),
     quantity: String(stock.quantity),
-    discount: String(stock.discount.value),
+    discount: String(truncate(stock.discount.value)),
     description: stock.stock_id.description,
     discount_price: String(
-      calculateDiscount(stock.sale_price, stock.quantity, stock.discount.value)
-        .discount
+      truncate(
+        calculateDiscount(
+          stock.sale_price,
+          stock.quantity,
+          stock.discount.value
+        ).discount
+      )
     ),
     total_price: String(
-      calculateDiscount(stock.sale_price, stock.quantity, stock.discount.value)
-        .value
+      truncate(
+        calculateDiscount(
+          stock.sale_price,
+          stock.quantity,
+          stock.discount.value
+        ).value
+      )
     ),
   }))
 
