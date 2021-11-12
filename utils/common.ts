@@ -6,6 +6,12 @@ export const truncateString = (text: any, ellipsisString: string) =>
     ? text.substring(0, ellipsisString) + "..."
     : text
 
+export const truncate = (n: any, digits: any) => {
+  var re = new RegExp("(\\d+\\.\\d{" + digits + "})(\\d)"),
+    m = n.toString().match(re)
+  return m ? parseFloat(m[1]) : n.valueOf()
+}
+
 export const numberWithCommas = (x: any) =>
   x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 
 import { useAPI } from "@utils/api"
+import { truncate } from "@utils/common"
 import { endpoints } from "@utils/constants"
 import { useAppContext, StockTypes, NotifierTypes } from "@contexts/index"
 
@@ -101,11 +102,11 @@ export const useStocks = () => {
         code: row.code,
         location: row.location,
         inventory: row.inventory,
-        cost_price: row.cost_price,
-        sale_price: row.sale_price,
         category: row.category.name,
         description: row.description,
         category_id: row.category._id,
+        cost_price: truncate(row.cost_price),
+        sale_price: truncate(row.sale_price),
       }))
 
       dispatch({

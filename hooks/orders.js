@@ -1,8 +1,8 @@
 import { useState } from "react"
 
 import { useAPI } from "@utils/api"
-import { toTitleCase } from "@utils/common"
 import { endpoints } from "@utils/constants"
+import { toTitleCase, truncate } from "@utils/common"
 import {
   OrderTypes,
   useAppContext,
@@ -74,7 +74,9 @@ export const useOrders = () => {
         key: row._id,
         type: toTitleCase(row.type),
         stocks_length: row.stocks.length,
+        balance: truncate(row.balance, 2),
         customer: row.created_for.first_name,
+        total_price: truncate(row.total_price, 2),
         installments: `${row.installments} - ${row.payments.length}`,
       }))
 

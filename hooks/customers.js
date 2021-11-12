@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 
 import { useAPI } from "@utils/api"
+import { truncate } from "@utils/common"
 import { endpoints } from "@utils/constants"
 import { useAppContext, CustomerTypes, NotifierTypes } from "@contexts/index"
 
@@ -61,7 +62,7 @@ export const useCustomers = () => {
         ...row,
         key: row._id,
         name: row.first_name,
-        balance: row.balance.value,
+        balance: truncate(row.balance.value),
       }))
 
       dispatch({
