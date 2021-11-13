@@ -1,7 +1,7 @@
-import Image from "next/image"
 import styled from "styled-components"
 import { useState, useEffect } from "react"
 
+import { Search } from "@components/icons"
 import { Spinner } from "@components/Spinner"
 import { useDebounce } from "@hooks/debounce"
 import { IconButton } from "@components/Buttons"
@@ -97,12 +97,7 @@ export const SearchIconInput = ({
           <Spinner size={16} />
         ) : (
           <Icon>
-            <Image
-              src="/icons/Search.svg"
-              alt="search-icon"
-              height={24}
-              width={24}
-            />
+            <Search size={24} />
           </Icon>
         )}
       </IconButton>

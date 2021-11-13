@@ -3,6 +3,7 @@ import styled from "styled-components"
 
 import { Menu } from "@components/Menu"
 import { useLogout } from "@hooks/auth"
+import { Burger } from "@components/icons"
 import { Heading } from "@components/Texts"
 import { FlexRow } from "@components/Common"
 import { IconButton } from "@components/Buttons"
@@ -73,12 +74,7 @@ export const Layout = ({ children }: { children: any }) => {
       <Header>
         <FlexRow>
           <IconButton>
-            <Image
-              src="/icons/Burger.svg"
-              alt="burger-icon"
-              width={24}
-              height={24}
-            />
+            <Burger size={24} color="white" />
           </IconButton>
           <WhiteHeading>Stocker</WhiteHeading>
         </FlexRow>

@@ -1,7 +1,7 @@
-import Image from "next/image"
 import styled from "styled-components"
 
 import { IconButton } from "@components/Buttons"
+import { ChevronLeft, ChevronRight } from "@components/icons"
 
 const Container = styled.div`
   width: 100%;
@@ -54,12 +54,7 @@ export const Pagination = ({
         disabled={currentPage - 1 === 0}
         onClick={() => onChange(currentPage - 1)}
       >
-        <Image
-          src="/icons/ChevronLeft.svg"
-          alt="search-icon"
-          width={24}
-          height={24}
-        />
+        <ChevronLeft />
       </IconButton>
       {pages().map((page) => (
         <Button
@@ -74,12 +69,7 @@ export const Pagination = ({
         disabled={currentPage + 1 > totalPages}
         onClick={() => onChange(currentPage + 1)}
       >
-        <Image
-          src="/icons/ChevronRight.svg"
-          alt="search-icon"
-          width={24}
-          height={24}
-        />
+        <ChevronRight />
       </IconButton>
     </Container>
   )

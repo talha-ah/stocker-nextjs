@@ -1,5 +1,4 @@
 import Head from "next/head"
-import Image from "next/image"
 import router from "next/router"
 import type { NextPage } from "next"
 import styled from "styled-components"
@@ -11,6 +10,7 @@ import { Content } from "@components/Common"
 import { Button } from "@components/Buttons"
 import { useAppContext } from "@contexts/index"
 import { useCustomers } from "@hooks/customers"
+import { Edit, Delete } from "@components/icons"
 import { Header, Table } from "@components/Table"
 import { CreateCustomer, EditCustomer } from "forms/customers"
 
@@ -86,12 +86,7 @@ const Customers: NextPage = () => {
               setShow((s) => !s)
             }}
           >
-            <Image
-              src="/icons/Edit.svg"
-              alt="search-icon"
-              height={16}
-              width={16}
-            />
+            <Edit />
           </Button>
           {row.orders <= 0 && (
             <Button
@@ -99,12 +94,7 @@ const Customers: NextPage = () => {
               loading={loading.delete}
               onClick={() => deleteData(row._id)}
             >
-              <Image
-                src="/icons/Delete.svg"
-                alt="search-icon"
-                height={16}
-                width={16}
-              />
+              <Delete />
             </Button>
           )}
         </Actions>

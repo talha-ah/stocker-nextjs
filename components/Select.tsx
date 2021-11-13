@@ -1,8 +1,8 @@
-import Image from "next/image"
 import styled from "styled-components"
 import { useState, useRef, useEffect } from "react"
 
 import { generateId } from "@utils/common"
+import { ChevronDown } from "@components/icons"
 import { DangerText, Label } from "@components/Texts"
 
 type SelectorType = {
@@ -202,12 +202,7 @@ export const Select = (props: any) => {
           : props.value[0]?.label || props.placeholder}
 
         <SelectorIcon>
-          <Image
-            src="/icons/ChevronDown.svg"
-            alt="search-icon"
-            width={24}
-            height={24}
-          />
+          <ChevronDown />
         </SelectorIcon>
       </Selector>
       {props.error && <DangerTextS>{props.error}</DangerTextS>}

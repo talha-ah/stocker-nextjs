@@ -1,7 +1,7 @@
-import Image from "next/image"
 import styled from "styled-components"
 import { useState, useRef, useEffect } from "react"
 
+import { Search } from "@components/icons"
 import { generateId } from "@utils/common"
 import { useDebounce } from "@hooks/debounce"
 import { Spinner } from "@components/Spinner"
@@ -207,12 +207,7 @@ export const SearchSelect = ({
         />
 
         <SelectorIcon>
-          <Image
-            src="/icons/Search.svg"
-            alt="search-icon"
-            height={24}
-            width={24}
-          />
+          <Search />
         </SelectorIcon>
       </Selector>
       {error && <DangerTextS>{error}</DangerTextS>}

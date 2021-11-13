@@ -1,5 +1,4 @@
 import Head from "next/head"
-import Image from "next/image"
 import type { NextPage } from "next"
 import styled from "styled-components"
 import { useRouter } from "next/router"
@@ -12,6 +11,7 @@ import { generateReceipt } from "@utils/pdfs"
 import { useAppContext } from "@contexts/index"
 import { Header, Table } from "@components/Table"
 import { useQuotations } from "@hooks/quotations"
+import { Receipt, Delete, Plus } from "@components/icons"
 
 const Actions = styled.div`
   display: flex;
@@ -53,32 +53,17 @@ const Quotations: NextPage = () => {
             loading={loading.toOrder}
             onClick={() => toOrder(row._id)}
           >
-            <Image
-              src="/icons/Plus.svg"
-              alt="search-icon"
-              height={16}
-              width={16}
-            />
+            <Plus />
           </Button>
           <Button iconed onClick={() => generateReceipt(row)}>
-            <Image
-              src="/icons/Receipt.svg"
-              alt="search-icon"
-              height={16}
-              width={16}
-            />
+            <Receipt />
           </Button>
           <Button
             iconed
             // onClick={() => cancelOrder(row._id)}
             disabled={row.items > 0}
           >
-            <Image
-              src="/icons/Delete.svg"
-              alt="search-icon"
-              height={16}
-              width={16}
-            />
+            <Delete />
           </Button>
         </Actions>
       ),

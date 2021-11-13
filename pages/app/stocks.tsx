@@ -1,5 +1,4 @@
 import Head from "next/head"
-import Image from "next/image"
 import type { NextPage } from "next"
 import styled from "styled-components"
 import { useState, useEffect } from "react"
@@ -10,6 +9,7 @@ import { Modal } from "@components/Modal"
 import { Content } from "@components/Common"
 import { Button } from "@components/Buttons"
 import { useAppContext } from "@contexts/index"
+import { Edit, Delete } from "@components/icons"
 import { Header, Table } from "@components/Table"
 import { CreateStock, EditStock } from "@forms/stocks"
 
@@ -88,24 +88,14 @@ const Stocks: NextPage = () => {
               setShow((s) => !s)
             }}
           >
-            <Image
-              src="/icons/Edit.svg"
-              alt="search-icon"
-              height={16}
-              width={16}
-            />
+            <Edit />
           </Button>
           <Button
             iconed
             loading={loading.delete}
             onClick={() => deleteData(row._id)}
           >
-            <Image
-              src="/icons/Delete.svg"
-              alt="search-icon"
-              height={16}
-              width={16}
-            />
+            <Delete />
           </Button>
         </Actions>
       ),

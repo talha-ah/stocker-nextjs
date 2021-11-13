@@ -1,7 +1,7 @@
-import Image from "next/image"
 import styled from "styled-components"
 import { useEffect, useState, useRef } from "react"
 
+import { Cross } from "@components/icons"
 import { Heading } from "@components/Texts"
 import { IconButton } from "@components/Buttons"
 
@@ -85,12 +85,7 @@ export const Modal = (props: any) => {
         <Header>
           <Heading>{props.title}</Heading>
           <IconButton onClick={() => toggleShow(false)}>
-            <Image
-              src="/icons/Cross.svg"
-              alt="search-icon"
-              width={24}
-              height={24}
-            />
+            <Cross />
           </IconButton>
         </Header>
         <Content>{props.children}</Content>

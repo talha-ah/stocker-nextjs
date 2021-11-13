@@ -1,7 +1,7 @@
-import Image from "next/image"
 import { useEffect } from "react"
 import styled from "styled-components"
 
+import { Cross } from "@components/icons"
 import { toTitleCase } from "@utils/common"
 import { IconButton } from "@components/Buttons"
 import { SubHeading, Placeholder } from "@components/Texts"
@@ -90,12 +90,7 @@ export const Notifier = () => {
           <Header>
             <SubHeading>{toTitleCase(notification.type)}</SubHeading>
             <IconButton onClick={() => removeNotification(notification.key)}>
-              <Image
-                src="/icons/Cross.svg"
-                alt="search-icon"
-                width={16}
-                height={16}
-              />
+              <Cross />
             </IconButton>
           </Header>
           <Placeholder>{notification.message}</Placeholder>

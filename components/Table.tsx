@@ -1,4 +1,3 @@
-import Image from "next/image"
 import styled from "styled-components"
 import { useState, useEffect } from "react"
 
@@ -6,6 +5,7 @@ import { generateId } from "@utils/common"
 import { Heading } from "@components/Texts"
 import { Spinner } from "@components/Spinner"
 import { IconButton } from "@components/Buttons"
+import { Plus, Settings } from "@components/icons"
 import { Pagination } from "@components/Pagination"
 import { SearchIconInput } from "@components/SearchInput"
 
@@ -32,10 +32,6 @@ const Icons = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: ${({ theme }) => theme.gaps.light};
-`
-
-const StyledImage = styled(Image)`
-  color: red;
 `
 
 const TableScroll = styled.div`
@@ -149,20 +145,10 @@ export const Header = ({
             placeholder={placeholder}
           />
           <IconButton onClick={add}>
-            <StyledImage
-              src="/icons/Plus.svg"
-              alt="search-icon"
-              width={24}
-              height={24}
-            />
+            <Plus size={24} />
           </IconButton>
           <IconButton>
-            <StyledImage
-              src="/icons/Settings.svg"
-              alt="search-icon"
-              width={24}
-              height={24}
-            />
+            <Settings size={24} />
           </IconButton>
         </Icons>
       )}

@@ -1,5 +1,4 @@
 import Head from "next/head"
-import Image from "next/image"
 import { useState } from "react"
 import type { NextPage } from "next"
 import styled from "styled-components"
@@ -7,6 +6,7 @@ import styled from "styled-components"
 import { Layout } from "@layouts/layout"
 import { useOrders } from "@hooks/orders"
 import { Input } from "@components/Inputs"
+import { Delete } from "@components/icons"
 import { Button } from "@components/Buttons"
 import { generateReceipt } from "@utils/pdfs"
 import { useSearchStock } from "@hooks/stocks"
@@ -226,12 +226,7 @@ const Orders: NextPage = () => {
       actions: (
         <Actions>
           <Button iconed onClick={() => removeStock(row._id)}>
-            <Image
-              src="/icons/Delete.svg"
-              alt="search-icon"
-              height={16}
-              width={16}
-            />
+            <Delete />
           </Button>
         </Actions>
       ),

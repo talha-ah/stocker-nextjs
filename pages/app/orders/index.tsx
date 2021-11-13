@@ -1,5 +1,4 @@
 import Head from "next/head"
-import Image from "next/image"
 import type { NextPage } from "next"
 import styled from "styled-components"
 import { useRouter } from "next/router"
@@ -14,6 +13,7 @@ import { Button } from "@components/Buttons"
 import { generateReceipt } from "@utils/pdfs"
 import { useAppContext } from "@contexts/index"
 import { Header, Table } from "@components/Table"
+import { Delete, Receipt, Plus } from "@components/icons"
 
 const Actions = styled.div`
   display: flex;
@@ -69,12 +69,7 @@ const Orders: NextPage = () => {
                 setShow((s) => !s)
               }}
             >
-              <Image
-                src="/icons/Plus.svg"
-                alt="search-icon"
-                height={16}
-                width={16}
-              />
+              <Plus />
             </Button>
           )}
           <Button
@@ -83,12 +78,7 @@ const Orders: NextPage = () => {
               generateReceipt(row)
             }}
           >
-            <Image
-              src="/icons/Receipt.svg"
-              alt="search-icon"
-              height={16}
-              width={16}
-            />
+            <Receipt />
           </Button>
           <Button
             iconed
@@ -96,12 +86,7 @@ const Orders: NextPage = () => {
             loading={loading.cancelOrder}
             onClick={() => cancelOrder(row._id)}
           >
-            <Image
-              src="/icons/Delete.svg"
-              alt="search-icon"
-              height={16}
-              width={16}
-            />
+            <Delete />
           </Button>
         </Actions>
       ),
