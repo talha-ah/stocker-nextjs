@@ -22,6 +22,15 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     scroll-behavior: smooth;
     background-color: ${colors.bg};
+
+    ::-webkit-scrollbar {
+      width: 2px;
+    }
+  
+    ::-webkit-scrollbar-thumb {
+      border-radius: 10%;
+      background-color: ${colors.primary};
+    }
   }
 `
 
