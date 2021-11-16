@@ -5,6 +5,7 @@ import { Spinner } from "@components/Spinner"
 
 type ButtonType = {
   fluid?: boolean
+  small?: boolean
   loading?: boolean
 }
 
@@ -19,16 +20,14 @@ export const BaseButton = styled.button<ButtonType>`
   border: 0;
   margin: 0;
   outline: 0;
-  height: 34px;
   display: block;
-  font-size: 14px;
-  font-size: 1rem;
   cursor: pointer;
   font-weight: 500;
-  padding: 6.5px 12px;
   text-decoration: none;
   transition: all 0.3s ease 0s;
   width: ${({ fluid }) => fluid && "100%"};
+  font-size: ${({ small }) => (small ? "12px" : "14px")};
+  padding: ${({ small }) => (small ? "3px 6px" : "6.5px 12px")};
   border-radius: ${({ theme }) => theme.borders.radius.default};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;

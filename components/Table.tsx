@@ -1,8 +1,10 @@
 import styled from "styled-components"
 import { useState, useEffect } from "react"
 
+import { Empty } from "@components/Empty"
 import { generateId } from "@utils/common"
 import { Heading } from "@components/Texts"
+import { FlexRow } from "@components/Common"
 import { Spinner } from "@components/Spinner"
 import { IconButton } from "@components/Buttons"
 import { Plus, Settings } from "@components/icons"
@@ -34,8 +36,12 @@ const Icons = styled.div`
   gap: ${({ theme }) => theme.gaps.light};
 `
 
-const TableScroll = styled.div`
-  max-height: 720px;
+type TableScrollType = {
+  height: number
+}
+
+const TableScroll = styled.div<TableScrollType>`
+  max-height: ${({ height }) => height}px;
   overflow-y: scroll;
 
   ::-webkit-scrollbar {
@@ -59,10 +65,10 @@ const TableContainer = styled.table<TableType>`
 
   & tr {
     border-radius: 60px;
-    cursor: ${({ hoverRow }) => (hoverRow ? "pointer" : "default")};
   }
 
-  & tr:hover {
+  & tbody > tr:hover {
+    cursor: ${({ hoverRow }) => (hoverRow ? "pointer" : "default")};
     background-color: ${({ theme, hover }) =>
       hover ? theme.colors.white : "transparent"};
   }
@@ -80,15 +86,23 @@ const TableContainer = styled.table<TableType>`
 
   & td,
   & th {
+    border-bottom: ${({ theme }) => theme.borders.tableBorder};
     padding: ${({ theme }) => theme.gaps.light}
       ${({ theme }) => theme.gaps.semiLight};
-    border-bottom: ${({ theme }) => theme.borders.tableBorder};
 
     max-width: 100px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
+`
+
+const TotalRow = styled.tr`
+  bottom: 0;
+  position: sticky;
+  position: -webkit-sticky; // this is for all Safari (Desktop & iOS), not for Chrome
+  z-index: 1; // any positive value, layer order is global
+  background-color: ${({ theme }) => theme.colors.white};
 `
 
 const calculateTotal = (headers: any, data: any, totalField: string) => {
@@ -165,6 +179,7 @@ export const Table = ({
   loading,
   totalField,
   onClickRow,
+  height = 720,
   hover = true,
   paginate = true,
 }: {
@@ -172,10 +187,11 @@ export const Table = ({
   id?: string
   headers: any
   hover?: boolean
+  height?: number
   onClickRow?: any
+  totalField?: any
   loading?: boolean
   paginate?: boolean
-  totalField?: any
 }) => {
   const [data, setData] = useState<any[]>([])
   const [page, setPage] = useState<number>(1)
@@ -194,7 +210,7 @@ export const Table = ({
 
   return (
     <>
-      <TableScroll>
+      <TableScroll height={height}>
         <TableContainer id={id} hover={hover} hoverRow={onClickRow}>
           <thead>
             <tr>
@@ -236,12 +252,19 @@ export const Table = ({
                 </tr>
               ))
             )}
-            {totalField && rows.length > 0 && (
-              <tr>{calculateTotal(headers, rows, totalField)}</tr>
-            )}
           </tbody>
+          <tfoot>
+            {totalField && rows.length > 0 && (
+              <TotalRow>{calculateTotal(headers, rows, totalField)}</TotalRow>
+            )}
+          </tfoot>
         </TableContainer>
       </TableScroll>
+      {data.length === 0 && (
+        <FlexRow justifyContent="center" style={{ height: 600 }}>
+          <Empty />
+        </FlexRow>
+      )}
       {rows.length > LIMIT && (
         <Pagination
           currentPage={page}

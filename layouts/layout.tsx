@@ -1,4 +1,5 @@
 import Image from "next/image"
+import { useState } from "react"
 import styled from "styled-components"
 
 import { Menu } from "@components/Menu"
@@ -12,9 +13,7 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
   display: flex;
-  position: fixed;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.bg};
 `
 
 const Header = styled.div`
@@ -56,6 +55,7 @@ const Sidebar = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  transition: all 0.3s ease 0s;
   border-right: 1px solid white;
   padding: ${({ theme }) => theme.gaps.light};
 `
@@ -68,12 +68,13 @@ const Content = styled.div`
 
 export const Layout = ({ children }: { children: any }) => {
   const { doLogout } = useLogout()
+  const [isOpen, setIsOpen] = useState(true)
 
   return (
     <Container>
       <Header>
         <FlexRow>
-          <IconButton>
+          <IconButton onClick={() => setIsOpen((s) => !s)}>
             <Burger size={24} color="white" />
           </IconButton>
           <WhiteHeading>Stocker</WhiteHeading>
@@ -83,9 +84,11 @@ export const Layout = ({ children }: { children: any }) => {
         </Avatar>
       </Header>
       <Page>
-        <Sidebar>
-          <Menu />
-        </Sidebar>
+        {isOpen && (
+          <Sidebar>
+            <Menu />
+          </Sidebar>
+        )}
         <Content>{children}</Content>
       </Page>
     </Container>

@@ -10,20 +10,17 @@ type ItemType = {
   active?: boolean
 }
 
-const Div = styled.div`
-  width: ${({ theme }) => theme.sidebar.width};
-`
-
 const Item = styled.div<ItemType>`
   width: 100%;
   display: flex;
-  margin: 8px 0px;
+  margin: 4px 0px;
   cursor: pointer;
   padding: 8px 24px;
   position: relative;
   align-items: center;
   flex-direction: row;
   transition: all 0.3s ease 0s;
+  width: ${({ theme }) => theme.sidebar.width};
 
   background-color: ${({ active, theme }) =>
     active ? theme.colors.white : "transparent"};
@@ -92,7 +89,7 @@ export const Menu = () => {
   const router = useRouter()
 
   return (
-    <Div>
+    <>
       {sidebarMenuList.map((item) => (
         <Link key={generateId()} href={item.url} passHref>
           <Item
@@ -106,6 +103,6 @@ export const Menu = () => {
           </Item>
         </Link>
       ))}
-    </Div>
+    </>
   )
 }

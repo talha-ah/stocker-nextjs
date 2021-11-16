@@ -75,7 +75,7 @@ export const generateReceipt = (data) => {
 
   pdfData[pdfData.length] = {
     total_price: truncate(total_price, 2),
-    discount_price: "Sub Total",
+    discount_price: "Total",
   }
 
   var doc = new jsPDF({ unit: "mm", format: "a4", orientation: "p" })

@@ -33,18 +33,27 @@ export const Content = styled.main`
   gap: ${({ theme }) => theme.gaps.light};
 `
 
-export const FlexRow = styled.div`
+type FlexType = {
+  alignItems?: string
+  justifyContent?: string
+}
+
+export const FlexRow = styled.div<FlexType>`
   width: 100%;
   display: flex;
   flex-direction: row;
-  align-items: center;
   gap: ${({ theme }) => theme.gaps.light};
+  align-items: ${({ alignItems }) => alignItems || "center"};
+  justify-content: ${({ justifyContent }) => justifyContent || "flex-start"};
 `
 
-export const FlexColumn = styled.div`
+export const FlexColumn = styled.div<FlexType>`
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.gaps.light};
+  align-items: ${({ alignItems }) => alignItems || "center"};
+  justify-content: ${({ justifyContent }) => justifyContent || "flex-start"};
 `
 
 export const Card = styled.div`

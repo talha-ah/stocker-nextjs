@@ -18,6 +18,7 @@ const Container = styled.div<ContainerType>`
   display: flex;
   overflow: hidden;
   flex-direction: column;
+  transition: all 0.3s ease 0s;
   background-color: rgba(255, 255, 255, 0.66);
   gap: ${({ theme }) => theme.gaps.extraLight};
   filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1));
@@ -34,8 +35,8 @@ const Container = styled.div<ContainerType>`
         ? theme.colors.error
         : theme.colors.primary};
 
-  position: absolute;
   z-index: 150;
+  position: absolute;
   right: ${({ theme }) => theme.gaps.defaultN}px;
   bottom: ${({ theme, place }) =>
     place * theme.gaps.defaultN + place * 76 + theme.gaps.defaultN}px;

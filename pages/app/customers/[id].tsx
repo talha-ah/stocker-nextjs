@@ -1,6 +1,5 @@
 import Head from "next/head"
 import type { NextPage } from "next"
-import styled from "styled-components"
 import { useRouter } from "next/router"
 import { useState, useEffect } from "react"
 
@@ -22,16 +21,6 @@ const headers = [
   { key: 6, name: "Stocks", field: "stocks_length", align: "left" },
   { key: 7, name: "Balance", field: "balance", align: "left" },
 ]
-
-const Buttons = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: ${({ theme }) => theme.gaps.default};
-  margin: ${({ theme }) => theme.gaps.default} 0px;
-`
 
 const Customers: NextPage = () => {
   const router = useRouter()
@@ -78,41 +67,48 @@ const Customers: NextPage = () => {
       </Head>
 
       <Content>
-        <Header actions={false} title={customer?.first_name} />
-
         <FlexRow>
-          <SubHeading>Phone: {customer?.phone}</SubHeading>
-          <SubHeading>Address: {customer?.address_one}</SubHeading>
-          <SubHeading>Email: {customer?.email}</SubHeading>
+          <Header actions={false} title={customer?.first_name} />
+          {customer?.phone && <SubHeading>Phone: {customer?.phone}</SubHeading>}
+          {customer?.address_one && (
+            <SubHeading>Address: {customer?.address_one}</SubHeading>
+          )}
+          {customer?.email && <SubHeading>Email: {customer?.email}</SubHeading>}
         </FlexRow>
 
         <FlexRow>
-          <TabButton active={tab === "unpaid"} onClick={() => setTab("unpaid")}>
-            UnPaid
-          </TabButton>
-          <TabButton active={tab === "paid"} onClick={() => setTab("paid")}>
-            Paid
-          </TabButton>
+          <FlexRow>
+            <TabButton
+              active={tab === "unpaid"}
+              onClick={() => setTab("unpaid")}
+            >
+              UnPaid
+            </TabButton>
+            <TabButton active={tab === "paid"} onClick={() => setTab("paid")}>
+              Paid
+            </TabButton>
+          </FlexRow>
+          <FlexRow justifyContent="flex-end">
+            {customerOrders.length > 0 && tab === "unpaid" && (
+              <Button
+                small
+                primary
+                onClick={() => setShow((s) => !s)}
+                loading={loading.addGeneralPayment}
+              >
+                Add Payment
+              </Button>
+            )}
+          </FlexRow>
         </FlexRow>
 
         <Table
+          height={650}
           headers={headers}
+          totalField="balance"
           rows={customerOrders}
           loading={loading.fetch}
-          totalField={tab === "unpaid" && "balance"}
         />
-
-        {customerOrders.length > 0 && tab === "unpaid" && (
-          <Buttons>
-            <Button
-              primary
-              onClick={() => setShow((s) => !s)}
-              loading={loading.addGeneralPayment}
-            >
-              Add Payment
-            </Button>
-          </Buttons>
-        )}
 
         <Modal
           show={show}

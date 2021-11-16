@@ -80,7 +80,7 @@ export const Modal = (props: any) => {
   }, [])
 
   return (
-    <Container ref={ref} id="modal" className={`${show ? "is-open" : ""}`}>
+    <Container ref={ref} id="modal" className={show ? "is-open" : ""}>
       <Body>
         <Header>
           <Heading>{props.title}</Heading>

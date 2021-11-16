@@ -21,6 +21,7 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     scroll-behavior: smooth;
+    background-color: ${colors.bg};
   }
 `
 
