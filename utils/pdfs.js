@@ -46,7 +46,7 @@ export const generateReceipt = (data) => {
     code: `${stock.stock_id.sr} - ${stock.stock_id.code}`,
     price: String(truncate(stock.sale_price, 2)),
     quantity: String(stock.quantity),
-    discount: String(truncate(stock.discount.value)),
+    discount: String(truncate(stock.discount.value, 2)),
     description: stock.stock_id.description,
     discount_price: String(
       truncate(
@@ -54,7 +54,8 @@ export const generateReceipt = (data) => {
           stock.sale_price,
           stock.quantity,
           stock.discount.value
-        ).discount
+        ).discount,
+        2
       )
     ),
     total_price: String(
@@ -63,7 +64,8 @@ export const generateReceipt = (data) => {
           stock.sale_price,
           stock.quantity,
           stock.discount.value
-        ).value
+        ).value,
+        2
       )
     ),
   }))
@@ -72,7 +74,7 @@ export const generateReceipt = (data) => {
   pdfData.map((d) => (total_price += Number(d.total_price)))
 
   pdfData[pdfData.length] = {
-    total_price: total_price,
+    total_price: truncate(total_price, 2),
     discount_price: "Sub Total",
   }
 
