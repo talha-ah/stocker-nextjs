@@ -13,6 +13,7 @@ type InputType = {
 }
 
 const SearchBar = styled.div<InputType>`
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -20,8 +21,8 @@ const SearchBar = styled.div<InputType>`
   gap: ${({ theme }) => theme.gaps.light};
   padding-right: ${({ theme }) => theme.gaps.light};
   height: ${({ small }) => (small ? "24px" : "30px")};
-  width: ${({ width }) => (width ? `${width}px` : "100%")};
   border-bottom: ${({ theme }) => theme.borders.inputActive};
+  max-width: ${({ width }) => (width ? `${width}px` : "100%")};
   border-radius: ${({ theme }) => theme.borders.radius.default};
   background-color: ${({ primary, theme }) =>
     primary ? theme.colors.bg : theme.colors.white};
@@ -57,12 +58,14 @@ export const SearchIconInput = ({
   loading,
   onSearch,
   value = "",
+  width = 400,
   placeholder,
 }: {
   name?: string
   onSearch?: any
   value?: string
   error?: string
+  width?: number
   primary?: boolean
   loading?: boolean
   placeholder?: string
@@ -82,7 +85,7 @@ export const SearchIconInput = ({
   }, [value])
 
   return (
-    <SearchBar>
+    <SearchBar width={width}>
       <Input
         id={name}
         name={name}

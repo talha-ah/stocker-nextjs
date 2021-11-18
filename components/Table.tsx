@@ -148,7 +148,7 @@ export const Header = ({
     <HeaderContainer>
       <Heading>{title}</Heading>
       {actions && (
-        <Icons>
+        <>
           <SearchIconInput
             name={name}
             value={value}
@@ -158,13 +158,15 @@ export const Header = ({
             onSearch={onSearch}
             placeholder={placeholder}
           />
-          <IconButton onClick={add}>
-            <Plus size={24} />
-          </IconButton>
-          <IconButton>
-            <Settings size={24} />
-          </IconButton>
-        </Icons>
+          <Icons>
+            <IconButton onClick={add}>
+              <Plus size={24} />
+            </IconButton>
+            <IconButton>
+              <Settings size={24} />
+            </IconButton>
+          </Icons>
+        </>
       )}
     </HeaderContainer>
   )

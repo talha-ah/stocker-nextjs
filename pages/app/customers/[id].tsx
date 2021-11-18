@@ -49,7 +49,7 @@ const Customers: NextPage = () => {
     fetchCustomerOrders(id, tab)
 
     // eslint-disable-next-line
-  }, [tab])
+  }, [tab, customer])
 
   const addPayment = (body: any, cb: any) => {
     addGeneralPayment({ ...body, customerId: customer._id }, () => {

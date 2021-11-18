@@ -95,8 +95,8 @@ const Options = styled.div`
   width: 100%;
   z-index: 90;
   display: flex;
+  overflow-y: auto;
   max-height: 366px;
-  overflow-y: scroll;
   position: absolute;
   flex-direction: column;
   align-items: flex-start;
@@ -105,9 +105,18 @@ const Options = styled.div`
   justify-content: space-between;
   transform: translate(0px, 56px);
   padding: ${({ theme }) => theme.gaps.light} 0px;
+  filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1));
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: ${({ theme }) => theme.borders.radius.default};
-  filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1));
+
+  ::-webkit-scrollbar {
+    width: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10%;
+    background-color: ${({ theme }) => theme.colors.primary};
+  }
 `
 
 const Option = styled.div<OptionType>`

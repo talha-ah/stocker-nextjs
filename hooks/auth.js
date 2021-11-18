@@ -165,7 +165,7 @@ export const AuthWrapper = ({ children }) => {
       if (router.asPath.startsWith("/app")) route = router.asPath
       else route = "/app"
     } catch (error) {
-      triggerNotification("error", error?.message)
+      if (err.status !== 403) triggerNotification("error", error?.message)
       dispatch({ type: AuthTypes.LOGOUT })
       dispatch({ type: CategoryTypes.RESET_CATEGORIES })
       dispatch({ type: CustomerTypes.RESET_CUSTOMERS })

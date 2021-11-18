@@ -60,7 +60,7 @@ const Customers: NextPage = () => {
     )
     setDataList(filtered)
     // eslint-disable-next-line
-  }, [query])
+  }, [query, state.customers.customers])
 
   const onSubmit = async (body: any, cb: any) => {
     addData(body, cb)

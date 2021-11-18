@@ -52,7 +52,7 @@ const Categories: NextPage = () => {
     )
     setDataList(filtered)
     // eslint-disable-next-line
-  }, [query])
+  }, [query, state.categories.categories])
 
   const onSubmit = async (body: any, cb: any) => {
     addData(body, cb)

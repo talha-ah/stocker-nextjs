@@ -226,17 +226,22 @@ export const useOrders = () => {
   }
 
   const fetchCustomerOrders = (id, tab) => {
-    setCustomerOrders(
-      tab
-        ? state.orders.orders.filter((order) =>
-            String(order.created_for._id) === String(id) && tab === "paid"
-              ? order.paid
-              : !order.paid
-          )
-        : state.orders.orders.filter(
-            (order) => String(order.created_for._id) === String(id)
-          )
-    )
+    let orders = []
+
+    if (tab) {
+      orders = state.orders.orders.filter((order) => {
+        return (
+          String(order.created_for._id) === String(id) &&
+          (tab === "paid" ? order.paid : !order.paid)
+        )
+      })
+    } else {
+      orders = state.orders.orders.filter(
+        (order) => String(order.created_for._id) === String(id)
+      )
+    }
+
+    setCustomerOrders(orders)
   }
 
   return {

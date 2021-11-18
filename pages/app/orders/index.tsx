@@ -47,7 +47,7 @@ const Orders: NextPage = () => {
     )
     setDataList(filtered)
     // eslint-disable-next-line
-  }, [query])
+  }, [query, state.orders.orders])
 
   const onSubmit = async (body: any, cb: any) => {
     addPayment(body, order._id, () => {

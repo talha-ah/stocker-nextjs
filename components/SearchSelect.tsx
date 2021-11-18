@@ -81,8 +81,8 @@ const Options = styled.div`
   z-index: 90;
   width: 100%;
   display: flex;
+  overflow-y: auto;
   max-height: 366px;
-  overflow-y: scroll;
   position: absolute;
   flex-direction: column;
   align-items: flex-start;
@@ -94,6 +94,15 @@ const Options = styled.div`
   filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1));
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: ${({ theme }) => theme.borders.radius.default};
+
+  ::-webkit-scrollbar {
+    width: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10%;
+    background-color: ${({ theme }) => theme.colors.primary};
+  }
 `
 
 const Option = styled.div<OptionType>`

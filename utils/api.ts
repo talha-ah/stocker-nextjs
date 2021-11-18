@@ -1,5 +1,5 @@
 import DateUtility from "./date"
-import { getBrowserItem, removeBrowserItem } from "./browser-utility"
+import { getBrowserItem } from "./browser-utility"
 
 export const useAPI = () => {
   const api = ({
@@ -36,8 +36,6 @@ export const useAPI = () => {
         resolve(data)
       } catch (err: any) {
         if (err.status) {
-          if (err.status === 403) removeBrowserItem()
-
           if (err.statusText === "Not Found") reject(err)
 
           const error = await err.json()

@@ -62,7 +62,7 @@ const Stocks: NextPage = () => {
     )
     setDataList(filtered)
     // eslint-disable-next-line
-  }, [query])
+  }, [query, state.stocks.stocks])
 
   const onSubmit = async (body: any, cb: any) => {
     addData(body, cb)

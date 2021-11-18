@@ -41,7 +41,7 @@ const Quotations: NextPage = () => {
     )
     setDataList(filtered)
     // eslint-disable-next-line
-  }, [query])
+  }, [query, state.quotations.quotations])
 
   const renderData = (rows: any) => {
     return rows.map((row: any) => ({
