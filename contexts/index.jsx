@@ -61,8 +61,18 @@ export const AppContext = createContext({
 export const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, AppInitialState)
 
+  const notify = (type, message) => {
+    dispatch({
+      type: NotifierTypes.ADD_NOTIFICATION,
+      payload: {
+        type: type,
+        message: message,
+      },
+    })
+  }
+
   return (
-    <AppContext.Provider value={{ state, dispatch }}>
+    <AppContext.Provider value={{ state, dispatch, notify }}>
       {children}
     </AppContext.Provider>
   )

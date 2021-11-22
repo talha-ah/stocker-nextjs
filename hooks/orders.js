@@ -46,21 +46,11 @@ const defaultError = {
 
 export const useOrders = () => {
   const { api } = useAPI()
-  const { state, dispatch } = useAppContext()
+  const { state, dispatch, notify } = useAppContext()
   const [customerOrders, setCustomerOrders] = useState([])
 
   const [error, setError] = useState(defaultError)
   const [loading, setLoading] = useState(defaultLoading)
-
-  const triggerNotification = (type, message) => {
-    dispatch({
-      type: NotifierTypes.ADD_NOTIFICATION,
-      payload: {
-        type: type,
-        message: message,
-      },
-    })
-  }
 
   const fetchData = async () => {
     try {
@@ -90,7 +80,7 @@ export const useOrders = () => {
       })
     } catch (error) {
       setError({ ...error, fetch: error?.data })
-      triggerNotification("error", error?.message)
+      notify("error", error?.message)
     } finally {
       setLoading({ ...loading, fetch: false })
     }
@@ -120,19 +110,19 @@ export const useOrders = () => {
           type: QuotationTypes.ADD_QUOTATION,
           payload: { quotation: result },
         })
-        triggerNotification("success", "Quotation added successfully.")
+        notify("success", "Quotation added successfully.")
       } else {
         dispatch({
           type: OrderTypes.ADD_ORDER,
           payload: { order: result },
         })
-        triggerNotification("success", "Order added successfully.")
+        notify("success", "Order added successfully.")
       }
 
       cb && cb(response.data)
     } catch (error) {
       setError({ ...error, add: error?.data })
-      triggerNotification("error", error?.message)
+      notify("error", error?.message)
     } finally {
       setLoading({ ...loading, add: { [body.status]: false } })
     }
@@ -161,12 +151,12 @@ export const useOrders = () => {
         },
       })
 
-      triggerNotification("success", "Payment added successfully.")
+      notify("success", "Payment added successfully.")
 
       cb && cb()
     } catch (error) {
       setError({ ...error, addPayment: error?.data })
-      triggerNotification("error", error?.message)
+      notify("error", error?.message)
     } finally {
       setLoading({ ...loading, addPayment: false })
     }
@@ -188,12 +178,12 @@ export const useOrders = () => {
         payload: { orders: response.data },
       })
 
-      triggerNotification("success", "Payment added successfully.")
+      notify("success", "Payment added successfully.")
 
       cb && cb()
     } catch (error) {
       setError({ ...error, addGeneralPayment: error?.data })
-      triggerNotification("error", error?.message)
+      notify("error", error?.message)
     } finally {
       setLoading({ ...loading, addGeneralPayment: false })
     }
@@ -214,12 +204,12 @@ export const useOrders = () => {
         payload: { _id: id },
       })
 
-      triggerNotification("success", "Order cancelled successfully.")
+      notify("success", "Order cancelled successfully.")
 
       cb && cb()
     } catch (error) {
       setError({ ...error, cancelOrder: error?.data })
-      triggerNotification("error", error?.message)
+      notify("error", error?.message)
     } finally {
       setLoading({ ...loading, cancelOrder: false })
     }

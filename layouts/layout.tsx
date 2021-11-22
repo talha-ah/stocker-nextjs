@@ -51,13 +51,20 @@ const Page = styled.div`
   justify-content: flex-start;
 `
 
-const Sidebar = styled.div`
+type SideBarType = {
+  open?: boolean
+}
+
+const Sidebar = styled.div<SideBarType>`
   height: 100%;
   display: flex;
+  overflow: hidden;
   flex-direction: column;
   transition: all 0.3s ease 0s;
   border-right: 1px solid white;
-  padding: ${({ theme }) => theme.gaps.light};
+  padding: ${({ theme }) => theme.gaps.light}
+    ${({ open, theme }) => (open ? theme.gaps.light : 0)};
+  width: ${({ open, theme }) => (open ? theme.sidebar.width : "0px")};
 `
 
 const Content = styled.div`
@@ -84,11 +91,9 @@ export const Layout = ({ children }: { children: any }) => {
         </Avatar>
       </Header>
       <Page>
-        {isOpen && (
-          <Sidebar>
-            <Menu />
-          </Sidebar>
-        )}
+        <Sidebar open={isOpen}>
+          <Menu />
+        </Sidebar>
         <Content>{children}</Content>
       </Page>
     </Container>

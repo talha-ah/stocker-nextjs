@@ -216,7 +216,7 @@ export const SearchSelect = ({
         />
 
         <SelectorIcon>
-          <Search />
+          <Search size={24} />
         </SelectorIcon>
       </Selector>
       {error && <DangerTextS>{error}</DangerTextS>}

@@ -32,20 +32,10 @@ const defaultError = {
 
 export const useQuotations = () => {
   const { api } = useAPI()
-  const { state, dispatch } = useAppContext()
+  const { state, dispatch, notify } = useAppContext()
 
   const [error, setError] = useState(defaultError)
   const [loading, setLoading] = useState(defaultLoading)
-
-  const triggerNotification = (type, message) => {
-    dispatch({
-      type: NotifierTypes.ADD_NOTIFICATION,
-      payload: {
-        type: type,
-        message: message,
-      },
-    })
-  }
 
   const fetchData = async () => {
     try {
@@ -75,7 +65,7 @@ export const useQuotations = () => {
       })
     } catch (error) {
       setError({ ...error, fetch: error?.data })
-      triggerNotification("error", error?.message)
+      notify("error", error?.message)
     } finally {
       setLoading({ ...loading, fetch: false })
     }
@@ -106,12 +96,12 @@ export const useQuotations = () => {
         payload: { order: quotation },
       })
 
-      triggerNotification("success", "Order added successfully.")
+      notify("success", "Order added successfully.")
 
       cb && cb()
     } catch (error) {
       setError({ ...error, toOrder: error?.data })
-      triggerNotification("error", error?.message)
+      notify("error", error?.message)
     } finally {
       setLoading({ ...loading, toOrder: false })
     }

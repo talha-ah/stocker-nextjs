@@ -211,7 +211,7 @@ export const Select = (props: any) => {
           : props.value[0]?.label || props.placeholder}
 
         <SelectorIcon>
-          <ChevronDown />
+          <ChevronDown size={24} />
         </SelectorIcon>
       </Selector>
       {props.error && <DangerTextS>{props.error}</DangerTextS>}

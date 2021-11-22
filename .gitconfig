@@ -1,0 +1,6 @@
+[user]
+    name = Talha Ahmad
+    email = talha1392.ahmed@gmail.com
+
+[include]
+    path = ~/.gitconfig

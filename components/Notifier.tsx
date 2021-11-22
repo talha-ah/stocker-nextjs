@@ -25,7 +25,7 @@ const Container = styled.div<ContainerType>`
   border-radius: ${({ theme }) => theme.borders.radius.default};
   padding: ${({ theme }) => theme.gaps.semiLight}
     ${({ theme }) => theme.gaps.semiLight};
-  border-bottom: 2px solid
+  border-left: 2px solid
     ${({ theme, type }) =>
       type === "success"
         ? theme.colors.success
@@ -61,7 +61,7 @@ export const Notifier = () => {
       if (timeoutIndex === -1) {
         timeouts.push(notification.key)
         setTimeout(() => {
-          removeNotification(notification.key)
+          // removeNotification(notification.key)
           timeouts.splice(timeoutIndex, 1)
         }, 3000)
       }

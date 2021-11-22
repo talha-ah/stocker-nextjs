@@ -69,20 +69,10 @@ const defaultError = {
 
 export const useStocks = () => {
   const { api } = useAPI()
-  const { state, dispatch } = useAppContext()
+  const { state, dispatch, notify } = useAppContext()
 
   const [error, setError] = useState(defaultError)
   const [loading, setLoading] = useState(defaultLoading)
-
-  const triggerNotification = (type, message) => {
-    dispatch({
-      type: NotifierTypes.ADD_NOTIFICATION,
-      payload: {
-        type: type,
-        message: message,
-      },
-    })
-  }
 
   const fetchData = async () => {
     try {
@@ -115,7 +105,7 @@ export const useStocks = () => {
       })
     } catch (error) {
       setError({ ...error, fetch: error?.data })
-      triggerNotification("error", error?.message)
+      notify("error", error?.message)
     } finally {
       setLoading({ ...loading, fetch: false })
     }
@@ -145,12 +135,12 @@ export const useStocks = () => {
         payload: { stock: response.data },
       })
 
-      triggerNotification("success", "Stock added successfully.")
+      notify("success", "Stock added successfully.")
 
       cb && cb()
     } catch (error) {
       setError({ ...error, add: error?.data })
-      triggerNotification("error", error?.message)
+      notify("error", error?.message)
     } finally {
       setLoading({ ...loading, add: false })
     }
@@ -180,12 +170,12 @@ export const useStocks = () => {
         payload: { stock: response.data },
       })
 
-      triggerNotification("success", "Stock updated successfully.")
+      notify("success", "Stock updated successfully.")
 
       cb && cb()
     } catch (error) {
       setError({ ...error, edit: error?.data })
-      triggerNotification("error", error?.message)
+      notify("error", error?.message)
     } finally {
       setLoading({ ...loading, edit: false })
     }
@@ -206,12 +196,12 @@ export const useStocks = () => {
         payload: { _id: id },
       })
 
-      triggerNotification("success", "Stock deleted successfully.")
+      notify("success", "Stock deleted successfully.")
 
       cb && cb()
     } catch (error) {
       setError({ ...error, delete: error?.data })
-      triggerNotification("error", error?.message)
+      notify("error", error?.message)
     } finally {
       setLoading({ ...loading, delete: false })
     }

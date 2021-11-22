@@ -117,7 +117,7 @@ export const useLogout = () => {
 export const AuthWrapper = ({ children }) => {
   const { api } = useAPI()
   const router = useRouter()
-  const { dispatch } = useAppContext()
+  const { dispatch, notify } = useAppContext()
 
   const { fetchData: fetchStocks } = useStocks()
   const { fetchData: fetchOrders } = useOrders()
@@ -126,16 +126,6 @@ export const AuthWrapper = ({ children }) => {
   const { fetchData: fetchQuotations } = useQuotations()
 
   const [loading, setLoading] = useState(true)
-
-  const triggerNotification = (type, message) => {
-    dispatch({
-      type: NotifierTypes.ADD_NOTIFICATION,
-      payload: {
-        type: type,
-        message: message,
-      },
-    })
-  }
 
   const checkAuth = async () => {
     let route = "/"
@@ -165,7 +155,7 @@ export const AuthWrapper = ({ children }) => {
       if (router.asPath.startsWith("/app")) route = router.asPath
       else route = "/app"
     } catch (error) {
-      if (err.status !== 403) triggerNotification("error", error?.message)
+      if (error.status !== 403) notify("error", error?.message)
       dispatch({ type: AuthTypes.LOGOUT })
       dispatch({ type: CategoryTypes.RESET_CATEGORIES })
       dispatch({ type: CustomerTypes.RESET_CUSTOMERS })

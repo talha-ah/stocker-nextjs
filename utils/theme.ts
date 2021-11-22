@@ -46,5 +46,5 @@ export const gaps = {
 }
 
 export const sidebar = {
-  width: "180px",
+  width: "196px",
 }
