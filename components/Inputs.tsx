@@ -13,6 +13,10 @@ type InputType = {
   primary?: boolean
 }
 
+type InputContainer = {
+  marginBottom?: number
+}
+
 export const Form = styled.form<WidthType>`
   display: flex;
   flex-direction: column;
@@ -28,10 +32,11 @@ export const Form = styled.form<WidthType>`
   }
 `
 
-const InputContainer = styled.div`
+const InputContainer = styled.div<InputContainer>`
   width: 100%;
   position: relative;
-  margin-bottom: ${({ theme }) => theme.gaps.semiLight};
+  margin-bottom: ${({ theme, marginBottom }) =>
+    marginBottom || theme.spacing.semiLight}px;
 `
 
 const StyledInput = styled.input<InputType>`
@@ -39,18 +44,20 @@ const StyledInput = styled.input<InputType>`
   outline: 0;
   transition: all 0.3s ease 0s;
   height: ${({ small }) => (small ? "24px" : "34px")};
-  border-bottom: ${({ theme }) => theme.borders.input};
   width: ${({ width }) => (width ? `${width}px` : "100%")};
-  border-radius: ${({ theme }) => theme.borders.radius.default};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.default}px;
+  border-bottom: ${({ theme }) => theme.mixins.inputs.borders.transparent};
+
   padding: 0px
-    ${({ theme, small }) => (small ? theme.gaps.light : theme.gaps.semiLight)};
+    ${({ theme, small }) =>
+      small ? theme.spacing.light : theme.spacing.semiLight}px;
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
   background-color: ${({ primary, theme }) =>
-    primary ? theme.colors.bg : theme.colors.white};
+    primary ? theme.palette.bg : theme.palette.white};
 
   :focus {
-    border-bottom: ${({ theme }) => theme.borders.inputActive};
+    border-bottom: ${({ theme }) => theme.mixins.inputs.borders.primary};
   }
 `
 
@@ -62,17 +69,18 @@ const StyledTextArea = styled.textarea<InputType>`
   overflow: hidden;
   resize: vertical;
   min-height: 80px;
-  border-bottom: ${({ theme }) => theme.borders.input};
-  border-radius: ${({ theme }) => theme.borders.radius.default};
-  padding: ${({ theme }) => theme.gaps.light}
-    ${({ theme }) => theme.gaps.semiLight};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.default}px;
+  border-bottom: ${({ theme }) => theme.mixins.inputs.borders.transparent};
+
+  padding: ${({ theme }) => theme.spacing.light}px
+    ${({ theme }) => theme.spacing.semiLight}px;
   background-color: ${({ primary, theme }) =>
-    primary ? theme.colors.bg : theme.colors.white};
+    primary ? theme.palette.bg : theme.palette.white};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 
   :focus {
-    border-bottom: ${({ theme }) => theme.borders.inputActive};
+    border-bottom: ${({ theme }) => theme.mixins.inputs.borders.primary};
   }
 `
 
@@ -97,6 +105,7 @@ export const Input = ({
   onChange,
   placeholder,
   defaultValue,
+  marginBottom,
 }: {
   min?: number
   name?: string
@@ -112,9 +121,10 @@ export const Input = ({
   required?: boolean
   defaultValue?: any
   placeholder?: string
+  marginBottom?: number
   error?: string | null
 }) => (
-  <InputContainer>
+  <InputContainer marginBottom={marginBottom}>
     {label && (
       <Label htmlFor={name}>
         {label}
@@ -150,6 +160,7 @@ export const TextArea = ({
   onChange,
   placeholder,
   defaultValue,
+  marginBottom,
 }: {
   name?: string
   label?: string
@@ -159,9 +170,10 @@ export const TextArea = ({
   required?: boolean
   placeholder?: string
   defaultValue?: string
+  marginBottom?: number
   error?: string | null
 }) => (
-  <InputContainer>
+  <InputContainer marginBottom={marginBottom}>
     {label && (
       <Label htmlFor={name}>
         {label}

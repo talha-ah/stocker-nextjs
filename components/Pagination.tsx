@@ -9,10 +9,10 @@ const Container = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  gap: ${({ theme }) => theme.gaps.light};
-  margin-top: ${({ theme }) => theme.gaps.semiLight};
-  padding: ${({ theme }) => theme.gaps.light}
-    ${({ theme }) => theme.gaps.default};
+  gap: ${({ theme }) => theme.spacing.light}px;
+  margin-top: ${({ theme }) => theme.spacing.semiLight}px;
+  padding: ${({ theme }) => theme.spacing.light}px
+    ${({ theme }) => theme.spacing.default}px;
 `
 
 type ButtonType = {
@@ -24,11 +24,11 @@ const Button = styled.button<ButtonType>`
   outline: 0;
   cursor: pointer;
   padding: 5px 10px;
-  border-radius: ${({ theme }) => theme.borders.radius.light};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.light}px;
   color: ${({ theme, active }) =>
-    active ? theme.colors.white : theme.colors.text};
+    active ? theme.palette.white : theme.palette.text};
   background-color: ${({ theme, active }) =>
-    active ? theme.colors.primary : "transparent"};
+    active ? theme.palette.primary : "transparent"};
 `
 
 export const Pagination = ({

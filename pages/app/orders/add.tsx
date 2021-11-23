@@ -11,15 +11,11 @@ import { Button } from "@components/Buttons"
 import { generateReceipt } from "@utils/pdfs"
 import { useSearchStock } from "@hooks/stocks"
 import { Header, Table } from "@components/Table"
+import { Content, FlexRow } from "@components/Common"
 import { Select, SelectType } from "@components/Select"
 import { SearchSelect } from "@components/SearchSelect"
 import { generateId, calculateDiscount } from "@utils/common"
-import { Content, FlexRow, FlexColumn } from "@components/Common"
 import { useSearchCustomer, useCustomers } from "@hooks/customers"
-
-const Form = styled(FlexColumn)`
-  margin: ${({ theme }) => theme.gaps.light} 0px;
-`
 
 const Buttons = styled.div`
   width: 100%;
@@ -27,8 +23,8 @@ const Buttons = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: ${({ theme }) => theme.gaps.default};
-  margin: ${({ theme }) => theme.gaps.default} 0px;
+  gap: ${({ theme }) => theme.spacing.default}px;
+  margin: ${({ theme }) => theme.spacing.default}px 0px;
 `
 
 const Actions = styled.div`
@@ -36,7 +32,7 @@ const Actions = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: ${({ theme }) => theme.gaps.light};
+  gap: ${({ theme }) => theme.spacing.light};
 `
 
 const headers = [
@@ -242,10 +238,11 @@ const Orders: NextPage = () => {
       </Head>
 
       <Content>
-        <Header title="Add Order" actions={false} />
-        <Form>
+        <FlexRow>
+          <Header title="Add Order" actions={false} />
           <FlexRow>
             <Input
+              marginBottom={0}
               name="displayId"
               value={displayId}
               label="Display Id"
@@ -256,68 +253,74 @@ const Orders: NextPage = () => {
               name="address"
               label="Address"
               value={address}
+              marginBottom={0}
               placeholder="Address"
               onChange={(e: any) => setAddress(e.target.value)}
             />
           </FlexRow>
-          <FlexRow>
-            <Select
-              required
-              name="paymentType"
-              value={paymentType}
-              label="Payment Type"
-              options={paymentTypes}
-              placeholder="Payment Type"
-              error={error?.add?.paymentType}
-              onChange={(value: any) => setPaymentType(value)}
-            />
-            <SearchSelect
-              required
-              name="customers"
-              label="Customer"
-              options={customers}
-              value={customer?.first_name}
-              placeholder="Search Customer"
-              error={error?.add?.created_for}
-              onSelect={(value: any) => setCustomer(value)}
-              onSearch={(text: string) => setCustomerQuery(text)}
-              onCreate={(value: any) => onAddCustomer({ first_name: value })}
-            />
-            <SearchSelect
-              required
-              name="stocks"
-              label="Stock"
-              options={stocks}
-              placeholder="Search Stock"
-              error={error?.add?.stocks}
-              onSelect={(value: any) => addStock(value)}
-              onSearch={(text: string) => setstockQuery(text)}
-            />
-          </FlexRow>
-        </Form>
+        </FlexRow>
+        <FlexRow>
+          <Select
+            required
+            search={false}
+            name="paymentType"
+            value={paymentType}
+            label="Payment Type"
+            options={paymentTypes}
+            placeholder="Payment Type"
+            error={error?.add?.paymentType}
+            onChange={(value: any) => setPaymentType(value)}
+          />
+          <SearchSelect
+            required
+            name="customers"
+            label="Customer"
+            options={customers}
+            value={customer?.first_name}
+            placeholder="Search Customer"
+            error={error?.add?.created_for}
+            onSelect={(value: any) => setCustomer(value)}
+            onSearch={(text: string) => setCustomerQuery(text)}
+            onCreate={(value: any) => onAddCustomer({ first_name: value })}
+          />
+          <SearchSelect
+            required
+            name="stocks"
+            label="Stock"
+            options={stocks}
+            placeholder="Search Stock"
+            error={error?.add?.stocks}
+            onSelect={(value: any) => addStock(value)}
+            onSearch={(text: string) => setstockQuery(text)}
+          />
+        </FlexRow>
+
         <Table
+          height={600}
           hover={false}
           id="add_order"
           headers={headers}
           rows={renderData(rows)}
           totalField="total_price"
         />
-        <Buttons>
-          <Button
-            primary
-            loading={loading.add.quotation}
-            onClick={() => onSubmit("active")}
-          >
-            Add Order
-          </Button>
-          <Button
-            neutral
-            onClick={() => onSubmit("quotation")}
-            loading={loading.add.active}
-          >
-            Add Quotation
-          </Button>
-        </Buttons>
+        {rows.length > 0 && (
+          <Buttons>
+            <Button
+              primary
+              loading={loading.add.quotation}
+              onClick={() => onSubmit("active")}
+            >
+              Add Order
+            </Button>
+            <Button
+              neutral
+              onClick={() => onSubmit("quotation")}
+              loading={loading.add.active}
+            >
+              Add Quotation
+            </Button>
+          </Buttons>
+        )}
       </Content>
     </Layout>
   )

@@ -18,14 +18,14 @@ const SearchBar = styled.div<InputType>`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: ${({ theme }) => theme.gaps.light};
-  padding-right: ${({ theme }) => theme.gaps.light};
+  gap: ${({ theme }) => theme.spacing.light}px;
   height: ${({ small }) => (small ? "24px" : "30px")};
-  border-bottom: ${({ theme }) => theme.borders.inputActive};
+  padding-right: ${({ theme }) => theme.spacing.light}px;
   max-width: ${({ width }) => (width ? `${width}px` : "100%")};
-  border-radius: ${({ theme }) => theme.borders.radius.default};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.default}px;
+  border-bottom: ${({ theme }) => theme.mixins.inputs.borders.primary};
   background-color: ${({ primary, theme }) =>
-    primary ? theme.colors.bg : theme.colors.white};
+    primary ? theme.palette.bg : theme.palette.white};
 `
 
 const Icon = styled.div`
@@ -44,9 +44,9 @@ const Input = styled.input<InputType>`
   font-size: 14px;
   transition: all 0.3s ease 0s;
   background-color: transparent;
-  border-radius: ${({ theme }) => theme.borders.radius.default};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.default}px;
   padding-left: ${({ theme, small }) =>
-    small ? theme.gaps.light : theme.gaps.semiLight};
+    small ? theme.spacing.light : theme.spacing.semiLight}px;
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `

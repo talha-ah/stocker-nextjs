@@ -10,7 +10,7 @@ const Content = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
-  gap: ${({ theme }) => theme.gaps.default};
+  gap: ${({ theme }) => theme.spacing.default}px;
 `
 
 const SalesReports: NextPage = () => {

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import { useAPI } from "@utils/api"
 import { truncate } from "@utils/common"
 import { endpoints } from "@utils/constants"
-import { useAppContext, CustomerTypes, NotifierTypes } from "@contexts/index"
+import { useAppContext, CustomerTypes } from "@contexts/index"
 
 const headers = [
   { key: 1, name: "Name", field: "name", align: "left" },

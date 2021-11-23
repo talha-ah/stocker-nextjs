@@ -10,7 +10,7 @@ const Actions = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  gap: ${({ theme }) => theme.gaps.light};
+  gap: ${({ theme }) => theme.spacing.light}px;
 `
 
 export const DoLogin = ({

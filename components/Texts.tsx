@@ -13,7 +13,7 @@ export const BigText = styled.h1<PrimaryType>`
   margin-bottom: 48px;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme, color = "text" }) => theme.colors[color]};
+  color: ${({ theme, color = "text" }) => theme.palette[color]};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -25,7 +25,7 @@ export const BigHeading = styled.p<PrimaryType>`
   line-height: auto;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme, color = "text" }) => theme.colors[color]};
+  color: ${({ theme, color = "text" }) => theme.palette[color]};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -37,7 +37,7 @@ export const Heading = styled.p<PrimaryType>`
   line-height: auto;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme, color = "text" }) => theme.colors[color]};
+  color: ${({ theme, color = "text" }) => theme.palette[color]};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -49,7 +49,7 @@ export const SubHeading = styled.p<PrimaryType>`
   line-height: auto;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme, color = "text" }) => theme.colors[color]};
+  color: ${({ theme, color = "text" }) => theme.palette[color]};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -61,7 +61,7 @@ export const Description = styled.p<PrimaryType>`
   line-height: auto;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme, color = "text" }) => theme.colors[color]};
+  color: ${({ theme, color = "text" }) => theme.palette[color]};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -73,7 +73,7 @@ export const SemiSmall = styled.p<PrimaryType>`
   line-height: auto;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme, color = "text" }) => theme.colors[color]};
+  color: ${({ theme, color = "text" }) => theme.palette[color]};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -85,7 +85,7 @@ export const Small = styled.p`
   line-height: auto;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme }) => theme.colors.placeholder};
+  color: ${({ theme }) => theme.palette.placeholder};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -97,7 +97,7 @@ export const Placeholder = styled.p`
   line-height: auto;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme }) => theme.colors.placeholder};
+  color: ${({ theme }) => theme.palette.placeholder};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -109,7 +109,7 @@ export const Link = styled.a`
   line-height: auto;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme }) => theme.colors.placeholder};
+  color: ${({ theme }) => theme.palette.placeholder};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 
@@ -117,12 +117,12 @@ export const Link = styled.a`
   &:focus,
   &:active {
     text-decoration: underline;
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.palette.primary};
   }
 `
 
 export const DangerText = styled(Small)`
-  color: ${({ theme }) => theme.colors.error};
+  color: ${({ theme }) => theme.palette.error};
 `
 
 export const Label = styled.label`
@@ -135,8 +135,8 @@ export const Label = styled.label`
   align-items: center;
   text-decoration: none;
   transition: all 0.3s ease 0s;
-  color: ${({ theme }) => theme.colors.placeholder};
-  margin-bottom: ${({ theme }) => theme.gaps.extraLight};
+  color: ${({ theme }) => theme.palette.placeholder};
+  margin-bottom: ${({ theme }) => theme.spacing.extraLight}px;
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `

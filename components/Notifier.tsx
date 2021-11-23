@@ -20,26 +20,26 @@ const Container = styled.div<ContainerType>`
   flex-direction: column;
   transition: all 0.3s ease 0s;
   background-color: rgba(255, 255, 255, 0.66);
-  gap: ${({ theme }) => theme.gaps.extraLight};
+  gap: ${({ theme }) => theme.spacing.extraLight}px;
   filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1));
-  border-radius: ${({ theme }) => theme.borders.radius.default};
-  padding: ${({ theme }) => theme.gaps.semiLight}
-    ${({ theme }) => theme.gaps.semiLight};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.default}px;
+  padding: ${({ theme }) => theme.spacing.semiLight}px
+    ${({ theme }) => theme.spacing.semiLight}px;
   border-left: 2px solid
     ${({ theme, type }) =>
       type === "success"
-        ? theme.colors.success
+        ? theme.palette.success
         : type === "warning"
-        ? theme.colors.warning
+        ? theme.palette.warning
         : type === "error"
-        ? theme.colors.error
-        : theme.colors.primary};
+        ? theme.palette.error
+        : theme.palette.primary};
 
   z-index: 150;
   position: absolute;
-  right: ${({ theme }) => theme.gaps.defaultN}px;
+  right: ${({ theme }) => theme.spacing.default}px;
   bottom: ${({ theme, place }) =>
-    place * theme.gaps.defaultN + place * 76 + theme.gaps.defaultN}px;
+    place * theme.spacing.default + place * 76 + theme.spacing.default}px;
 `
 
 const Header = styled.div`
@@ -61,7 +61,7 @@ export const Notifier = () => {
       if (timeoutIndex === -1) {
         timeouts.push(notification.key)
         setTimeout(() => {
-          // removeNotification(notification.key)
+          removeNotification(notification.key)
           timeouts.splice(timeoutIndex, 1)
         }, 3000)
       }

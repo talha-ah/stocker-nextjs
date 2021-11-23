@@ -26,11 +26,11 @@ const Item = styled.div<ItemType>`
   transition: all 0.3s ease 0s;
 
   background-color: ${({ active, theme }) =>
-    active ? theme.colors.white : "transparent"};
-  border-radius: ${({ theme }) => theme.borders.radius.default};
+    active ? theme.palette.white : "transparent"};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.default}px;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.white};
+    background-color: ${({ theme }) => theme.palette.white};
   }
 
   & a {
@@ -45,9 +45,9 @@ const Item = styled.div<ItemType>`
     content: "";
     position: absolute;
     transform: translate(-50%, -50%);
-    border-radius: ${({ theme }) => theme.borders.radius.default};
+    border-radius: ${({ theme }) => theme.shape.borderRadius.default}px;
     background-color: ${({ active, theme }) =>
-      active ? theme.colors.primary : "transparent"};
+      active ? theme.palette.primary : "transparent"};
   }
 `
 

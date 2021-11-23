@@ -30,7 +30,7 @@ export const Content = styled.main`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.gaps.light};
+  gap: ${({ theme }) => theme.spacing.light}px;
 `
 
 type FlexType = {
@@ -42,7 +42,7 @@ export const FlexRow = styled.div<FlexType>`
   width: 100%;
   display: flex;
   flex-direction: row;
-  gap: ${({ theme }) => theme.gaps.light};
+  gap: ${({ theme }) => theme.spacing.light}px;
   align-items: ${({ alignItems }) => alignItems || "center"};
   justify-content: ${({ justifyContent }) => justifyContent || "flex-start"};
 `
@@ -51,7 +51,7 @@ export const FlexColumn = styled.div<FlexType>`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.gaps.light};
+  gap: ${({ theme }) => theme.spacing.light}px;
   align-items: ${({ alignItems }) => alignItems || "center"};
   justify-content: ${({ justifyContent }) => justifyContent || "flex-start"};
 `
@@ -67,12 +67,12 @@ export const Card = styled.div`
   background-color: transparent;
   border: 2px solid rgb(4, 6, 8);
   box-shadow: rgb(210 239 253) 6px 6px;
-  gap: ${({ theme }) => theme.gaps.light};
+  gap: ${({ theme }) => theme.spacing.light}px;
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol, SF Pro Display, -apple-system, acumin-pro,
     BlinkMacSystemFont;
 
   &:hover {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.palette.primary};
   }
 `

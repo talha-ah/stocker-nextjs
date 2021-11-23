@@ -18,7 +18,7 @@ const Actions = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  gap: ${({ theme }) => theme.gaps.light};
+  gap: ${({ theme }) => theme.spacing.light}px;
 `
 
 type StockType = {

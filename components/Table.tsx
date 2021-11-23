@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import { useState, useEffect } from "react"
 
+import { pad } from "@utils/common"
 import { Empty } from "@components/Empty"
 import { generateId } from "@utils/common"
 import { Heading } from "@components/Texts"
@@ -24,7 +25,7 @@ const HeaderContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: ${({ theme }) => theme.gaps.light};
+  margin-bottom: ${({ theme }) => theme.spacing.light}px;
 `
 
 const Icons = styled.div`
@@ -33,7 +34,7 @@ const Icons = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: ${({ theme }) => theme.gaps.light};
+  gap: ${({ theme }) => theme.spacing.light}px;
 `
 
 type TableScrollType = {
@@ -41,8 +42,8 @@ type TableScrollType = {
 }
 
 const TableScroll = styled.div<TableScrollType>`
-  max-height: ${({ height }) => height}px;
   overflow-y: scroll;
+  max-height: ${({ height }) => height}px;
 
   ::-webkit-scrollbar {
     width: 2px;
@@ -50,7 +51,7 @@ const TableScroll = styled.div<TableScrollType>`
 
   ::-webkit-scrollbar-thumb {
     border-radius: 10%;
-    background-color: ${({ theme }) => theme.colors.primary};
+    background-color: ${({ theme }) => theme.palette.primary};
   }
 `
 
@@ -60,7 +61,7 @@ const TableContainer = styled.table<TableType>`
   font-weight: 400;
   table-layout: auto;
   border-collapse: collapse;
-  color: ${({ theme }) => theme.colors.placeholder};
+  color: ${({ theme }) => theme.palette.placeholder};
   font-family: Segoe UI, Arial, Helvetica, sans-serif;
 
   & tr {
@@ -70,7 +71,7 @@ const TableContainer = styled.table<TableType>`
   & tbody > tr:hover {
     cursor: ${({ hoverRow }) => (hoverRow ? "pointer" : "default")};
     background-color: ${({ theme, hover }) =>
-      hover ? theme.colors.white : "transparent"};
+      hover ? theme.palette.white : "transparent"};
   }
 
   & th {
@@ -80,15 +81,15 @@ const TableContainer = styled.table<TableType>`
     z-index: 1; // any positive value, layer order is global
 
     text-align: left;
-    color: ${({ theme }) => theme.colors.text};
-    background-color: ${({ theme }) => theme.colors.white};
+    color: ${({ theme }) => theme.palette.text};
+    background-color: ${({ theme }) => theme.palette.white};
   }
 
   & td,
   & th {
-    border-bottom: ${({ theme }) => theme.borders.tableBorder};
-    padding: ${({ theme }) => theme.gaps.light}
-      ${({ theme }) => theme.gaps.semiLight};
+    border-bottom: ${({ theme }) => theme.mixins.tables.borders.divider};
+    padding: ${({ theme }) => theme.spacing.light}px
+      ${({ theme }) => theme.spacing.semiLight}px;
 
     max-width: 100px;
     overflow: hidden;
@@ -102,7 +103,7 @@ const TotalRow = styled.tr`
   position: sticky;
   position: -webkit-sticky; // this is for all Safari (Desktop & iOS), not for Chrome
   z-index: 1; // any positive value, layer order is global
-  background-color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.palette.white};
 `
 
 const calculateTotal = (headers: any, data: any, totalField: string) => {
@@ -112,7 +113,7 @@ const calculateTotal = (headers: any, data: any, totalField: string) => {
   let index = 0
   const rows = headers.map((header: any, ind: number) => (
     <td key={generateId()}>
-      {header.field === totalField && (index = ind) && total_value}
+      {header.field === totalField && (index = ind) && pad(total_value, 2)}
     </td>
   ))
 

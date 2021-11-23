@@ -18,7 +18,7 @@ const Actions = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  gap: ${({ theme }) => theme.gaps.light};
+  gap: ${({ theme }) => theme.spacing.light}px;
 `
 
 const Quotations: NextPage = () => {
@@ -26,7 +26,8 @@ const Quotations: NextPage = () => {
   const { state } = useAppContext()
   const [query, setQuery] = useState<any>("")
   const [dataList, setDataList] = useState([])
-  const { headers, fetchData, toOrder, loading } = useQuotations()
+  const { headers, fetchData, toOrder, loading, cancelQuotation } =
+    useQuotations()
 
   useEffect(() => {
     fetchData()
@@ -36,6 +37,8 @@ const Quotations: NextPage = () => {
   useEffect(() => {
     const filtered = state.quotations.quotations.filter(
       (option: any) =>
+        !option.order_id ||
+        !option.display_id ||
         option.display_id.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
         String(option.order_id).toLowerCase().indexOf(query.toLowerCase()) > -1
     )
@@ -60,8 +63,8 @@ const Quotations: NextPage = () => {
           </Button>
           <Button
             iconed
-            // onClick={() => cancelOrder(row._id)}
-            disabled={row.items > 0}
+            onClick={() => cancelQuotation(row._id)}
+            disabled={row.items > 0 || loading.cancelQuotation}
           >
             <Delete />
           </Button>

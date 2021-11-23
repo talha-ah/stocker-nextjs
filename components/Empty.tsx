@@ -9,7 +9,7 @@ const Content = styled.div`
   align-items: center;
   flex-direction: column;
   justify-content: space-between;
-  gap: ${({ theme }) => theme.gaps.bold};
+  gap: ${({ theme }) => theme.spacing.bold}px;
 `
 
 const ContentItem = styled.div`

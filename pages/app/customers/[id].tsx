@@ -105,9 +105,9 @@ const Customers: NextPage = () => {
         <Table
           height={650}
           headers={headers}
-          totalField="balance"
           rows={customerOrders}
           loading={loading.fetch}
+          totalField={tab === "unpaid" && "balance"}
         />
 
         <Modal

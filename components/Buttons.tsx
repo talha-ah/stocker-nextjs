@@ -28,7 +28,7 @@ export const BaseButton = styled.button<ButtonType>`
   width: ${({ fluid }) => fluid && "100%"};
   font-size: ${({ small }) => (small ? "12px" : "14px")};
   padding: ${({ small }) => (small ? "3px 6px" : "6.5px 12px")};
-  border-radius: ${({ theme }) => theme.borders.radius.default};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.default}px;
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 
@@ -38,26 +38,26 @@ export const BaseButton = styled.button<ButtonType>`
 `
 
 const ButtonPrimary = styled(BaseButton)`
-  color: ${({ theme }) => theme.colors.white};
-  background: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.palette.white};
+  background: ${({ theme }) => theme.palette.primary};
 `
 
 const NeutralButton = styled(BaseButton)`
-  color: ${({ theme }) => theme.colors.primary};
-  background: ${({ theme }) => theme.colors.white};
-  border-radius: ${({ theme }) => theme.borders.radius.default};
+  color: ${({ theme }) => theme.palette.primary};
+  background: ${({ theme }) => theme.palette.white};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.default}px;
 `
 
 const BorderedButton = styled(BaseButton)`
-  color: ${({ theme }) => theme.colors.primary};
-  border: ${({ theme }) => theme.borders.light};
-  border-radius: ${({ theme }) => theme.borders.radius.default};
+  color: ${({ theme }) => theme.palette.primary};
+  border: ${({ theme }) => theme.mixins.borders.light};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.default}px;
 `
 
 const GhostButton = styled(BaseButton)`
   background: transparent;
-  color: ${({ theme }) => theme.colors.primary};
-  border-radius: ${({ theme }) => theme.borders.radius.default};
+  color: ${({ theme }) => theme.palette.primary};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.default}px;
 `
 
 export const IconButton = styled.button`
@@ -97,7 +97,7 @@ export const Button = React.forwardRef((props: any, ref): JSX.Element => {
         disabled={loading || disabled}
         onClick={(e) => {
           e.stopPropagation()
-          rest.onClick()
+          rest.onClick && rest.onClick()
         }}
       >
         {loading ? <Spinner size={16} /> : children}
@@ -205,7 +205,7 @@ export const Anchor = styled.button`
     BlinkMacSystemFont;
 
   &:hover {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.palette.primary};
   }
 `
 
@@ -233,7 +233,7 @@ export const TabButton = styled.div<TabButtonType>`
   transition: all 0.3s ease 0s;
   background-color: transparent;
   color: ${({ theme, active }) =>
-    active ? theme.colors.text : theme.colors.placeholder};
+    active ? theme.palette.text : theme.palette.placeholder};
   border-bottom: 2px solid
-    ${({ theme, active }) => (active ? theme.colors.primary : "transparent")};
+    ${({ theme, active }) => (active ? theme.palette.primary : "transparent")}px;
 `

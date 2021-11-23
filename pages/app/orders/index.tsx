@@ -20,7 +20,7 @@ const Actions = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  gap: ${({ theme }) => theme.gaps.light};
+  gap: ${({ theme }) => theme.spacing.light}px;
 `
 
 const Orders: NextPage = () => {
@@ -42,6 +42,8 @@ const Orders: NextPage = () => {
   useEffect(() => {
     const filtered = state.orders.orders.filter(
       (option: any) =>
+        !option.order_id ||
+        !option.display_id ||
         option.display_id.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
         String(option.order_id).toLowerCase().indexOf(query.toLowerCase()) > -1
     )

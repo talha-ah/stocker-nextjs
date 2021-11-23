@@ -16,7 +16,7 @@ const FormWrapper = styled.div`
   align-items: center;
   flex-direction: column;
   justify-content: space-between;
-  gap: ${({ theme }) => theme.gaps.default};
+  gap: ${({ theme }) => theme.spacing.default}px;
 `
 
 const Texts = styled.div`

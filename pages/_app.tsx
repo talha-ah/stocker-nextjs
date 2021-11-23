@@ -6,22 +6,23 @@ import { createGlobalStyle, ThemeProvider } from "styled-components"
 import { AuthWrapper } from "@hooks/auth"
 import { AppProvider } from "@contexts/index"
 import { Notifier } from "@components/Notifier"
-import { colors, gaps, borders, sidebar } from "@utils/theme"
+import { palette, spacing, shape, mixins, zIndex } from "@utils/theme"
 
 const theme = {
-  gaps,
-  colors,
-  borders,
-  sidebar,
+  shape,
+  mixins,
+  zIndex,
+  spacing,
+  palette,
 }
 
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
+    overflow-y: clip;
     box-sizing: border-box;
-    scroll-behavior: smooth;
-    background-color: ${colors.bg};
+    background-color: ${palette.bg};
 
     ::-webkit-scrollbar {
       width: 2px;
@@ -29,7 +30,7 @@ const GlobalStyle = createGlobalStyle`
   
     ::-webkit-scrollbar-thumb {
       border-radius: 10%;
-      background-color: ${colors.primary};
+      background-color: ${palette.primary};
     }
   }
 `

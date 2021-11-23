@@ -2,7 +2,7 @@ import { useState } from "react"
 
 import { useAPI } from "@utils/api"
 import { endpoints } from "@utils/constants"
-import { useAppContext, CategoryTypes, NotifierTypes } from "@contexts/index"
+import { useAppContext, CategoryTypes } from "@contexts/index"
 
 const headers = [
   { key: 1, name: "Name", field: "name", align: "left" },

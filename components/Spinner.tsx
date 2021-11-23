@@ -14,7 +14,7 @@ const SpinnerWrapper = styled.div<SpinnerType>`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: ${({ theme }) => theme.gaps.light};
+  gap: ${({ theme }) => theme.spacing.light}px;
   flex-direction: ${({ position }) =>
     position === "top"
       ? "column"
@@ -25,14 +25,14 @@ const SpinnerWrapper = styled.div<SpinnerType>`
       : "row-reverse"};
 
   span {
-    width: ${({ size, theme }) => `${size}px` || theme.gaps.default};
-    height: ${({ size, theme }) => `${size}px` || theme.gaps.default};
+    width: ${({ size, theme }) => size || theme.spacing.default}px;
+    height: ${({ size, theme }) => size || theme.spacing.default}px;
     display: block;
     border-radius: 50%;
     border-width: 1.5px;
     border-style: solid;
     box-sizing: border-box;
-    border-color: ${({ theme, color = "text" }) => theme.colors[color]}
+    border-color: ${({ theme, color = "text" }) => theme.palette[color]}
       rgb(0, 0, 0, 0.2) rgb(0, 0, 0, 0.2);
 
     border-image: initial;

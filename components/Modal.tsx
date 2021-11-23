@@ -8,7 +8,7 @@ import { IconButton } from "@components/Buttons"
 const Container = styled.div`
   width: 100%;
   background: rgba(0, 0, 0, 0.5);
-  padding: ${({ theme }) => theme.gaps.default};
+  padding: ${({ theme }) => theme.spacing.default}px;
 
   position: fixed;
   bottom: 0;
@@ -35,10 +35,10 @@ const Body = styled.div`
   width: 500px;
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.gaps.semiLight};
-  padding: ${({ theme }) => theme.gaps.default};
-  background-color: ${({ theme }) => theme.colors.white};
-  border-radius: ${({ theme }) => theme.borders.radius.default};
+  gap: ${({ theme }) => theme.spacing.semiLight}px;
+  padding: ${({ theme }) => theme.spacing.default}px;
+  background-color: ${({ theme }) => theme.palette.white};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.default}px;
 `
 
 const Header = styled.div`

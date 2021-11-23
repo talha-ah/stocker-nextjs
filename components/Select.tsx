@@ -24,7 +24,7 @@ const Container = styled.div`
   position: relative;
   flex-direction: column;
   transition: all 0.3s ease 0s;
-  margin-bottom: ${({ theme }) => theme.gaps.semiLight};
+  margin-bottom: ${({ theme }) => theme.spacing.semiLight}px;
 `
 
 const DangerTextS = styled(DangerText)`
@@ -46,10 +46,10 @@ const Selector = styled.div<SelectorType>`
   align-items: center;
   justify-content: flex-start;
   transition: all 0.3s ease 0s;
-  padding: 0px ${({ theme }) => theme.gaps.semiLight};
-  border-radius: ${({ theme }) => theme.borders.radius.default};
+  padding: 0px ${({ theme }) => theme.spacing.semiLight}px;
+  border-radius: ${({ theme }) => theme.shape.borderRadius.default}px;
   background-color: ${({ primary, theme }) =>
-    primary ? theme.colors.bg : theme.colors.white};
+    primary ? theme.palette.bg : theme.palette.white};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 `
@@ -61,13 +61,13 @@ const SelectorIcon = styled.div`
   position: absolute;
   align-items: center;
   justify-content: center;
-  right: ${({ theme }) => theme.gaps.semiLight};
+  right: ${({ theme }) => theme.spacing.semiLight}px;
 `
 
 const InputContainer = styled.div`
   width: 100%;
-  padding: 0px ${({ theme }) => theme.gaps.semiLight}
-    ${({ theme }) => theme.gaps.light};
+  padding: 0px ${({ theme }) => theme.spacing.semiLight}px
+    ${({ theme }) => theme.spacing.light}px;
 `
 
 const Input = styled.input`
@@ -77,15 +77,15 @@ const Input = styled.input`
   height: 34px;
   font-size: 14px;
   transition: all 0.3s ease 0s;
-  padding: 0px ${({ theme }) => theme.gaps.semiLight};
-  background-color: ${({ theme }) => theme.colors.bg};
-  border-bottom: ${({ theme }) => theme.borders.input};
-  border-radius: ${({ theme }) => theme.borders.radius.default};
+  background-color: ${({ theme }) => theme.palette.bg};
+  padding: 0px ${({ theme }) => theme.spacing.semiLight}px;
+  border-radius: ${({ theme }) => theme.shape.borderRadius.default}px;
+  border-bottom: ${({ theme }) => theme.mixins.inputs.borders.transparent};
   font-family: Segoe UI, Helvetica Neue, Arial, sans-serif, Apple Color Emoji,
     Segoe UI Emoji, Segoe UI Symbol;
 
   :focus {
-    border-bottom: ${({ theme }) => theme.borders.inputActive};
+    border-bottom: ${({ theme }) => theme.mixins.inputs.borders.primary};
   }
 `
 
@@ -104,10 +104,10 @@ const Options = styled.div`
   transition: all 0.3s ease 0s;
   justify-content: space-between;
   transform: translate(0px, 56px);
-  padding: ${({ theme }) => theme.gaps.light} 0px;
   filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1));
-  background-color: ${({ theme }) => theme.colors.white};
-  border-radius: ${({ theme }) => theme.borders.radius.default};
+  padding: ${({ theme }) => theme.spacing.light}px 0px;
+  background-color: ${({ theme }) => theme.palette.white};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.default}px;
 
   ::-webkit-scrollbar {
     width: 2px;
@@ -115,7 +115,7 @@ const Options = styled.div`
 
   ::-webkit-scrollbar-thumb {
     border-radius: 10%;
-    background-color: ${({ theme }) => theme.colors.primary};
+    background-color: ${({ theme }) => theme.palette.primary};
   }
 `
 
@@ -127,11 +127,11 @@ const Option = styled.div<OptionType>`
   align-items: center;
   justify-content: space-between;
   font-weight: ${({ active }) => (active ? 500 : "normal")};
-  padding: ${({ theme }) => theme.gaps.light}
-    ${({ theme }) => theme.gaps.semiLight};
+  padding: ${({ theme }) => theme.spacing.light}px
+    ${({ theme }) => theme.spacing.semiLight}px;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.bg};
+    background-color: ${({ theme }) => theme.palette.bg};
   }
 `
 
@@ -139,10 +139,12 @@ const Dot = styled.div`
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: ${({ theme }) => theme.colors.primary};
+  background-color: ${({ theme }) => theme.palette.primary};
 `
 
 export const Select = (props: any) => {
+  const { search = true } = props
+
   const [open, setOpen] = useState(false)
 
   function isItemInSelection(item: any) {
@@ -217,15 +219,17 @@ export const Select = (props: any) => {
       {props.error && <DangerTextS>{props.error}</DangerTextS>}
       {open && (
         <Options>
-          <InputContainer>
-            <Input
-              type="text"
-              name="query"
-              autoComplete="off"
-              placeholder="Search"
-              onChange={(e) => setQuery(e.target.value)}
-            />
-          </InputContainer>
+          {search && (
+            <InputContainer>
+              <Input
+                type="text"
+                name="query"
+                autoComplete="off"
+                placeholder="Search"
+                onChange={(e) => setQuery(e.target.value)}
+              />
+            </InputContainer>
+          )}
           {filter(props.options).map((option: any) => (
             <Option
               key={generateId()}

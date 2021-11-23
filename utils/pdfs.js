@@ -5,6 +5,7 @@ import DateUtility from "@utils/date"
 import { calculateDiscount, pad, truncate } from "@utils/common"
 
 export const generateReceipt = (data) => {
+  console.log(data)
   const pdfHeaders = [
     {
       dataKey: "sr",
@@ -91,7 +92,13 @@ export const generateReceipt = (data) => {
     "center"
   )
   doc.text("Mobile #: 0321-8464465, 03004001431", 105, 35, null, null, "center")
-  doc.text(`Receipt #: ${pad(data.order_id)}`, 14, 44)
+  doc.text(
+    data.status === "quotation"
+      ? "Quotation"
+      : `Receipt #: ${pad(data.order_id)}`,
+    14,
+    44
+  )
   doc.text(
     `Date: ${DateUtility.formatDate(data.createdAt)}`,
     196,
@@ -100,7 +107,7 @@ export const generateReceipt = (data) => {
     null,
     "right"
   )
-  doc.text("DHA Raya 148", 14, 52)
+  doc.text(data.created_for.first_name, 14, 52)
 
   doc.autoTable({
     startX: 0,

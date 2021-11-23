@@ -3,12 +3,7 @@ import { useState } from "react"
 import { useAPI } from "@utils/api"
 import { endpoints } from "@utils/constants"
 import { toTitleCase, truncate } from "@utils/common"
-import {
-  OrderTypes,
-  useAppContext,
-  NotifierTypes,
-  QuotationTypes,
-} from "@contexts/index"
+import { OrderTypes, useAppContext, QuotationTypes } from "@contexts/index"
 
 const headers = [
   { key: 1, name: "Quotation #", field: "order_id", align: "left" },
@@ -23,11 +18,13 @@ const headers = [
 const defaultLoading = {
   fetch: false,
   toOrder: false,
+  cancelQuotation: false,
 }
 
 const defaultError = {
   fetch: null,
   toOrder: null,
+  cancelQuotation: null,
 }
 
 export const useQuotations = () => {
@@ -107,11 +104,38 @@ export const useQuotations = () => {
     }
   }
 
+  const cancelQuotation = async (id, cb) => {
+    try {
+      setError(defaultError)
+      setLoading({ ...loading, cancelQuotation: true })
+
+      await api({
+        method: "DELETE",
+        uri: `${endpoints.orders}/${id}`,
+      })
+
+      dispatch({
+        type: QuotationTypes.REMOVE_QUOTATION,
+        payload: { _id: id },
+      })
+
+      notify("success", "Quotation canceled successfully.")
+
+      cb && cb()
+    } catch (error) {
+      setError({ ...error, cancelQuotation: error?.data })
+      notify("error", error?.message)
+    } finally {
+      setLoading({ ...loading, cancelQuotation: false })
+    }
+  }
+
   return {
     error,
     headers,
     loading,
     toOrder,
     fetchData,
+    cancelQuotation,
   }
 }

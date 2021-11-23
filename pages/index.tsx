@@ -17,7 +17,7 @@ const Content = styled.div`
   align-items: center;
   flex-direction: column;
   justify-content: space-between;
-  gap: ${({ theme }) => theme.gaps.bold};
+  gap: ${({ theme }) => theme.spacing.bold}px;
 `
 
 const ContentItem = styled.div`
@@ -33,11 +33,11 @@ const ContentActions = styled.div`
   max-width: 220px;
   align-items: center;
   flex-direction: column;
-  gap: ${({ theme }) => theme.gaps.light};
+  gap: ${({ theme }) => theme.spacing.light}px;
 `
 
 const BlackHeading = styled(Heading)`
-  color: ${({ theme }) => theme.colors.black};
+  color: ${({ theme }) => theme.palette.black};
 `
 
 const Home: NextPage = () => {

@@ -22,13 +22,14 @@ const Header = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: ${({ theme }) => theme.gaps.light};
-  padding: 12px ${({ theme }) => theme.gaps.semiLight};
-  background-color: ${({ theme }) => theme.colors.primary};
+  gap: ${({ theme }) => theme.spacing.light}px;
+  padding: 12px ${({ theme }) => theme.spacing.semiLight}px;
+  background-color: ${({ theme }) => theme.palette.primary};
+  min-height: ${({ theme }) => theme.mixins.toolbar.height}px;
 `
 
 const WhiteHeading = styled(Heading)`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.palette.white};
 `
 
 const Avatar = styled.div`
@@ -62,15 +63,26 @@ const Sidebar = styled.div<SideBarType>`
   flex-direction: column;
   transition: all 0.3s ease 0s;
   border-right: 1px solid white;
-  padding: ${({ theme }) => theme.gaps.light}
-    ${({ open, theme }) => (open ? theme.gaps.light : 0)};
-  width: ${({ open, theme }) => (open ? theme.sidebar.width : "0px")};
+  padding: ${({ theme }) => theme.spacing.light}px
+    ${({ open, theme }) => (open ? theme.spacing.light : 0)}px;
+  width: ${({ open, theme }) => (open ? theme.mixins.sidebar.minWidth : 0)}px;
 `
 
 const Content = styled.div`
   width: 100%;
   height: 100%;
-  padding: ${({ theme }) => theme.gaps.default};
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  padding: ${({ theme }) => theme.spacing.default}px;
+
+  ::-webkit-scrollbar {
+    width: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10%;
+    background-color: ${({ theme }) => theme.palette.primary};
+  }
 `
 
 export const Layout = ({ children }: { children: any }) => {

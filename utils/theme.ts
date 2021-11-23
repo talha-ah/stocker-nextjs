@@ -1,4 +1,4 @@
-export const colors = {
+export const palette = {
   primary: "#585a96",
   accent: "#f2f2f2",
   black: "#000000",
@@ -10,6 +10,8 @@ export const colors = {
   label: "#686868",
   border: "#c7c7c7",
   disabled: "#c7c7c7",
+
+  mode: "light",
 
   // Light
   bg: "#f5f5f5",
@@ -23,28 +25,50 @@ export const colors = {
   darkPlaceholder: "#adadad",
 }
 
-export const borders = {
-  radius: {
-    light: "2px",
-    default: "4px",
-    bold: "6px",
+export const shape = {
+  borderRadius: {
+    light: 2,
+    default: 4,
+    bold: 6,
   },
-  input: `2px solid transparent`,
-  light: `2px solid ${colors.border}`,
-  inputActive: `2px solid ${colors.primary}`,
-  tableBorder: `1px solid ${colors.divider}`,
 }
 
-export const gaps = {
-  extraLight: "4px",
-  light: "8px",
-  semiLight: "16px",
-  defaultN: 24,
-  default: "24px",
-  bold: "32px",
-  extraBold: "64px",
+export const spacing = {
+  extraLight: 4,
+  light: 8,
+  semiLight: 16,
+  default: 24,
+  bold: 32,
+  extraBold: 64,
 }
 
-export const sidebar = {
-  width: "196px",
+export const mixins = {
+  sidebar: {
+    minWidth: 196,
+  },
+  toolbar: {
+    height: 48,
+  },
+  inputs: {
+    borders: {
+      transparent: `2px solid transparent`,
+      primary: `2px solid ${palette.primary}`,
+    },
+  },
+  tables: {
+    borders: {
+      divider: `1px solid ${palette.divider}`,
+    },
+  },
+  borders: {
+    light: `2px solid ${palette.border}`,
+  },
+}
+
+export const zIndex = {
+  appBar: 1100,
+  drawer: 1200,
+  modal: 1300,
+  notifier: 1400,
+  tooltip: 1500,
 }
