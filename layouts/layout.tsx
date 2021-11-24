@@ -7,7 +7,7 @@ import { useLogout } from "@hooks/auth"
 import { Burger } from "@components/icons"
 import { Heading } from "@components/Texts"
 import { FlexRow } from "@components/Common"
-import { IconButton } from "@components/Buttons"
+import { Button } from "@components/Buttons"
 
 const Container = styled.div`
   width: 100%;
@@ -93,9 +93,9 @@ export const Layout = ({ children }: { children: any }) => {
     <Container>
       <Header>
         <FlexRow>
-          <IconButton onClick={() => setIsOpen((s) => !s)}>
+          <Button iconed onClick={() => setIsOpen((s) => !s)}>
             <Burger size={24} color="white" />
-          </IconButton>
+          </Button>
           <WhiteHeading>Stocker</WhiteHeading>
         </FlexRow>
         <Avatar onClick={() => doLogout()}>

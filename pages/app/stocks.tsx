@@ -82,7 +82,9 @@ const Stocks: NextPage = () => {
       actions: (
         <Actions>
           <Button
+            small
             iconed
+            hover={false}
             onClick={() => {
               setStock(row)
               setShow((s) => !s)
@@ -91,7 +93,9 @@ const Stocks: NextPage = () => {
             <Edit />
           </Button>
           <Button
+            small
             iconed
+            hover={false}
             loading={loading.delete}
             onClick={() => deleteData(row._id)}
           >

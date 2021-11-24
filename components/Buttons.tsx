@@ -60,7 +60,12 @@ const GhostButton = styled(BaseButton)`
   border-radius: ${({ theme }) => theme.shape.borderRadius.default}px;
 `
 
-export const IconButton = styled.button`
+type IconButtonType = {
+  small?: boolean
+  hover?: boolean
+}
+
+export const IconButton = styled.button<IconButtonType>`
   border: 0;
   margin: 0;
   outline: 0;
@@ -70,9 +75,17 @@ export const IconButton = styled.button`
   background: none;
   align-items: center;
   text-decoration: none;
-  background-color: none;
   justify-content: center;
   transition: all 0.3s ease 0s;
+  background-color: transparent;
+  width: ${({ small }) => (small ? "default" : "30px")};
+  height: ${({ small }) => (small ? "default" : "30px")};
+  border-radius: ${({ theme }) => theme.shape.borderRadius.light}px;
+
+  :hover {
+    background-color: ${({ hover }) =>
+      hover ? "rgba(0, 0, 0, 0.1)" : "transparent"};
+  }
 `
 
 // eslint-disable-next-line
@@ -86,6 +99,7 @@ export const Button = React.forwardRef((props: any, ref): JSX.Element => {
     bordered,
     children,
     disabled,
+    hover = true,
     ...rest
   } = props
 
@@ -94,6 +108,7 @@ export const Button = React.forwardRef((props: any, ref): JSX.Element => {
       <IconButton
         {...rest}
         ref={ref}
+        hover={hover}
         disabled={loading || disabled}
         onClick={(e) => {
           e.stopPropagation()
@@ -235,5 +250,5 @@ export const TabButton = styled.div<TabButtonType>`
   color: ${({ theme, active }) =>
     active ? theme.palette.text : theme.palette.placeholder};
   border-bottom: 2px solid
-    ${({ theme, active }) => (active ? theme.palette.primary : "transparent")}px;
+    ${({ theme, active }) => (active ? theme.palette.primary : "transparent")};
 `

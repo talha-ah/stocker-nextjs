@@ -65,7 +65,9 @@ const Orders: NextPage = () => {
         <Actions>
           {row.type === "Installments" && row.balance > 0 && (
             <Button
+              small
               iconed
+              hover={false}
               onClick={() => {
                 setOrder(row)
                 setShow((s) => !s)
@@ -75,7 +77,9 @@ const Orders: NextPage = () => {
             </Button>
           )}
           <Button
+            small
             iconed
+            hover={false}
             onClick={() => {
               generateReceipt(row)
             }}
@@ -83,7 +87,9 @@ const Orders: NextPage = () => {
             <Receipt />
           </Button>
           <Button
+            small
             iconed
+            hover={false}
             disabled={row.items > 0}
             loading={loading.cancelOrder}
             onClick={() => cancelOrder(row._id)}

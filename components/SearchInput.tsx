@@ -2,9 +2,9 @@ import styled from "styled-components"
 import { useState, useEffect } from "react"
 
 import { Search } from "@components/icons"
+import { Button } from "@components/Buttons"
 import { Spinner } from "@components/Spinner"
 import { useDebounce } from "@hooks/debounce"
-import { IconButton } from "@components/Buttons"
 
 type InputType = {
   width?: number
@@ -26,14 +26,6 @@ const SearchBar = styled.div<InputType>`
   border-bottom: ${({ theme }) => theme.mixins.inputs.borders.primary};
   background-color: ${({ primary, theme }) =>
     primary ? theme.palette.bg : theme.palette.white};
-`
-
-const Icon = styled.div`
-  color: red;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `
 
 const Input = styled.input<InputType>`
@@ -95,15 +87,9 @@ export const SearchIconInput = ({
         placeholder={placeholder}
         onChange={(e) => setQuery(e.target.value)}
       />
-      <IconButton onClick={() => onSearch(query)}>
-        {loading ? (
-          <Spinner size={16} />
-        ) : (
-          <Icon>
-            <Search size={24} />
-          </Icon>
-        )}
-      </IconButton>
+      <Button iconed onClick={() => onSearch(query)} hover={false}>
+        {loading ? <Spinner size={16} /> : <Search size={24} />}
+      </Button>
     </SearchBar>
   )
 }

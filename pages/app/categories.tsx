@@ -72,7 +72,9 @@ const Categories: NextPage = () => {
       actions: (
         <Actions>
           <Button
+            small
             iconed
+            hover={false}
             onClick={() => {
               setCategory(row)
               setShow((s) => !s)
@@ -81,7 +83,9 @@ const Categories: NextPage = () => {
             <Edit />
           </Button>
           <Button
+            small
             iconed
+            hover={false}
             disabled={row.items > 0}
             loading={loading.delete}
             onClick={() => deleteData(row._id)}

@@ -6,8 +6,8 @@ import { Empty } from "@components/Empty"
 import { generateId } from "@utils/common"
 import { Heading } from "@components/Texts"
 import { FlexRow } from "@components/Common"
+import { Button } from "@components/Buttons"
 import { Spinner } from "@components/Spinner"
-import { IconButton } from "@components/Buttons"
 import { Plus, Settings } from "@components/icons"
 import { Pagination } from "@components/Pagination"
 import { SearchIconInput } from "@components/SearchInput"
@@ -25,7 +25,6 @@ const HeaderContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: ${({ theme }) => theme.spacing.light}px;
 `
 
 const Icons = styled.div`
@@ -160,12 +159,12 @@ export const Header = ({
             placeholder={placeholder}
           />
           <Icons>
-            <IconButton onClick={add}>
+            <Button iconed onClick={add}>
               <Plus size={24} />
-            </IconButton>
-            <IconButton>
+            </Button>
+            <Button iconed>
               <Settings size={24} />
-            </IconButton>
+            </Button>
           </Icons>
         </>
       )}

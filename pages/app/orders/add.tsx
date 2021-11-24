@@ -190,6 +190,7 @@ const Orders: NextPage = () => {
           small
           min={0}
           type="number"
+          marginBottom={0.1}
           value={row.sale_price}
           name={`sale_price${row._id}`}
           onChange={(e: any) => onChangeRowInput(e, "sale_price", row)}
@@ -201,6 +202,7 @@ const Orders: NextPage = () => {
           min={0}
           type="number"
           value={row.qty}
+          marginBottom={0.1}
           name={`qty${row._id}`}
           onChange={(e: any) => onChangeRowInput(e, "qty", row)}
         />
@@ -210,6 +212,7 @@ const Orders: NextPage = () => {
           small
           min={0}
           type="number"
+          marginBottom={0.1}
           value={row.discount}
           name={`discount${row._id}`}
           onChange={(e: any) => onChangeRowInput(e, "discount", row)}
@@ -221,7 +224,12 @@ const Orders: NextPage = () => {
         .value,
       actions: (
         <Actions>
-          <Button iconed onClick={() => removeStock(row._id)}>
+          <Button
+            small
+            iconed
+            hover={false}
+            onClick={() => removeStock(row._id)}
+          >
             <Delete />
           </Button>
         </Actions>
@@ -242,10 +250,10 @@ const Orders: NextPage = () => {
           <Header title="Add Order" actions={false} />
           <FlexRow>
             <Input
-              marginBottom={0}
               name="displayId"
               value={displayId}
               label="Display Id"
+              marginBottom={0.1}
               placeholder="Display Id"
               onChange={(e: any) => setDisplayId(e.target.value)}
             />
@@ -253,7 +261,7 @@ const Orders: NextPage = () => {
               name="address"
               label="Address"
               value={address}
-              marginBottom={0}
+              marginBottom={0.1}
               placeholder="Address"
               onChange={(e: any) => setAddress(e.target.value)}
             />

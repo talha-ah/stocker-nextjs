@@ -52,17 +52,26 @@ const Quotations: NextPage = () => {
       actions: (
         <Actions>
           <Button
+            small
             iconed
+            hover={false}
             loading={loading.toOrder}
             onClick={() => toOrder(row._id)}
           >
             <Plus />
           </Button>
-          <Button iconed onClick={() => generateReceipt(row)}>
+          <Button
+            small
+            iconed
+            hover={false}
+            onClick={() => generateReceipt(row)}
+          >
             <Receipt />
           </Button>
           <Button
+            small
             iconed
+            hover={false}
             onClick={() => cancelQuotation(row._id)}
             disabled={row.items > 0 || loading.cancelQuotation}
           >

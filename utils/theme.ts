@@ -16,7 +16,7 @@ export const palette = {
   // Light
   bg: "#f5f5f5",
   text: "#252525",
-  secondary: "#5c5b5b",
+  secondary: "#e1e1e1",
   placeholder: "#686868",
 
   darkBg: "#1f1f1f",

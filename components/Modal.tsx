@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react"
 
 import { Cross } from "@components/icons"
 import { Heading } from "@components/Texts"
-import { IconButton } from "@components/Buttons"
+import { Button } from "@components/Buttons"
 
 const Container = styled.div`
   width: 100%;
@@ -84,9 +84,9 @@ export const Modal = (props: any) => {
       <Body>
         <Header>
           <Heading>{props.title}</Heading>
-          <IconButton onClick={() => toggleShow(false)}>
+          <Button iconed onClick={() => toggleShow(false)}>
             <Cross />
-          </IconButton>
+          </Button>
         </Header>
         <Content>{props.children}</Content>
       </Body>

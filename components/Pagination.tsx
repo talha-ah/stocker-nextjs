@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-import { IconButton } from "@components/Buttons"
+import { Button } from "@components/Buttons"
 import { ChevronLeft, ChevronRight } from "@components/icons"
 
 const Container = styled.div`
@@ -9,7 +9,7 @@ const Container = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  gap: ${({ theme }) => theme.spacing.light}px;
+  gap: ${({ theme }) => theme.spacing.extraLight}px;
   margin-top: ${({ theme }) => theme.spacing.semiLight}px;
   padding: ${({ theme }) => theme.spacing.light}px
     ${({ theme }) => theme.spacing.default}px;
@@ -19,16 +19,23 @@ type ButtonType = {
   active?: boolean
 }
 
-const Button = styled.button<ButtonType>`
+const ButtonContainer = styled.button<ButtonType>`
   border: 0;
   outline: 0;
+  width: 30px;
+  height: 30px;
   cursor: pointer;
-  padding: 5px 10px;
+  transition: all 0.3s ease 0s;
   border-radius: ${({ theme }) => theme.shape.borderRadius.light}px;
   color: ${({ theme, active }) =>
     active ? theme.palette.white : theme.palette.text};
   background-color: ${({ theme, active }) =>
     active ? theme.palette.primary : "transparent"};
+
+  :hover {
+    background-color: ${({ theme, active }) =>
+      active ? theme.palette.primary : "rgba(0, 0, 0, 0.1)"};
+  }
 `
 
 export const Pagination = ({
@@ -50,27 +57,29 @@ export const Pagination = ({
 
   return (
     <Container>
-      <IconButton
+      <Button
+        iconed
         disabled={currentPage - 1 === 0}
         onClick={() => onChange(currentPage - 1)}
       >
         <ChevronLeft />
-      </IconButton>
+      </Button>
       {pages().map((page) => (
-        <Button
+        <ButtonContainer
           key={page}
           active={page === currentPage}
           onClick={() => onChange(page)}
         >
           {page}
-        </Button>
+        </ButtonContainer>
       ))}
-      <IconButton
+      <Button
+        iconed
         disabled={currentPage + 1 > totalPages}
         onClick={() => onChange(currentPage + 1)}
       >
         <ChevronRight />
-      </IconButton>
+      </Button>
     </Container>
   )
 }

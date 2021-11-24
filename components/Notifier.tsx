@@ -3,7 +3,7 @@ import styled from "styled-components"
 
 import { Cross } from "@components/icons"
 import { toTitleCase } from "@utils/common"
-import { IconButton } from "@components/Buttons"
+import { Button } from "@components/Buttons"
 import { SubHeading, Placeholder } from "@components/Texts"
 import { useAppContext, NotifierTypes } from "@contexts/index"
 
@@ -90,9 +90,9 @@ export const Notifier = () => {
         >
           <Header>
             <SubHeading>{toTitleCase(notification.type)}</SubHeading>
-            <IconButton onClick={() => removeNotification(notification.key)}>
+            <Button iconed onClick={() => removeNotification(notification.key)}>
               <Cross />
-            </IconButton>
+            </Button>
           </Header>
           <Placeholder>{notification.message}</Placeholder>
         </Container>

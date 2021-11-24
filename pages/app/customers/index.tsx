@@ -80,7 +80,9 @@ const Customers: NextPage = () => {
       actions: (
         <Actions>
           <Button
+            small
             iconed
+            hover={false}
             onClick={() => {
               setCustomer(row)
               setShow((s) => !s)
@@ -90,7 +92,9 @@ const Customers: NextPage = () => {
           </Button>
           {row.orders <= 0 && (
             <Button
+              small
               iconed
+              hover={false}
               loading={loading.delete}
               onClick={() => deleteData(row._id)}
             >
