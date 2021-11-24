@@ -4,17 +4,21 @@ import styled from "styled-components"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
+import DateUtility from "@utils/date"
 import { Layout } from "@layouts/layout"
 import { Modal } from "@components/Modal"
 import { useOrders } from "@hooks/orders"
 import { AddPayment } from "@forms/orders"
-import { Content } from "@components/Common"
 import { Button } from "@components/Buttons"
 import { Confirm } from "@components/Confirm"
+import { Divider } from "@components/Divider"
 import { generateReceipt } from "@utils/pdfs"
 import { useAppContext } from "@contexts/index"
 import { Header, Table } from "@components/Table"
-import { Delete, Receipt, Plus } from "@components/icons"
+import { Content, FlexRow } from "@components/Common"
+import { calculateDiscount, truncate } from "@utils/common"
+import { Description, SubHeading } from "@components/Texts"
+import { Delete, Receipt, Plus, Eye } from "@components/icons"
 
 const Actions = styled.div`
   display: flex;
@@ -27,9 +31,10 @@ const Actions = styled.div`
 const Orders: NextPage = () => {
   const router = useRouter()
   const { state } = useAppContext()
-  const [show, setShow] = useState(false)
+
   const [query, setQuery] = useState<any>("")
-  const [dataList, setDataList] = useState([])
+  const [show, setShow] = useState<boolean>(false)
+  const [dataList, setDataList] = useState<any>([])
   const [order, setOrder] = useState<any | null>(null)
 
   const { headers, fetchData, loading, addPayment, cancelOrder, error } =
@@ -82,6 +87,17 @@ const Orders: NextPage = () => {
             iconed
             hover={false}
             onClick={() => {
+              setOrder(row)
+              setShowOrder(true)
+            }}
+          >
+            <Eye />
+          </Button>
+          <Button
+            small
+            iconed
+            hover={false}
+            onClick={() => {
               generateReceipt(row)
             }}
           >
@@ -108,6 +124,73 @@ const Orders: NextPage = () => {
       ),
     }))
   }
+
+  // ================================ View Order
+  const [showOrder, setShowOrder] = useState<boolean>(false)
+
+  const renderStocks = (rows: any) =>
+    rows.map((row: any) => ({
+      sr: row.stock_id.sr,
+      description: row.stock_id.description,
+      code: row.stock_id.code,
+      sale_price: row.sale_price,
+      quantity: row.quantity,
+      discount: row.discount.value,
+      location: row.stock_id.location,
+      amount: truncate(
+        calculateDiscount(row.sale_price, row.quantity, row.discount.value)
+          .value,
+        2
+      ),
+    }))
+
+  const stockHeaders = [
+    { key: 1, name: "Sr.", field: "sr", align: "left", width: "10px" },
+    {
+      key: 2,
+      name: "Description",
+      field: "description",
+      align: "left",
+      width: "auto",
+    },
+    { key: 3, name: "Code", field: "code", align: "left", width: "100px" },
+    {
+      key: 4,
+      name: "Location",
+      field: "location",
+      align: "left",
+      width: "auto",
+    },
+    {
+      key: 5,
+      name: "Price",
+      field: "sale_price",
+      align: "right",
+      width: "100px",
+    },
+    {
+      key: 6,
+      name: "Quantity",
+      field: "quantity",
+      align: "right",
+      width: "auto",
+    },
+    {
+      key: 7,
+      name: "Disc %",
+      field: "discount",
+      align: "right",
+      width: "auto",
+    },
+    {
+      key: 8,
+      name: "Amount",
+      field: "amount",
+      align: "right",
+      width: "auto",
+    },
+  ]
+  // View Order =================================
 
   return (
     <Layout>
@@ -142,6 +225,44 @@ const Orders: NextPage = () => {
             loading={loading.addPayment}
           />
         </Modal>
+        {order && (
+          <Modal
+            width={800}
+            show={showOrder}
+            title={"Order Details"}
+            setShow={(s: boolean) => setShowOrder(s)}
+          >
+            <FlexRow marginBottom={8}>
+              <FlexRow>
+                <SubHeading>Order #: </SubHeading>
+                <Description>{order.order_id}</Description>
+              </FlexRow>
+              <FlexRow>
+                <SubHeading>Customer: </SubHeading>
+                <Description>{order.created_for.first_name}</Description>
+              </FlexRow>
+            </FlexRow>
+            <FlexRow marginBottom={16}>
+              <FlexRow>
+                <SubHeading>Display ID: </SubHeading>
+                <Description>{order.display_id}</Description>
+              </FlexRow>
+              <FlexRow>
+                <SubHeading>Created At: </SubHeading>
+                <Description>
+                  {DateUtility.formatDate(order.createdAt)}
+                </Description>
+              </FlexRow>
+            </FlexRow>
+            <Divider />
+            <Table
+              paginate
+              totalField="amount"
+              headers={stockHeaders}
+              rows={renderStocks(order.stocks)}
+            />
+          </Modal>
+        )}
       </Content>
     </Layout>
   )

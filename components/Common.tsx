@@ -35,6 +35,7 @@ export const Content = styled.main`
 
 type FlexType = {
   alignItems?: string
+  marginBottom?: number
   justifyContent?: string
 }
 
@@ -44,6 +45,7 @@ export const FlexRow = styled.div<FlexType>`
   flex-direction: row;
   gap: ${({ theme }) => theme.spacing.light}px;
   align-items: ${({ alignItems }) => alignItems || "center"};
+  margin-bottom: ${({ marginBottom }) => marginBottom || 0}px;
   justify-content: ${({ justifyContent }) => justifyContent || "flex-start"};
 `
 

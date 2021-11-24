@@ -31,10 +31,14 @@ const Container = styled.div`
   }
 `
 
-const Body = styled.div`
-  width: 500px;
+type BodyType = {
+  width: number
+}
+
+const Body = styled.div<BodyType>`
   display: flex;
   flex-direction: column;
+  width: ${({ width }) => width}px;
   gap: ${({ theme }) => theme.spacing.semiLight}px;
   padding: ${({ theme }) => theme.spacing.default}px;
   background-color: ${({ theme }) => theme.palette.white};
@@ -81,7 +85,7 @@ export const Modal = (props: any) => {
 
   return (
     <Container ref={ref} id="modal" className={show ? "is-open" : ""}>
-      <Body>
+      <Body width={props.width || 500}>
         <Header>
           <Heading>{props.title}</Heading>
           <Button iconed onClick={() => toggleShow(false)}>

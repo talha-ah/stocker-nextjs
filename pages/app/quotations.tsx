@@ -4,15 +4,20 @@ import styled from "styled-components"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
+import DateUtility from "@utils/date"
 import { Layout } from "@layouts/layout"
-import { Content } from "@components/Common"
+import { Modal } from "@components/Modal"
 import { Button } from "@components/Buttons"
 import { generateReceipt } from "@utils/pdfs"
+import { Divider } from "@components/Divider"
 import { Confirm } from "@components/Confirm"
 import { useAppContext } from "@contexts/index"
 import { Header, Table } from "@components/Table"
 import { useQuotations } from "@hooks/quotations"
-import { Receipt, Delete, Plus } from "@components/icons"
+import { Content, FlexRow } from "@components/Common"
+import { calculateDiscount, truncate } from "@utils/common"
+import { Description, SubHeading } from "@components/Texts"
+import { Receipt, Delete, Plus, Eye, Edit } from "@components/icons"
 
 const Actions = styled.div`
   display: flex;
@@ -68,6 +73,20 @@ const Quotations: NextPage = () => {
               </Button>
             )}
           />
+          <Button small iconed hover={false} onClick={() => {}}>
+            <Edit />
+          </Button>
+          <Button
+            small
+            iconed
+            hover={false}
+            onClick={() => {
+              setQuotation(row)
+              setShowQuotation(true)
+            }}
+          >
+            <Eye />
+          </Button>
           <Button
             small
             iconed
@@ -98,6 +117,74 @@ const Quotations: NextPage = () => {
     }))
   }
 
+  // ================================ View Order
+  const [quotation, setQuotation] = useState<any | null>(null)
+  const [showQuotation, setShowQuotation] = useState<boolean>(false)
+
+  const renderStocks = (rows: any) =>
+    rows.map((row: any) => ({
+      sr: row.stock_id.sr,
+      description: row.stock_id.description,
+      code: row.stock_id.code,
+      sale_price: row.sale_price,
+      quantity: row.quantity,
+      discount: row.discount.value,
+      location: row.stock_id.location,
+      amount: truncate(
+        calculateDiscount(row.sale_price, row.quantity, row.discount.value)
+          .value,
+        2
+      ),
+    }))
+
+  const stockHeaders = [
+    { key: 1, name: "Sr.", field: "sr", align: "left", width: "10px" },
+    {
+      key: 2,
+      name: "Description",
+      field: "description",
+      align: "left",
+      width: "auto",
+    },
+    { key: 3, name: "Code", field: "code", align: "left", width: "100px" },
+    {
+      key: 4,
+      name: "Location",
+      field: "location",
+      align: "left",
+      width: "auto",
+    },
+    {
+      key: 5,
+      name: "Price",
+      field: "sale_price",
+      align: "right",
+      width: "100px",
+    },
+    {
+      key: 6,
+      name: "Quantity",
+      field: "quantity",
+      align: "right",
+      width: "auto",
+    },
+    {
+      key: 7,
+      name: "Disc %",
+      field: "discount",
+      align: "right",
+      width: "auto",
+    },
+    {
+      key: 8,
+      name: "Amount",
+      field: "amount",
+      align: "right",
+      width: "auto",
+    },
+  ]
+  // View Order =================================
+
   return (
     <Layout>
       <Head>
@@ -120,6 +207,49 @@ const Quotations: NextPage = () => {
           loading={loading.fetch}
           rows={renderData(dataList)}
         />
+        {quotation && (
+          <Modal
+            width={800}
+            show={showQuotation}
+            title={"Quotation Details"}
+            setShow={(s: boolean) => setShowQuotation(s)}
+          >
+            <FlexRow marginBottom={8}>
+              <FlexRow>
+                <SubHeading>Quotation #: </SubHeading>
+                <Description>{quotation.order_id}</Description>
+              </FlexRow>
+              <FlexRow>
+                <SubHeading>Customer: </SubHeading>
+                <Description>{quotation.created_for.first_name}</Description>
+              </FlexRow>
+            </FlexRow>
+            <FlexRow marginBottom={16}>
+              <FlexRow>
+                <SubHeading>Display ID: </SubHeading>
+                <Description>{quotation.display_id}</Description>
+              </FlexRow>
+              <FlexRow>
+                <SubHeading>Created At: </SubHeading>
+                <Description>
+                  {DateUtility.formatDate(quotation.createdAt)}
+                </Description>
+              </FlexRow>
+            </FlexRow>
+            <Divider />
+            <Table
+              paginate
+              totalField="amount"
+              headers={stockHeaders}
+              rows={renderStocks(quotation.stocks)}
+            />
+            <Actions style={{ marginTop: 16 }}>
+              <Button primary onClick={() => console.log("EDIT")}>
+                Edit
+              </Button>
+            </Actions>
+          </Modal>
+        )}
       </Content>
     </Layout>
   )

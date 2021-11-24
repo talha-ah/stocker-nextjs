@@ -58,7 +58,7 @@ export const mixins = {
   },
   tables: {
     borders: {
-      divider: `1px solid ${palette.divider}`,
+      default: `1px solid ${palette.divider}`,
     },
   },
   borders: {

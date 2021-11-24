@@ -65,6 +65,7 @@ const TableContainer = styled.table<TableType>`
 
   & tr {
     border-radius: 60px;
+    border-bottom: ${({ theme }) => theme.mixins.tables.borders.default};
   }
 
   & tbody > tr:hover {
@@ -86,7 +87,6 @@ const TableContainer = styled.table<TableType>`
 
   & td,
   & th {
-    border-bottom: ${({ theme }) => theme.mixins.tables.borders.divider};
     padding: ${({ theme }) => theme.spacing.light}px
       ${({ theme }) => theme.spacing.semiLight}px;
 
@@ -116,7 +116,7 @@ const calculateTotal = (headers: any, data: any, totalField: string) => {
     </td>
   ))
 
-  rows[index - 1] = <td key={rows[index - 1].key}>Sub Total</td>
+  rows[index - 1] = <td key={rows[index - 1].key}>Total</td>
 
   return rows
 }
@@ -257,7 +257,9 @@ export const Table = ({
           </tbody>
           <tfoot>
             {totalField && rows.length > 0 && (
-              <TotalRow>{calculateTotal(headers, rows, totalField)}</TotalRow>
+              <TotalRow style={{ textAlign: "right" }}>
+                {calculateTotal(headers, rows, totalField)}
+              </TotalRow>
             )}
           </tfoot>
         </TableContainer>
