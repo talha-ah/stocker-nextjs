@@ -8,6 +8,7 @@ import { useStocks } from "@hooks/stocks"
 import { Modal } from "@components/Modal"
 import { Content } from "@components/Common"
 import { Button } from "@components/Buttons"
+import { Confirm } from "@components/Confirm"
 import { useAppContext } from "@contexts/index"
 import { Edit, Delete } from "@components/icons"
 import { Header, Table } from "@components/Table"
@@ -92,15 +93,22 @@ const Stocks: NextPage = () => {
           >
             <Edit />
           </Button>
-          <Button
-            small
-            iconed
-            hover={false}
-            loading={loading.delete}
-            onClick={() => deleteData(row._id)}
-          >
-            <Delete />
-          </Button>
+          <Confirm
+            title="Delete Stock"
+            onConfirm={() => deleteData(row._id)}
+            message="Are you sure you want to delete this stock?"
+            trigger={({ open }: { open: boolean }) => (
+              <Button
+                small
+                iconed
+                hover={false}
+                onClick={open}
+                loading={loading.delete}
+              >
+                <Delete />
+              </Button>
+            )}
+          />
         </Actions>
       ),
     }))

@@ -34,6 +34,7 @@ export const shape = {
 }
 
 export const spacing = {
+  xxLight: 2,
   extraLight: 4,
   light: 8,
   semiLight: 16,

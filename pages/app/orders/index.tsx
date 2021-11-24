@@ -10,6 +10,7 @@ import { useOrders } from "@hooks/orders"
 import { AddPayment } from "@forms/orders"
 import { Content } from "@components/Common"
 import { Button } from "@components/Buttons"
+import { Confirm } from "@components/Confirm"
 import { generateReceipt } from "@utils/pdfs"
 import { useAppContext } from "@contexts/index"
 import { Header, Table } from "@components/Table"
@@ -86,16 +87,23 @@ const Orders: NextPage = () => {
           >
             <Receipt />
           </Button>
-          <Button
-            small
-            iconed
-            hover={false}
-            disabled={row.items > 0}
-            loading={loading.cancelOrder}
-            onClick={() => cancelOrder(row._id)}
-          >
-            <Delete />
-          </Button>
+          <Confirm
+            title="Delete Order"
+            onConfirm={() => cancelOrder(row._id)}
+            message="Are you sure you want to delete this order?"
+            trigger={({ open }: { open: boolean }) => (
+              <Button
+                small
+                iconed
+                hover={false}
+                onClick={open}
+                disabled={row.items > 0}
+                loading={loading.cancelOrder}
+              >
+                <Delete />
+              </Button>
+            )}
+          />
         </Actions>
       ),
     }))

@@ -5,7 +5,6 @@ import DateUtility from "@utils/date"
 import { calculateDiscount, pad, truncate } from "@utils/common"
 
 export const generateReceipt = (data) => {
-  console.log(data)
   const pdfHeaders = [
     {
       dataKey: "sr",
@@ -13,19 +12,19 @@ export const generateReceipt = (data) => {
     },
     {
       dataKey: "description",
-      header: "Description",
+      header: "Product",
     },
-    {
-      dataKey: "code",
-      header: "Code",
-    },
-    {
-      dataKey: "price",
-      header: "Price",
-    },
+    // {
+    //   dataKey: "code",
+    //   header: "Code",
+    // },
     {
       dataKey: "quantity",
       header: "Quantity",
+    },
+    {
+      dataKey: "price",
+      header: "Unit Price",
     },
     {
       dataKey: "discount",
@@ -33,18 +32,18 @@ export const generateReceipt = (data) => {
     },
     {
       dataKey: "discount_price",
-      header: "Disc Price",
+      header: "Discount",
     },
     {
       dataKey: "total_price",
-      header: "Total Price",
+      header: "Amount",
     },
   ]
 
   let pdfData = data.stocks.map((stock, index) => ({
     sr: String(index + 1),
     id: String(index + 1),
-    code: `${stock.stock_id.sr} - ${stock.stock_id.code}`,
+    code: stock.stock_id.code,
     price: String(truncate(stock.sale_price, 2)),
     quantity: String(stock.quantity),
     discount: String(truncate(stock.discount.value, 2)),
@@ -71,12 +70,20 @@ export const generateReceipt = (data) => {
     ),
   }))
 
+  let total_qty = 0
   let total_price = 0
-  pdfData.map((d) => (total_price += Number(d.total_price)))
+  let total_discount = 0
+  pdfData.map((d) => {
+    total_qty += Number(d.quantity)
+    total_price += Number(d.total_price)
+    total_discount += Number(d.discount_price)
+  })
 
   pdfData[pdfData.length] = {
+    quantity: truncate(total_qty, 2),
     total_price: truncate(total_price, 2),
-    discount_price: "Total",
+    discount_price: truncate(total_discount, 2),
+    description: "Total",
   }
 
   var doc = new jsPDF({ unit: "mm", format: "a4", orientation: "p" })
@@ -107,7 +114,7 @@ export const generateReceipt = (data) => {
     null,
     "right"
   )
-  doc.text(data.created_for.first_name, 14, 52)
+  doc.text("Customer: " + data.created_for.first_name, 14, 52)
 
   doc.autoTable({
     startX: 0,

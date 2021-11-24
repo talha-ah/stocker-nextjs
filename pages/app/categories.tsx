@@ -7,6 +7,7 @@ import { Layout } from "@layouts/layout"
 import { Modal } from "@components/Modal"
 import { Content } from "@components/Common"
 import { Button } from "@components/Buttons"
+import { Confirm } from "@components/Confirm"
 import { useAppContext } from "@contexts/index"
 import { Delete, Edit } from "@components/icons"
 import { Header, Table } from "@components/Table"
@@ -82,16 +83,22 @@ const Categories: NextPage = () => {
           >
             <Edit />
           </Button>
-          <Button
-            small
-            iconed
-            hover={false}
-            disabled={row.items > 0}
-            loading={loading.delete}
-            onClick={() => deleteData(row._id)}
-          >
-            <Delete />
-          </Button>
+          <Confirm
+            title="Delete Category"
+            onConfirm={() => deleteData(row._id)}
+            message="Are you sure you want to delete this category?"
+            trigger={({ open }: { open: boolean }) => (
+              <Button
+                small
+                iconed
+                hover={false}
+                onClick={open}
+                loading={loading.delete}
+              >
+                <Delete />
+              </Button>
+            )}
+          />
         </Actions>
       ),
     }))

@@ -8,6 +8,7 @@ import { Layout } from "@layouts/layout"
 import { Modal } from "@components/Modal"
 import { Content } from "@components/Common"
 import { Button } from "@components/Buttons"
+import { Confirm } from "@components/Confirm"
 import { useAppContext } from "@contexts/index"
 import { useCustomers } from "@hooks/customers"
 import { Edit, Delete } from "@components/icons"
@@ -91,15 +92,22 @@ const Customers: NextPage = () => {
             <Edit />
           </Button>
           {row.orders <= 0 && (
-            <Button
-              small
-              iconed
-              hover={false}
-              loading={loading.delete}
-              onClick={() => deleteData(row._id)}
-            >
-              <Delete />
-            </Button>
+            <Confirm
+              title="Delete Customer"
+              onConfirm={() => deleteData(row._id)}
+              message="Are you sure you want to delete this customer?"
+              trigger={({ open }: { open: boolean }) => (
+                <Button
+                  small
+                  iconed
+                  hover={false}
+                  onClick={open}
+                  loading={loading.delete}
+                >
+                  <Delete />
+                </Button>
+              )}
+            />
           )}
         </Actions>
       ),

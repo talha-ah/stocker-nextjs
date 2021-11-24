@@ -14,7 +14,6 @@ type ContainerType = {
 
 const Container = styled.div<ContainerType>`
   width: 345px;
-  height: 76px;
   display: flex;
   overflow: hidden;
   flex-direction: column;
@@ -63,7 +62,7 @@ export const Notifier = () => {
         setTimeout(() => {
           removeNotification(notification.key)
           timeouts.splice(timeoutIndex, 1)
-        }, 3000)
+        }, 5000)
       }
     })
 
@@ -90,7 +89,12 @@ export const Notifier = () => {
         >
           <Header>
             <SubHeading>{toTitleCase(notification.type)}</SubHeading>
-            <Button iconed onClick={() => removeNotification(notification.key)}>
+            <Button
+              small
+              iconed
+              hover={false}
+              onClick={() => removeNotification(notification.key)}
+            >
               <Cross />
             </Button>
           </Header>

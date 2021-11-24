@@ -56,7 +56,8 @@ export const SubHeading = styled.p<PrimaryType>`
 
 export const Description = styled.p<PrimaryType>`
   margin: 0;
-  font-size: 20px;
+  font-size: 14px;
+  text-align: left;
   font-weight: 400;
   line-height: auto;
   text-decoration: none;
