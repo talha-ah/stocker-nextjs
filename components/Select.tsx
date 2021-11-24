@@ -124,22 +124,29 @@ const Option = styled.div<OptionType>`
   display: flex;
   font-size: 14px;
   cursor: pointer;
+  position: relative;
   align-items: center;
   justify-content: space-between;
   font-weight: ${({ active }) => (active ? 500 : "normal")};
   padding: ${({ theme }) => theme.spacing.light}px
-    ${({ theme }) => theme.spacing.semiLight}px;
+    ${({ theme }) => theme.spacing.default}px;
 
   &:hover {
     background-color: ${({ theme }) => theme.palette.bg};
   }
-`
 
-const Dot = styled.div`
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: ${({ theme }) => theme.palette.primary};
+  ::before {
+    top: 50%;
+    left: 12px;
+    width: 4px;
+    height: 50%;
+    content: "";
+    position: absolute;
+    transform: translate(-50%, -50%);
+    border-radius: ${({ theme }) => theme.shape.borderRadius.default}px;
+    background-color: ${({ active, theme }) =>
+      active ? theme.palette.primary : "transparent"};
+  }
 `
 
 export const Select = (props: any) => {
@@ -237,7 +244,6 @@ export const Select = (props: any) => {
               active={isItemInSelection(option)}
             >
               <span>{option.label}</span>
-              <span>{isItemInSelection(option) && <Dot />}</span>
             </Option>
           ))}
         </Options>
