@@ -7,9 +7,11 @@ export const truncateString = (text: any, ellipsisString: string) =>
     : text
 
 export const truncate = (n: any, digits: any) => {
-  var re = new RegExp("(\\d+\\.\\d{" + digits + "})(\\d)"),
-    m = n.toString().match(re)
-  return m ? parseFloat(m[1]) : n.valueOf()
+  if (n) {
+    var re = new RegExp("(\\d+\\.\\d{" + digits + "})(\\d)"),
+      m = n.toString().match(re)
+    return m ? parseFloat(m[1]) : n.valueOf()
+  }
 }
 
 export const numberWithCommas = (x: any) =>

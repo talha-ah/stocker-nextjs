@@ -11,8 +11,8 @@ import { Button } from "@components/Buttons"
 import { Confirm } from "@components/Confirm"
 import { useAppContext } from "@contexts/index"
 import { useCustomers } from "@hooks/customers"
-import { Edit, Delete } from "@components/icons"
 import { Header, Table } from "@components/Table"
+import { Edit, Delete, Eye } from "@components/icons"
 import { CreateCustomer, EditCustomer } from "forms/customers"
 
 const Actions = styled.div`
@@ -84,6 +84,14 @@ const Customers: NextPage = () => {
             small
             iconed
             hover={false}
+            onClick={() => router.push(`/app/customers/${row._id}`)}
+          >
+            <Eye />
+          </Button>
+          <Button
+            small
+            iconed
+            hover={false}
             onClick={() => {
               setCustomer(row)
               setShow((s) => !s)
@@ -134,7 +142,6 @@ const Customers: NextPage = () => {
           headers={headers}
           loading={loading.fetch}
           rows={renderData(dataList)}
-          onClickRow={(row: any) => router.push(`/app/customers/${row._id}`)}
         />
         <Modal
           show={show}
