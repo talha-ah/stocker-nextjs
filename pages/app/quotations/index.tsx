@@ -37,6 +37,7 @@ const Quotations: NextPage = () => {
 
   useEffect(() => {
     fetchData()
+    router.prefetch("/app/quotations/edit")
     // eslint-disable-next-line
   }, [])
 
@@ -73,9 +74,6 @@ const Quotations: NextPage = () => {
               </Button>
             )}
           />
-          <Button small iconed hover={false} onClick={() => {}}>
-            <Edit />
-          </Button>
           <Button
             small
             iconed
@@ -86,6 +84,14 @@ const Quotations: NextPage = () => {
             }}
           >
             <Eye />
+          </Button>
+          <Button
+            small
+            iconed
+            hover={false}
+            onClick={() => router.push(`/app/quotations/edit/${row._id}`)}
+          >
+            <Edit />
           </Button>
           <Button
             small
@@ -201,12 +207,14 @@ const Quotations: NextPage = () => {
           add={() => router.push("/app/orders/add")}
           onSearch={(value: any) => setQuery(value)}
         />
+
         <Table
           paginate
           headers={headers}
           loading={loading.fetch}
           rows={renderData(dataList)}
         />
+
         {quotation && (
           <Modal
             width={800}
@@ -244,7 +252,13 @@ const Quotations: NextPage = () => {
               rows={renderStocks(quotation.stocks)}
             />
             <Actions style={{ marginTop: 16 }}>
-              <Button primary onClick={() => console.log("EDIT")}>
+              <Button
+                primary
+                onClick={() => {
+                  setQuotation(quotation)
+                  setShowQuotation(true)
+                }}
+              >
                 Edit
               </Button>
             </Actions>

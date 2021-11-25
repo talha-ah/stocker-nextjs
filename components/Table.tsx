@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import { useState, useEffect } from "react"
 
-import { pad } from "@utils/common"
+import { truncate } from "@utils/common"
 import { Empty } from "@components/Empty"
 import { generateId } from "@utils/common"
 import { Heading } from "@components/Texts"
@@ -112,7 +112,7 @@ const calculateTotal = (headers: any, data: any, totalField: string) => {
   let index = 0
   const rows = headers.map((header: any, ind: number) => (
     <td key={generateId()}>
-      {header.field === totalField && (index = ind) && pad(total_value, 2)}
+      {header.field === totalField && (index = ind) && truncate(total_value, 2)}
     </td>
   ))
 

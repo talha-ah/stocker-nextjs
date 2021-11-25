@@ -82,9 +82,7 @@ export const Confirm = (props: any) => {
             <Description>{props.message}</Description>
           </Content>
           <Actions>
-            <Button neutral onClick={toggleShow}>
-              Cancel
-            </Button>
+            <Button onClick={toggleShow}>Cancel</Button>
             <Button primary onClick={() => props.onConfirm(toggleShow)}>
               Confirm
             </Button>

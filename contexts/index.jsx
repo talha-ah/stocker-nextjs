@@ -55,7 +55,8 @@ const AppInitialState = {
 
 export const AppContext = createContext({
   state: AppInitialState,
-  dispatch: (pay) => undefined,
+  dispatch: (arg1) => undefined,
+  notify: (arg1, arg2) => undefined,
 })
 
 export const AppProvider = ({ children }) => {

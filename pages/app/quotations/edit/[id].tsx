@@ -1,21 +1,23 @@
 import Head from "next/head"
-import { useState } from "react"
 import type { NextPage } from "next"
 import styled from "styled-components"
+import { useRouter } from "next/router"
+import { useState, useEffect } from "react"
 
 import { Layout } from "@layouts/layout"
-import { useOrders } from "@hooks/orders"
 import { Input } from "@components/Inputs"
 import { Delete } from "@components/icons"
 import { Button } from "@components/Buttons"
 import { generateReceipt } from "@utils/pdfs"
 import { useSearchStock } from "@hooks/stocks"
+import { useAppContext } from "@contexts/index"
 import { Header, Table } from "@components/Table"
+import { useQuotations } from "@hooks/quotations"
 import { Content, FlexRow } from "@components/Common"
 import { Select, SelectType } from "@components/Select"
 import { SearchSelect } from "@components/SearchSelect"
-import { generateId, calculateDiscount } from "@utils/common"
-import { useSearchCustomer, useCustomers } from "@hooks/customers"
+import { Description, SubHeading } from "@components/Texts"
+import { calculateDiscount, toTitleCase, truncate } from "@utils/common"
 
 const Buttons = styled.div`
   width: 100%;
@@ -69,24 +71,58 @@ const paymentTypes = [
   },
 ]
 
-const Orders: NextPage = () => {
+const EditQuotation: NextPage = () => {
+  const router = useRouter()
+  const { notify } = useAppContext()
+
   const [rows, setRows] = useState<any>([])
 
   const [paymentType, setPaymentType] = useState<SelectType[]>([
     paymentTypes[0],
   ])
 
-  const { addData, loading, error } = useOrders()
+  const { updateQuotation, fetchQuotation, loading, error } = useQuotations()
 
   const [stockQuery, setstockQuery] = useState("")
   const { stocks } = useSearchStock(stockQuery)
 
-  const [customerQuery, setCustomerQuery] = useState("")
-  const { customers } = useSearchCustomer(customerQuery)
-
   const [address, setAddress] = useState<string>("")
+  const [orderId, setOrderId] = useState<string>("")
   const [displayId, setDisplayId] = useState<string>("")
   const [customer, setCustomer] = useState<any | null>(null)
+
+  useEffect(() => {
+    const { id } = router.query
+    const quotation: any = fetchQuotation(id)
+
+    if (quotation) {
+      setOrderId(quotation?.order_id)
+      setDisplayId(quotation?.display_id)
+      setCustomer(quotation?.created_for)
+      setAddress(quotation?.shipping_address?.address_one)
+      setPaymentType([
+        {
+          label: toTitleCase(quotation?.type),
+          value: quotation?.type,
+        },
+      ])
+      setRows(
+        quotation?.stocks.map((item: any) => ({
+          ...item.stock_id,
+          qty: item.quantity,
+          value: item.stock_id._id,
+          total_price: item.sale_price,
+          discount: item.discount.value,
+          label: item.stock_id.description,
+          discount_price: item.discount.value,
+        }))
+      )
+    } else {
+      notify("error", "Quotation not found")
+    }
+
+    // eslint-disable-next-line
+  }, [])
 
   const addStock = (value: any) => {
     const rowsCloned = [...rows]
@@ -134,53 +170,32 @@ const Orders: NextPage = () => {
     }, 0)
   }
 
-  const resetForm = () => {
-    setRows([])
-    setCustomer(null)
-    setPaymentType([paymentTypes[0]])
-  }
-
-  const onSubmit = async (status: string = "active") => {
+  const onSubmit = async () => {
     const body = {
-      created_for: customer?.value,
-      display_id: displayId || generateId(),
-      stocks: rows.map((row: any) => ({
-        stock_id: row.value,
-        quantity: row.qty,
-        price: row.sale_price,
-        discount: row.discount,
-        discount_type: "percentage",
-      })),
-      type: paymentType[0]?.value,
       installments: 1,
-      status: status,
+      type: paymentType[0]?.value,
       address_one: address || customer?.address_one,
       address_two: customer?.address_two,
       postal_code: customer?.postal_code,
       city: customer?.city,
       state: customer?.state,
       country: customer?.country,
+      stocks: rows.map((row: any) => ({
+        stock_id: row.value,
+        quantity: String(row.qty),
+        discount_type: "percentage",
+        price: String(row.sale_price),
+        discount: String(row.discount),
+      })),
     }
 
-    addData(body, (data: any) => {
+    const { id } = router.query
+
+    updateQuotation(body, id, (data: any) => {
       generateReceipt(data)
-      resetForm()
+      router.back()
     })
   }
-
-  // ==================> Add Customer
-  const { addData: addCustomer } = useCustomers()
-
-  const onAddCustomer = async (body: any) => {
-    addCustomer(body, (data: any) => {
-      setCustomer({
-        ...data,
-        value: data._id,
-        label: data.first_name,
-      })
-    })
-  }
-  // Add Customer <==================
 
   const renderData = (rows: any) => {
     return rows.map((row: any) => ({
@@ -218,10 +233,14 @@ const Orders: NextPage = () => {
           onChange={(e: any) => onChangeRowInput(e, "discount", row)}
         />
       ),
-      discount_price: calculateDiscount(row.sale_price, row.qty, row.discount)
-        .discount,
-      total_price: calculateDiscount(row.sale_price, row.qty, row.discount)
-        .value,
+      discount_price: truncate(
+        calculateDiscount(row.sale_price, row.qty, row.discount).discount,
+        2
+      ),
+      total_price: truncate(
+        calculateDiscount(row.sale_price, row.qty, row.discount).value,
+        2
+      ),
       actions: (
         <Actions>
           <Button
@@ -240,33 +259,30 @@ const Orders: NextPage = () => {
   return (
     <Layout>
       <Head>
-        <title>Add Order - Stocker</title>
+        <title>Update Quotation - Stocker</title>
         <meta name="description" content="stocker" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Content>
         <FlexRow>
-          <Header title="Add Order" actions={false} />
+          <Header title="Update Quotation" actions={false} />
+        </FlexRow>
+        <FlexRow marginBottom={8}>
           <FlexRow>
-            <Input
-              name="displayId"
-              value={displayId}
-              label="Display Id"
-              marginBottom={0.1}
-              placeholder="Display Id"
-              onChange={(e: any) => setDisplayId(e.target.value)}
-            />
-            <Input
-              name="address"
-              label="Address"
-              value={address}
-              marginBottom={0.1}
-              placeholder="Address"
-              onChange={(e: any) => setAddress(e.target.value)}
-            />
+            <SubHeading>Quotation #: </SubHeading>
+            <Description>{orderId}</Description>
+          </FlexRow>
+          <FlexRow>
+            <SubHeading>Display ID: </SubHeading>
+            <Description>{displayId}</Description>
+          </FlexRow>
+          <FlexRow>
+            <SubHeading>Customer: </SubHeading>
+            <Description>{customer?.first_name}</Description>
           </FlexRow>
         </FlexRow>
+
         <FlexRow>
           <Select
             required
@@ -276,20 +292,15 @@ const Orders: NextPage = () => {
             label="Payment Type"
             options={paymentTypes}
             placeholder="Payment Type"
-            error={error?.add?.paymentType}
+            error={error?.updateQuotation?.paymentType}
             onChange={(value: any) => setPaymentType(value)}
           />
-          <SearchSelect
-            required
-            name="customers"
-            label="Customer"
-            options={customers}
-            value={customer?.first_name}
-            placeholder="Search Customer"
-            error={error?.add?.created_for}
-            onSelect={(value: any) => setCustomer(value)}
-            onSearch={(text: string) => setCustomerQuery(text)}
-            onCreate={(value: any) => onAddCustomer({ first_name: value })}
+          <Input
+            name="address"
+            label="Address"
+            value={address}
+            placeholder="Address"
+            onChange={(e: any) => setAddress(e.target.value)}
           />
           <SearchSelect
             required
@@ -297,7 +308,7 @@ const Orders: NextPage = () => {
             label="Stock"
             options={stocks}
             placeholder="Search Stock"
-            error={error?.add?.stocks}
+            error={error?.updateQuotation?.stocks}
             onSelect={(value: any) => addStock(value)}
             onSearch={(text: string) => setstockQuery(text)}
           />
@@ -306,26 +317,20 @@ const Orders: NextPage = () => {
         <Table
           height={600}
           hover={false}
-          id="add_order"
           headers={headers}
+          id="edit_quotation"
           rows={renderData(rows)}
           totalField="total_price"
         />
+
         {rows.length > 0 && (
           <Buttons>
             <Button
               primary
-              loading={loading.add.quotation}
-              onClick={() => onSubmit("active")}
+              onClick={onSubmit}
+              loading={loading.updateQuotation}
             >
-              Add Order
-            </Button>
-            <Button
-              neutral
-              onClick={() => onSubmit("quotation")}
-              loading={loading.add.active}
-            >
-              Add Quotation
+              Update
             </Button>
           </Buttons>
         )}
@@ -334,4 +339,4 @@ const Orders: NextPage = () => {
   )
 }
 
-export default Orders
+export default EditQuotation

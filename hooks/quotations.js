@@ -19,12 +19,17 @@ const defaultLoading = {
   fetch: false,
   toOrder: false,
   cancelQuotation: false,
+  updateQuotation: false,
 }
 
 const defaultError = {
   fetch: null,
   toOrder: null,
   cancelQuotation: null,
+  updateQuotation: {
+    paymentType: null,
+    stocks: null,
+  },
 }
 
 export const useQuotations = () => {
@@ -48,7 +53,6 @@ export const useQuotations = () => {
       const result = response.data.map((row) => ({
         ...row,
         key: row._id,
-        type: toTitleCase(row.type),
         stocks_length: row.stocks.length,
         balance: truncate(row.balance, 2),
         customer: row.created_for.first_name,
@@ -104,6 +108,48 @@ export const useQuotations = () => {
     }
   }
 
+  const fetchQuotation = (id) => {
+    return state.quotations.quotations.find(
+      (quotation) => String(quotation._id) === String(id)
+    )
+  }
+
+  const updateQuotation = async (body, id, cb) => {
+    try {
+      setError(defaultError)
+      setLoading({ ...loading, updateQuotation: true })
+
+      const response = await api({
+        method: "PUT",
+        uri: `${endpoints.orders}/quotation/${id}`,
+        body: JSON.stringify(body),
+      })
+
+      const quotation = response.data
+
+      quotation.key = quotation._id
+      quotation.stocks_length = quotation.stocks.length
+      quotation.balance = truncate(quotation.balance, 2)
+      quotation.customer = quotation.created_for.first_name
+      quotation.total_price = truncate(quotation.total_price, 2)
+      quotation.installments = `${quotation.installments} - ${quotation.payments.length}`
+
+      dispatch({
+        type: QuotationTypes.UPDATE_QUOTATION,
+        payload: { quotation: quotation },
+      })
+
+      notify("success", "Quotation updated successfully.")
+
+      cb && cb(quotation)
+    } catch (error) {
+      setError({ ...error, updateQuotation: error?.data })
+      notify("error", error?.message)
+    } finally {
+      setLoading({ ...loading, updateQuotation: false })
+    }
+  }
+
   const cancelQuotation = async (id, cb) => {
     try {
       setError(defaultError)
@@ -136,6 +182,8 @@ export const useQuotations = () => {
     loading,
     toOrder,
     fetchData,
+    fetchQuotation,
     cancelQuotation,
+    updateQuotation,
   }
 }

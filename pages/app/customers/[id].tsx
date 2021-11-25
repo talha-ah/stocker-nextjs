@@ -24,6 +24,7 @@ const headers = [
 
 const Customers: NextPage = () => {
   const router = useRouter()
+
   const [show, setShow] = useState(false)
   const [tab, setTab] = useState("unpaid")
   const [customer, setCustomer] = useState<any>(null)
