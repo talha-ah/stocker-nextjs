@@ -14,7 +14,7 @@ const Container = styled.div`
   bottom: 0;
   right: 0;
   top: 0;
-  z-index: 100;
+  z-index: ${({ theme }) => theme.zIndex.confirm};
 
   opacity: 0;
   visibility: hidden;

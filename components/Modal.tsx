@@ -5,6 +5,18 @@ import { Cross } from "@components/icons"
 import { Heading } from "@components/Texts"
 import { Button } from "@components/Buttons"
 
+// Glass Effect
+// backdrop-filter: blur(5px);
+// background-color: rgba(255, 255, 255, 0.15);
+
+// /* From https://css.glass */
+// background: rgba(255, 255, 255, 0.2);
+// border-radius: 16px;
+// box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+// backdrop-filter: blur(5px);
+// -webkit-backdrop-filter: blur(5px);
+// border: 1px solid rgba(255, 255, 255, 0.3);
+
 const Container = styled.div`
   width: 100%;
   background: rgba(0, 0, 0, 0.5);
@@ -14,7 +26,7 @@ const Container = styled.div`
   bottom: 0;
   right: 0;
   top: 0;
-  z-index: 100;
+  z-index: ${({ theme }) => theme.zIndex.modal};
 
   opacity: 0;
   visibility: hidden;

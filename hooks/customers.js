@@ -79,6 +79,8 @@ export const useCustomers = () => {
       })
 
       const result = response.data
+
+      result.orders = 0
       result.key = result._id
       result.name = result.first_name
       result.balance = result.balance.value

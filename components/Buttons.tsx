@@ -35,6 +35,10 @@ export const BaseButton = styled.button<ButtonType>`
   // &:hover {
   //   transform: translateY(-2px);
   // }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 `
 
 const ButtonPrimary = styled(BaseButton)`

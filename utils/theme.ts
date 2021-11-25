@@ -71,5 +71,7 @@ export const zIndex = {
   drawer: 1200,
   modal: 1300,
   notifier: 1400,
-  tooltip: 1500,
+  confirm: 1500,
+  select: 1600,
+  tooltip: 1700,
 }

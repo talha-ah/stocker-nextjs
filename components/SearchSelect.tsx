@@ -78,7 +78,6 @@ const Input = styled.input`
 const Options = styled.div`
   top: 0;
   left: 0;
-  z-index: 90;
   width: 100%;
   display: flex;
   overflow-y: auto;
@@ -90,6 +89,7 @@ const Options = styled.div`
   transition: all 0.3s ease 0s;
   justify-content: space-between;
   transform: translate(0px, 60px);
+  z-index: ${({ theme }) => theme.zIndex.select};
   filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1));
   padding: ${({ theme }) => theme.spacing.light}px 0px;
   background-color: ${({ theme }) => theme.palette.white};

@@ -18,9 +18,9 @@ const Container = styled.div<ContainerType>`
   overflow: hidden;
   flex-direction: column;
   transition: all 0.3s ease 0s;
-  background-color: rgba(255, 255, 255, 0.66);
   gap: ${({ theme }) => theme.spacing.extraLight}px;
   filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1));
+  background-color: ${({ theme }) => theme.palette.white};
   border-radius: ${({ theme }) => theme.shape.borderRadius.default}px;
   padding: ${({ theme }) => theme.spacing.semiLight}px
     ${({ theme }) => theme.spacing.semiLight}px;
@@ -34,8 +34,8 @@ const Container = styled.div<ContainerType>`
         ? theme.palette.error
         : theme.palette.primary};
 
-  z-index: 150;
   position: absolute;
+  z-index: ${({ theme }) => theme.zIndex.notifier};
   right: ${({ theme }) => theme.spacing.default}px;
   bottom: ${({ theme, place }) =>
     place * theme.spacing.default + place * 76 + theme.spacing.default}px;

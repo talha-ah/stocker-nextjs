@@ -54,9 +54,7 @@ export const DoLogin = ({
           Login
         </Button>
         <Link href="/register" passHref>
-          <Button fluid ghost>
-            Create new account
-          </Button>
+          <Button ghost>Create new account</Button>
         </Link>
       </Actions>
     </Form>
