@@ -1,6 +1,7 @@
 import Head from "next/head"
 import type { NextPage } from "next"
 import styled from "styled-components"
+import { useRouter } from "next/router"
 import { useState, useEffect } from "react"
 
 import { Layout } from "@layouts/layout"
@@ -10,8 +11,8 @@ import { Content } from "@components/Common"
 import { Button } from "@components/Buttons"
 import { Confirm } from "@components/Confirm"
 import { useAppContext } from "@contexts/index"
-import { Edit, Delete } from "@components/icons"
 import { Header, Table } from "@components/Table"
+import { Edit, Delete, Eye } from "@components/icons"
 import { CreateStock, EditStock } from "@forms/stocks"
 
 const Actions = styled.div`
@@ -39,6 +40,8 @@ type StockType = {
 } | null
 
 const Stocks: NextPage = () => {
+  const router = useRouter()
+
   const { state } = useAppContext()
   const [show, setShow] = useState(false)
   const [query, setQuery] = useState<any>("")
@@ -56,9 +59,12 @@ const Stocks: NextPage = () => {
   useEffect(() => {
     const filtered = state.stocks.stocks.filter(
       (option: any) =>
+        !option.code ||
+        !option.location ||
+        !option.description ||
         option.code.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-        option.description.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
         option.location.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        option.description.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
         String(option.sr).toLowerCase().indexOf(query.toLowerCase()) > -1
     )
     setDataList(filtered)
@@ -86,6 +92,14 @@ const Stocks: NextPage = () => {
             small
             iconed
             hover={false}
+            onClick={() => router.push(`/app/stocks/${row._id}`)}
+          >
+            <Eye />
+          </Button>
+          <Button
+            small
+            iconed
+            hover={false}
             onClick={() => {
               setStock(row)
               setShow((s) => !s)
@@ -97,7 +111,7 @@ const Stocks: NextPage = () => {
             title="Delete Stock"
             onConfirm={() => deleteData(row._id)}
             message="Are you sure you want to delete this stock?"
-            trigger={({ open }: { open: boolean }) => (
+            trigger={({ open }: { open: any }) => (
               <Button
                 small
                 iconed

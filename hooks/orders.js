@@ -229,6 +229,12 @@ export const useOrders = () => {
     setCustomerOrders(orders)
   }
 
+  const getStockOrders = (id) => {
+    return state.orders.orders.filter((order) =>
+      order.stocks.some((stock) => String(stock.stock_id._id) === String(id))
+    )
+  }
+
   return {
     error,
     headers,
@@ -237,6 +243,7 @@ export const useOrders = () => {
     fetchData,
     addPayment,
     cancelOrder,
+    getStockOrders,
     customerOrders,
     addGeneralPayment,
     fetchCustomerOrders,

@@ -57,6 +57,7 @@ const Customers: NextPage = () => {
   useEffect(() => {
     const filtered = state.customers.customers.filter(
       (option: any) =>
+        !option.first_name ||
         option.first_name.toLowerCase().indexOf(query.toLowerCase()) > -1
     )
     setDataList(filtered)
@@ -104,7 +105,7 @@ const Customers: NextPage = () => {
               title="Delete Customer"
               onConfirm={() => deleteData(row._id)}
               message="Are you sure you want to delete this customer?"
-              trigger={({ open }: { open: boolean }) => (
+              trigger={({ open }: { open: any }) => (
                 <Button
                   small
                   iconed

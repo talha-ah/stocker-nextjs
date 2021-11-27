@@ -62,7 +62,7 @@ const Quotations: NextPage = () => {
             title="Add Order"
             onConfirm={() => toOrder(row._id)}
             message="Are you sure you want to create an order for this quotation?"
-            trigger={({ open }: { open: boolean }) => (
+            trigger={({ open }: { open: any }) => (
               <Button
                 small
                 iconed
@@ -105,7 +105,7 @@ const Quotations: NextPage = () => {
             title="Delete Quotation"
             onConfirm={() => cancelQuotation(row._id)}
             message="Are you sure you want to delete this quotation?"
-            trigger={({ open }: { open: boolean }) => (
+            trigger={({ open }: { open: any }) => (
               <Button
                 small
                 iconed

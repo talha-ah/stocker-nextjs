@@ -207,12 +207,17 @@ export const useStocks = () => {
     }
   }
 
+  const fetchOne = (id) => {
+    return state.stocks.stocks.find((stock) => String(stock._id) === String(id))
+  }
+
   return {
     error,
     headers,
     loading,
     addData,
     editData,
+    fetchOne,
     fetchData,
     deleteData,
   }

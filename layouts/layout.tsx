@@ -8,6 +8,7 @@ import { Burger } from "@components/icons"
 import { Heading } from "@components/Texts"
 import { FlexRow } from "@components/Common"
 import { Button } from "@components/Buttons"
+import { Confirm } from "@components/Confirm"
 
 const Container = styled.div`
   width: 100%;
@@ -98,9 +99,22 @@ export const Layout = ({ children }: { children: any }) => {
           </Button>
           <WhiteHeading>Stocker</WhiteHeading>
         </FlexRow>
-        <Avatar onClick={() => doLogout()}>
-          <Image src="/images/avatar.png" alt="avatar" width={25} height={25} />
-        </Avatar>
+
+        <Confirm
+          title="Logout"
+          onConfirm={() => doLogout()}
+          message="Are you sure you want to logout?"
+          trigger={({ open }: { open: any }) => (
+            <Avatar onClick={open}>
+              <Image
+                src="/images/avatar.png"
+                alt="avatar"
+                width={25}
+                height={25}
+              />
+            </Avatar>
+          )}
+        />
       </Header>
       <Page>
         <Sidebar open={isOpen}>

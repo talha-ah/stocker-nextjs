@@ -107,7 +107,7 @@ const Orders: NextPage = () => {
             title="Delete Order"
             onConfirm={() => cancelOrder(row._id)}
             message="Are you sure you want to delete this order?"
-            trigger={({ open }: { open: boolean }) => (
+            trigger={({ open }: { open: any }) => (
               <Button
                 small
                 iconed

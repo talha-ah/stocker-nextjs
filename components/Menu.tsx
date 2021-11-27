@@ -27,6 +27,7 @@ const Item = styled.div<ItemType>`
 
   background-color: ${({ active, theme }) =>
     active ? theme.palette.white : "transparent"};
+  filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1));
   border-radius: ${({ theme }) => theme.shape.borderRadius.default}px;
 
   &:hover {
