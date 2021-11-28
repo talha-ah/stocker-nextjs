@@ -5,15 +5,17 @@ import { useRouter } from "next/router"
 import { useState, useEffect } from "react"
 
 import { Layout } from "@layouts/layout"
+import { truncate } from "@utils/common"
 import { useStocks } from "@hooks/stocks"
 import { Modal } from "@components/Modal"
-import { Content } from "@components/Common"
 import { Button } from "@components/Buttons"
 import { Confirm } from "@components/Confirm"
 import { useAppContext } from "@contexts/index"
 import { Header, Table } from "@components/Table"
 import { Edit, Delete, Eye } from "@components/icons"
+import { Content, FlexRow } from "@components/Common"
 import { CreateStock, EditStock } from "@forms/stocks"
+import { Description, SubHeading } from "@components/Texts"
 
 const Actions = styled.div`
   display: flex;
@@ -47,6 +49,8 @@ const Stocks: NextPage = () => {
   const [query, setQuery] = useState<any>("")
   const [dataList, setDataList] = useState([])
   const [stock, setStock] = useState<StockType>(null)
+  const [totalCost, setTotalCost] = useState<number>(0)
+  const [totalSale, setTotalSale] = useState<number>(0)
 
   const { headers, fetchData, addData, editData, deleteData, error, loading } =
     useStocks()
@@ -55,6 +59,19 @@ const Stocks: NextPage = () => {
     fetchData()
     // eslint-disable-next-line
   }, [])
+  useEffect(() => {
+    let sale = 0
+    let cost = 0
+
+    state.stocks.stocks.forEach((s: any) => {
+      sale += s.sale_price
+      cost += s.cost_price
+    })
+
+    setTotalCost(truncate(cost, 2))
+    setTotalSale(truncate(sale, 2))
+    // eslint-disable-next-line
+  }, [state.stocks.stocks])
 
   useEffect(() => {
     const filtered = state.stocks.stocks.filter(
@@ -144,10 +161,20 @@ const Stocks: NextPage = () => {
           add={() => setShow((s) => !s)}
           onSearch={(value: any) => setQuery(value)}
         />
+
+        <FlexRow gap={18} marginBottom={8}>
+          <SubHeading>Total Cost: </SubHeading>
+          <Description>{totalCost}</Description>
+          <SubHeading>Total Sale: </SubHeading>
+          <Description>{totalSale}</Description>
+        </FlexRow>
+
         <Table
+          height={700}
           headers={headers}
           loading={loading.fetch}
           rows={renderData(dataList)}
+          totalField={["cost_price", "sale_price", "inventory"]}
         />
         <Modal
           show={show}

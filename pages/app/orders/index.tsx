@@ -46,13 +46,21 @@ const Orders: NextPage = () => {
   }, [])
 
   useEffect(() => {
-    const filtered = state.orders.orders.filter(
-      (option: any) =>
-        !option.order_id ||
-        !option.display_id ||
-        option.display_id.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-        String(option.order_id).toLowerCase().indexOf(query.toLowerCase()) > -1
-    )
+    const filtered = state.orders.orders.filter((option: any) => {
+      if (query) {
+        return (
+          (option.order_id &&
+            String(option.order_id)
+              .toLowerCase()
+              .indexOf(String(query.toLowerCase())) > -1) ||
+          String(option.created_for.first_name)
+            .toLowerCase()
+            .indexOf(String(query.toLowerCase())) > -1
+        )
+      } else {
+        return true
+      }
+    })
     setDataList(filtered)
     // eslint-disable-next-line
   }, [query, state.orders.orders])
@@ -153,37 +161,29 @@ const Orders: NextPage = () => {
       align: "left",
       width: "auto",
     },
-    { key: 3, name: "Code", field: "code", align: "left", width: "100px" },
     {
-      key: 4,
-      name: "Location",
-      field: "location",
-      align: "left",
-      width: "auto",
-    },
-    {
-      key: 5,
+      key: 3,
       name: "Price",
       field: "sale_price",
       align: "right",
       width: "100px",
     },
     {
-      key: 6,
-      name: "Quantity",
+      key: 4,
+      name: "Qty",
       field: "quantity",
       align: "right",
       width: "auto",
     },
     {
-      key: 7,
+      key: 5,
       name: "Disc %",
       field: "discount",
       align: "right",
       width: "auto",
     },
     {
-      key: 8,
+      key: 6,
       name: "Amount",
       field: "amount",
       align: "right",
@@ -213,6 +213,7 @@ const Orders: NextPage = () => {
           headers={headers}
           loading={loading.fetch}
           rows={renderData(dataList)}
+          totalField={["total_price", "balance"]}
         />
         <Modal
           show={show}
@@ -229,23 +230,13 @@ const Orders: NextPage = () => {
           <Modal
             width={800}
             show={showOrder}
-            title={"Order Details"}
+            title={`Order #: ${order.order_id}`}
             setShow={(s: boolean) => setShowOrder(s)}
           >
             <FlexRow marginBottom={8}>
               <FlexRow>
-                <SubHeading>Order #: </SubHeading>
-                <Description>{order.order_id}</Description>
-              </FlexRow>
-              <FlexRow>
                 <SubHeading>Customer: </SubHeading>
                 <Description>{order.created_for.first_name}</Description>
-              </FlexRow>
-            </FlexRow>
-            <FlexRow marginBottom={16}>
-              <FlexRow>
-                <SubHeading>Display ID: </SubHeading>
-                <Description>{order.display_id}</Description>
               </FlexRow>
               <FlexRow>
                 <SubHeading>Created At: </SubHeading>

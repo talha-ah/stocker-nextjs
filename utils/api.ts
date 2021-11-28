@@ -36,8 +36,6 @@ export const useAPI = () => {
         resolve(data)
       } catch (err: any) {
         if (err.status) {
-          if (err.statusText === "Not Found") reject(err)
-
           const error = await err.json()
           console.log(`[API Error at ${DateUtility.getLocaleDate()}]:`, error)
           console.log(`Error for Body`, body)

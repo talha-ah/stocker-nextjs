@@ -84,19 +84,13 @@ const SingleStock: NextPage = () => {
         <Header title="Stocks" actions={false} />
         <FlexRow marginBottom={8}>
           <FlexRow>
-            <SubHeading>Details : </SubHeading>
+            <SubHeading>Description : </SubHeading>
             <Description>{stock?.description}</Description>
-          </FlexRow>
-          <FlexRow>
-            <SubHeading>Code: </SubHeading>
-            <Description>{stock?.code}</Description>
           </FlexRow>
           <FlexRow>
             <SubHeading>Location: </SubHeading>
             <Description>{stock?.location}</Description>
           </FlexRow>
-        </FlexRow>
-        <FlexRow marginBottom={8}>
           <FlexRow>
             <SubHeading>Cost Price: </SubHeading>
             <Description>{stock?.cost_price}</Description>
@@ -110,7 +104,6 @@ const SingleStock: NextPage = () => {
             <Description>{stock?.inventory}</Description>
           </FlexRow>
         </FlexRow>
-        {console.log(orders)}
         <Table rows={orders} headers={headers} loading={loading.fetch} />
       </Content>
     </Layout>

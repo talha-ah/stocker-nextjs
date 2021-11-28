@@ -42,13 +42,21 @@ const Quotations: NextPage = () => {
   }, [])
 
   useEffect(() => {
-    const filtered = state.quotations.quotations.filter(
-      (option: any) =>
-        !option.order_id ||
-        !option.display_id ||
-        option.display_id.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-        String(option.order_id).toLowerCase().indexOf(query.toLowerCase()) > -1
-    )
+    const filtered = state.quotations.quotations.filter((option: any) => {
+      if (query) {
+        return (
+          (option.order_id &&
+            String(option.order_id)
+              .toLowerCase()
+              .indexOf(String(query.toLowerCase())) > -1) ||
+          String(option.created_for.first_name)
+            .toLowerCase()
+            .indexOf(String(query.toLowerCase())) > -1
+        )
+      } else {
+        return true
+      }
+    })
     setDataList(filtered)
     // eslint-disable-next-line
   }, [query, state.quotations.quotations])
@@ -152,37 +160,29 @@ const Quotations: NextPage = () => {
       align: "left",
       width: "auto",
     },
-    { key: 3, name: "Code", field: "code", align: "left", width: "100px" },
     {
-      key: 4,
-      name: "Location",
-      field: "location",
-      align: "left",
-      width: "auto",
-    },
-    {
-      key: 5,
+      key: 3,
       name: "Price",
       field: "sale_price",
       align: "right",
       width: "100px",
     },
     {
-      key: 6,
+      key: 4,
       name: "Quantity",
       field: "quantity",
       align: "right",
       width: "auto",
     },
     {
-      key: 7,
+      key: 5,
       name: "Disc %",
       field: "discount",
       align: "right",
       width: "auto",
     },
     {
-      key: 8,
+      key: 6,
       name: "Amount",
       field: "amount",
       align: "right",
@@ -219,23 +219,13 @@ const Quotations: NextPage = () => {
           <Modal
             width={800}
             show={showQuotation}
-            title={"Quotation Details"}
+            title={`Quotation #: ${quotation.order_id}`}
             setShow={(s: boolean) => setShowQuotation(s)}
           >
             <FlexRow marginBottom={8}>
               <FlexRow>
-                <SubHeading>Quotation #: </SubHeading>
-                <Description>{quotation.order_id}</Description>
-              </FlexRow>
-              <FlexRow>
                 <SubHeading>Customer: </SubHeading>
                 <Description>{quotation.created_for.first_name}</Description>
-              </FlexRow>
-            </FlexRow>
-            <FlexRow marginBottom={16}>
-              <FlexRow>
-                <SubHeading>Display ID: </SubHeading>
-                <Description>{quotation.display_id}</Description>
               </FlexRow>
               <FlexRow>
                 <SubHeading>Created At: </SubHeading>

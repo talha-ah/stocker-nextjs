@@ -5,9 +5,10 @@ import { endpoints } from "@utils/constants"
 import { useAppContext, CategoryTypes } from "@contexts/index"
 
 const headers = [
-  { key: 1, name: "Name", field: "name", align: "left" },
-  { key: 2, name: "Items", field: "items", align: "left" },
-  { key: 3, name: "Actions", field: "actions", align: "right" },
+  { key: 1, name: "Sr", field: "sr", align: "left" },
+  { key: 2, name: "Name", field: "name", align: "left" },
+  { key: 3, name: "Items", field: "items", align: "right" },
+  { key: 4, name: "Actions", field: "actions", align: "right" },
 ]
 
 const defaultLoading = {
@@ -42,7 +43,8 @@ export const useCategories = () => {
         uri: endpoints.categories,
       })
 
-      const result = response.data.map((row) => ({
+      const result = response.data.map((row, index) => ({
+        sr: index + 1,
         _id: row._id,
         key: row._id,
         name: row.name,

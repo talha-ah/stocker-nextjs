@@ -8,12 +8,11 @@ import { OrderTypes, useAppContext, QuotationTypes } from "@contexts/index"
 const headers = [
   { key: 1, name: "Order #", field: "order_id", align: "left" },
   { key: 2, name: "Customer", field: "customer", align: "left" },
-  { key: 3, name: "Display Id", field: "display_id", align: "left" },
-  { key: 4, name: "Type", field: "type", align: "left" },
-  { key: 5, name: "Total Price", field: "total_price", align: "left" },
-  { key: 6, name: "Stocks", field: "stocks_length", align: "left" },
-  { key: 7, name: "Balance", field: "balance", align: "left" },
-  { key: 8, name: "Actions", field: "actions", align: "right" },
+  { key: 3, name: "Type", field: "type", align: "left" },
+  { key: 4, name: "Total Price", field: "total_price", align: "right" },
+  { key: 5, name: "Stocks", field: "stocks_length", align: "right" },
+  { key: 6, name: "Balance", field: "balance", align: "right" },
+  { key: 7, name: "Actions", field: "actions", align: "right" },
 ]
 
 const defaultLoading = {
@@ -22,7 +21,7 @@ const defaultLoading = {
   cancelOrder: false,
   addGeneralPayment: false,
   add: {
-    active: false,
+    order: false,
     quotation: false,
   },
 }
@@ -63,9 +62,9 @@ export const useOrders = () => {
         key: row._id,
         type: toTitleCase(row.type),
         stocks_length: row.stocks.length,
-        balance: truncate(row.balance, 2),
         customer: row.created_for.first_name,
         total_price: truncate(row.total_price, 2),
+        balance: row.balance ? truncate(row.balance, 2) : "0",
         installments: `${row.installments} - ${row.payments.length}`,
       }))
 
@@ -210,23 +209,12 @@ export const useOrders = () => {
     }
   }
 
-  const fetchCustomerOrders = (id, tab) => {
-    let orders = []
-
-    if (tab) {
-      orders = state.orders.orders.filter((order) => {
-        return (
-          String(order.created_for._id) === String(id) &&
-          (tab === "paid" ? order.paid : !order.paid)
-        )
-      })
-    } else {
-      orders = state.orders.orders.filter(
+  const fetchCustomerOrders = (id) => {
+    setCustomerOrders(
+      state.orders.orders.filter(
         (order) => String(order.created_for._id) === String(id)
       )
-    }
-
-    setCustomerOrders(orders)
+    )
   }
 
   const getStockOrders = (id) => {

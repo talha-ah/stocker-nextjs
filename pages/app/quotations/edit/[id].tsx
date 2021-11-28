@@ -40,24 +40,23 @@ const Actions = styled.div`
 const headers = [
   { key: 1, name: "Sr.", field: "sr", align: "left", width: "100px" },
   { key: 2, name: "Description", field: "description", align: "left" },
-  { key: 3, name: "Code", field: "code", align: "left" },
-  { key: 4, name: "Price", field: "sale_price", align: "left", width: "100px" },
-  { key: 5, name: "Qty", field: "qty", align: "left", width: "100px" },
-  { key: 6, name: "Disc %", field: "discount", align: "left", width: "100px" },
+  { key: 3, name: "Price", field: "sale_price", align: "left", width: "100px" },
+  { key: 4, name: "Qty", field: "qty", align: "left", width: "100px" },
+  { key: 5, name: "Disc %", field: "discount", align: "left", width: "100px" },
   {
-    key: 7,
+    key: 6,
     name: "Disc Price",
     field: "discount_price",
     align: "right",
     width: "100px",
   },
   {
-    key: 8,
+    key: 7,
     name: "Total Price",
     field: "total_price",
     align: "right",
   },
-  { key: 9, name: "Actions", field: "actions", align: "center" },
+  { key: 8, name: "Actions", field: "actions", align: "center" },
 ]
 
 const paymentTypes = [
@@ -88,7 +87,6 @@ const EditQuotation: NextPage = () => {
 
   const [address, setAddress] = useState<string>("")
   const [orderId, setOrderId] = useState<string>("")
-  const [displayId, setDisplayId] = useState<string>("")
   const [customer, setCustomer] = useState<any | null>(null)
 
   useEffect(() => {
@@ -97,7 +95,6 @@ const EditQuotation: NextPage = () => {
 
     if (quotation) {
       setOrderId(quotation?.order_id)
-      setDisplayId(quotation?.display_id)
       setCustomer(quotation?.created_for)
       setAddress(quotation?.shipping_address?.address_one)
       setPaymentType([
@@ -233,10 +230,11 @@ const EditQuotation: NextPage = () => {
           onChange={(e: any) => onChangeRowInput(e, "discount", row)}
         />
       ),
-      discount_price: truncate(
-        calculateDiscount(row.sale_price, row.qty, row.discount).discount,
-        2
-      ),
+      discount_price:
+        truncate(
+          calculateDiscount(row.sale_price, row.qty, row.discount).discount,
+          2
+        ) || 0,
       total_price: truncate(
         calculateDiscount(row.sale_price, row.qty, row.discount).value,
         2
@@ -266,21 +264,12 @@ const EditQuotation: NextPage = () => {
 
       <Content>
         <FlexRow>
-          <Header title="Update Quotation" actions={false} />
+          <Header title={`Update Quotation #: ${orderId}`} actions={false} />
         </FlexRow>
-        <FlexRow marginBottom={8}>
-          <FlexRow>
-            <SubHeading>Quotation #: </SubHeading>
-            <Description>{orderId}</Description>
-          </FlexRow>
-          <FlexRow>
-            <SubHeading>Display ID: </SubHeading>
-            <Description>{displayId}</Description>
-          </FlexRow>
-          <FlexRow>
-            <SubHeading>Customer: </SubHeading>
-            <Description>{customer?.first_name}</Description>
-          </FlexRow>
+
+        <FlexRow marginBottom={16}>
+          <SubHeading>Customer: </SubHeading>
+          <Description>{customer?.first_name}</Description>
         </FlexRow>
 
         <FlexRow>

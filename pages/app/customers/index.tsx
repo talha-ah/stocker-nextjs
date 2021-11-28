@@ -142,6 +142,7 @@ const Customers: NextPage = () => {
         <Table
           headers={headers}
           loading={loading.fetch}
+          totalField={["balance"]}
           rows={renderData(dataList)}
         />
         <Modal

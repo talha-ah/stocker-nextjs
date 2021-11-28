@@ -42,10 +42,12 @@ type TableScrollType = {
 
 const TableScroll = styled.div<TableScrollType>`
   overflow-y: scroll;
+  overflow-x: scroll;
   max-height: ${({ height }) => height}px;
 
   ::-webkit-scrollbar {
     width: 2px;
+    height: 2px;
   }
 
   ::-webkit-scrollbar-thumb {
@@ -105,20 +107,50 @@ const TotalRow = styled.tr`
   background-color: ${({ theme }) => theme.palette.white};
 `
 
-const calculateTotal = (headers: any, data: any, totalField: string) => {
-  let total_value = 0
-  data.map((d: any) => (total_value += d[totalField]))
+const calculateTotal = (headers: any, data: any, totalField: any) => {
+  if (Array.isArray(totalField)) {
+    const rows: any = []
 
-  let index = 0
-  const rows = headers.map((header: any, ind: number) => (
-    <td key={generateId()}>
-      {header.field === totalField && (index = ind) && truncate(total_value, 2)}
-    </td>
-  ))
+    headers.forEach((header: any) => {
+      let field = totalField.find((f: any) => f === header.field)
 
-  rows[index - 1] = <td key={rows[index - 1].key}>Total</td>
+      if (field) {
+        let totalValue = 0
+        data.forEach((d: any) => (totalValue += Number(d[field]) || 0))
+        rows.push(<td key={generateId()}>{truncate(totalValue, 2)}</td>)
+      } else {
+        rows.push(<td key={generateId()}></td>)
+      }
+    })
 
-  return rows
+    rows[1] = (
+      <td key={generateId()} style={{ textAlign: "left" }}>
+        Total
+      </td>
+    )
+
+    return rows
+  } else {
+    let totalValue = 0
+    data.map((d: any) => (totalValue += +d[totalField] || 0))
+
+    let index = 0
+    const rows = headers.map((header: any, ind: number) => (
+      <td key={generateId()}>
+        {header.field === totalField &&
+          (index = ind) &&
+          truncate(totalValue, 2)}
+      </td>
+    ))
+
+    rows[index - 1] = (
+      <td key={rows[index - 1].key} style={{ textAlign: "left" }}>
+        Total
+      </td>
+    )
+
+    return rows
+  }
 }
 
 export const Header = ({
@@ -256,9 +288,9 @@ export const Table = ({
             )}
           </tbody>
           <tfoot>
-            {totalField && rows.length > 0 && (
+            {totalField && data.length > 0 && (
               <TotalRow style={{ textAlign: "right" }}>
-                {calculateTotal(headers, rows, totalField)}
+                {calculateTotal(headers, data, totalField)}
               </TotalRow>
             )}
           </tfoot>

@@ -14,27 +14,33 @@ const headers = [
     align: "left",
     width: "auto",
   },
-  { key: 3, name: "Code", field: "code", align: "left", width: "100px" },
   {
-    key: 4,
+    key: 3,
     name: "Cost Price",
     field: "cost_price",
-    align: "left",
+    align: "right",
+    width: "100px",
+  },
+  {
+    key: 4,
+    name: "Sale Price",
+    field: "sale_price",
+    align: "right",
     width: "100px",
   },
   {
     key: 5,
-    name: "Sale Price",
-    field: "sale_price",
-    align: "left",
+    name: "Inventory",
+    field: "inventory",
+    align: "right",
     width: "100px",
   },
   {
     key: 6,
-    name: "Inventory",
-    field: "inventory",
+    name: "Location",
+    field: "location",
     align: "left",
-    width: "100px",
+    width: "auto",
   },
   {
     key: 7,
@@ -43,14 +49,7 @@ const headers = [
     align: "left",
     width: "auto",
   },
-  {
-    key: 8,
-    name: "Location",
-    field: "location",
-    align: "left",
-    width: "auto",
-  },
-  { key: 9, name: "Actions", field: "actions", align: "right", width: "100px" },
+  { key: 8, name: "Actions", field: "actions", align: "right", width: "100px" },
 ]
 
 const defaultLoading = {

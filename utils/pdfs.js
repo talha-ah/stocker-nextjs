@@ -7,57 +7,56 @@ import { calculateDiscount, pad, truncate } from "@utils/common"
 export const generateReceipt = (data) => {
   const pdfHeaders = [
     {
-      dataKey: "sr",
       header: "Sr",
+      dataKey: "sr",
     },
     {
+      header: "Description",
       dataKey: "description",
-      header: "Product",
     },
-    // {
-    //   dataKey: "code",
-    //   header: "Code",
-    // },
     {
+      header: "Qty",
       dataKey: "quantity",
-      header: "Quantity",
     },
     {
+      header: "Rate",
       dataKey: "price",
-      header: "Unit Price",
     },
     {
-      dataKey: "discount",
       header: "Disc %",
+      dataKey: "discount",
     },
     {
+      header: "Disc",
       dataKey: "discount_price",
-      header: "Discount",
     },
     {
-      dataKey: "total_price",
       header: "Amount",
+      dataKey: "total_price",
     },
   ]
 
   let pdfData = data.stocks.map((stock, index) => ({
-    sr: String(index + 1),
     id: String(index + 1),
-    code: stock.stock_id.code,
-    price: String(truncate(stock.sale_price, 2)),
-    quantity: String(stock.quantity),
-    discount: String(truncate(stock.discount.value, 2)),
+    sr: String(index + 1),
     description: stock.stock_id.description,
-    discount_price: String(
-      truncate(
-        calculateDiscount(
-          stock.sale_price,
-          stock.quantity,
-          stock.discount.value
-        ).discount,
-        2
-      )
-    ),
+    quantity: String(stock.quantity),
+    price: String(truncate(stock.sale_price, 2)),
+    discount: stock.discount.value
+      ? String(truncate(stock.discount.value, 2))
+      : "0",
+    discount_price: stock.discount.value
+      ? String(
+          truncate(
+            calculateDiscount(
+              stock.sale_price,
+              stock.quantity,
+              stock.discount.value
+            ).discount,
+            2
+          )
+        )
+      : "0",
     total_price: String(
       truncate(
         calculateDiscount(
@@ -100,9 +99,9 @@ export const generateReceipt = (data) => {
   )
   doc.text("Mobile #: 0321-8464465, 03004001431", 105, 35, null, null, "center")
   doc.text(
-    data.status === "quotation"
-      ? "Quotation"
-      : `Receipt #: ${pad(data.order_id)}`,
+    `${data.status === "quotation" ? "Quotation" : "Receipt"} #: ${pad(
+      data.order_id
+    )}`,
     14,
     44
   )

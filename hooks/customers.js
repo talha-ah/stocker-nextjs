@@ -11,8 +11,8 @@ const headers = [
   { key: 3, name: "Phone", field: "phone", align: "left" },
   { key: 4, name: "Address", field: "address_one", align: "left" },
   { key: 5, name: "Details", field: "description", align: "left" },
-  { key: 6, name: "Sales", field: "orders", align: "left" },
-  { key: 7, name: "Balance", field: "balance", align: "left" },
+  { key: 6, name: "Sales", field: "orders", align: "right" },
+  { key: 7, name: "Balance", field: "balance", align: "right" },
   { key: 8, name: "Actions", field: "actions", align: "right" },
 ]
 

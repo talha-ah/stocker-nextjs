@@ -8,11 +8,10 @@ import { OrderTypes, useAppContext, QuotationTypes } from "@contexts/index"
 const headers = [
   { key: 1, name: "Quotation #", field: "order_id", align: "left" },
   { key: 2, name: "Customer", field: "customer", align: "left" },
-  { key: 3, name: "Display Id", field: "display_id", align: "left" },
-  { key: 4, name: "Type", field: "type", align: "left" },
-  { key: 5, name: "Total Price", field: "total_price", align: "left" },
-  { key: 6, name: "Stocks", field: "stocks_length", align: "left" },
-  { key: 7, name: "Actions", field: "actions", align: "right" },
+  { key: 3, name: "Type", field: "type", align: "left" },
+  { key: 4, name: "Total Price", field: "total_price", align: "right" },
+  { key: 5, name: "Stocks", field: "stocks_length", align: "right" },
+  { key: 6, name: "Actions", field: "actions", align: "right" },
 ]
 
 const defaultLoading = {
@@ -53,6 +52,7 @@ export const useQuotations = () => {
       const result = response.data.map((row) => ({
         ...row,
         key: row._id,
+        type: toTitleCase(row.type),
         stocks_length: row.stocks.length,
         balance: truncate(row.balance, 2),
         customer: row.created_for.first_name,

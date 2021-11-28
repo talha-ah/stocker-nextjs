@@ -14,7 +14,7 @@ import { Header, Table } from "@components/Table"
 import { Content, FlexRow } from "@components/Common"
 import { Select, SelectType } from "@components/Select"
 import { SearchSelect } from "@components/SearchSelect"
-import { generateId, calculateDiscount } from "@utils/common"
+import { generateId, calculateDiscount, truncate } from "@utils/common"
 import { useSearchCustomer, useCustomers } from "@hooks/customers"
 
 const Buttons = styled.div`
@@ -38,20 +38,25 @@ const Actions = styled.div`
 const headers = [
   { key: 1, name: "Sr.", field: "sr", align: "left", width: "100px" },
   { key: 2, name: "Description", field: "description", align: "left" },
-  { key: 3, name: "Code", field: "code", align: "left" },
+  {
+    key: 3,
+    name: "Inventory",
+    field: "inventory",
+    align: "left",
+    width: "100px",
+  },
   { key: 4, name: "Price", field: "sale_price", align: "left", width: "100px" },
   { key: 5, name: "Qty", field: "qty", align: "left", width: "100px" },
   { key: 6, name: "Disc %", field: "discount", align: "left", width: "100px" },
   {
     key: 7,
-    name: "Disc Price",
+    name: "Disc",
     field: "discount_price",
     align: "right",
-    width: "100px",
   },
   {
     key: 8,
-    name: "Total Price",
+    name: "Amount",
     field: "total_price",
     align: "right",
   },
@@ -85,7 +90,6 @@ const Orders: NextPage = () => {
   const { customers } = useSearchCustomer(customerQuery)
 
   const [address, setAddress] = useState<string>("")
-  const [displayId, setDisplayId] = useState<string>("")
   const [customer, setCustomer] = useState<any | null>(null)
 
   const addStock = (value: any) => {
@@ -94,6 +98,7 @@ const Orders: NextPage = () => {
     const rowIndex = rowsCloned.findIndex(
       (row) => String(row.value) === String(value.value)
     )
+    console.log(rowIndex)
 
     if (rowIndex === -1) {
       rowsCloned.push({
@@ -143,7 +148,7 @@ const Orders: NextPage = () => {
   const onSubmit = async (status: string = "active") => {
     const body = {
       created_for: customer?.value,
-      display_id: displayId || generateId(),
+      display_id: generateId(),
       stocks: rows.map((row: any) => ({
         stock_id: row.value,
         quantity: row.qty,
@@ -218,10 +223,15 @@ const Orders: NextPage = () => {
           onChange={(e: any) => onChangeRowInput(e, "discount", row)}
         />
       ),
-      discount_price: calculateDiscount(row.sale_price, row.qty, row.discount)
-        .discount,
-      total_price: calculateDiscount(row.sale_price, row.qty, row.discount)
-        .value,
+      discount_price:
+        truncate(
+          calculateDiscount(row.sale_price, row.qty, row.discount).discount,
+          2
+        ) || 0,
+      total_price: truncate(
+        calculateDiscount(row.sale_price, row.qty, row.discount).value,
+        2
+      ),
       actions: (
         <Actions>
           <Button
@@ -249,14 +259,6 @@ const Orders: NextPage = () => {
         <FlexRow>
           <Header title="Add Order" actions={false} />
           <FlexRow>
-            <Input
-              name="displayId"
-              value={displayId}
-              label="Display Id"
-              marginBottom={0.1}
-              placeholder="Display Id"
-              onChange={(e: any) => setDisplayId(e.target.value)}
-            />
             <Input
               name="address"
               label="Address"
@@ -309,21 +311,21 @@ const Orders: NextPage = () => {
           id="add_order"
           headers={headers}
           rows={renderData(rows)}
-          totalField="total_price"
+          totalField={["discount_price", "total_price"]}
         />
         {rows.length > 0 && (
           <Buttons>
             <Button
               primary
-              loading={loading.add.quotation}
+              loading={loading.add.order}
               onClick={() => onSubmit("active")}
             >
               Add Order
             </Button>
             <Button
               neutral
+              loading={loading.add.quotation}
               onClick={() => onSubmit("quotation")}
-              loading={loading.add.active}
             >
               Add Quotation
             </Button>

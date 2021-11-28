@@ -15,6 +15,15 @@ const Container = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
+
+  ::-webkit-scrollbar {
+    width: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10%;
+    background-color: ${({ theme }) => theme.palette.primary};
+  }
 `
 
 const Header = styled.div`
